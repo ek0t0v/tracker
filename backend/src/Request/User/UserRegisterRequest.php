@@ -1,15 +1,15 @@
 <?php
 
-namespace App\Http\Request\User;
+namespace App\Request\User;
 
-use App\Http\RequestDTOInterface;
+use App\Http\RequestDtoInterface;
 use App\Validator\Constraints\UserUniqueEmail;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Class UserRegisterRequest.
  */
-class UserRegisterRequest implements RequestDTOInterface
+class UserRegisterRequest implements RequestDtoInterface
 {
     /**
      * @var string

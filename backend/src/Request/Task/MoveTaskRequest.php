@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Http\Request\Task;
+namespace App\Request\Task;
 
-use App\Http\RequestDTOInterface;
+use App\Http\RequestDtoInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Class MoveTaskRequest.
  */
-class MoveTaskRequest implements RequestDTOInterface
+class MoveTaskRequest implements RequestDtoInterface
 {
     /**
      * @var int

@@ -3,9 +3,9 @@
 namespace App\Controller;
 
 use App\Entity\Task;
-use App\Http\Request\Task\AddTaskRequest;
-use App\Http\Request\Task\MoveTaskRequest;
-use App\Http\Request\Task\RenameTaskRequest;
+use App\Request\Task\AddTaskRequest;
+use App\Request\Task\MoveTaskRequest;
+use App\Request\Task\RenameTaskRequest;
 use App\Service\Task\TaskManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;

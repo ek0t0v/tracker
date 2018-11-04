@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Http\Request\Task;
+namespace App\Request\Task;
 
-use App\Http\RequestDTOInterface;
+use App\Http\RequestDtoInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Class RenameTaskRequest.
  */
-class RenameTaskRequest implements RequestDTOInterface
+class RenameTaskRequest implements RequestDtoInterface
 {
     /**
      * @var string

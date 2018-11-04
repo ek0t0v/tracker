@@ -11,9 +11,9 @@ use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
- * Class RequestDTOResolver.
+ * Class RequestDtoResolver.
  */
-final class RequestDTOResolver implements ArgumentValueResolverInterface
+final class RequestDtoResolver implements ArgumentValueResolverInterface
 {
     /**
      * @var SerializerInterface
@@ -26,7 +26,7 @@ final class RequestDTOResolver implements ArgumentValueResolverInterface
     private $validator;
 
     /**
-     * RequestDTOResolver constructor.
+     * RequestDtoResolver constructor.
      *
      * @param SerializerInterface $serializer
      * @param ValidatorInterface  $validator
@@ -44,7 +44,7 @@ final class RequestDTOResolver implements ArgumentValueResolverInterface
     {
         $reflection = new \ReflectionClass($argument->getType());
 
-        return $reflection->implementsInterface(RequestDTOInterface::class);
+        return $reflection->implementsInterface(RequestDtoInterface::class);
     }
 
     /**
