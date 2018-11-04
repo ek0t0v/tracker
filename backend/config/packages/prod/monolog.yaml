@@ -1,0 +1,41 @@
+monolog:
+    handlers:
+        main:
+            type: fingers_crossed
+            action_level: error
+            handler: nested # handlers_group
+            excluded_404s:
+                - ^(/[a-z]{2})?/_asterisk
+                - ^(/[a-z]{2})?/bitrix/admin
+                - ^(/[a-z]{2})?/wordpress
+                - ^(/[a-z]{2})?/favicon.ico
+                - ^(/[a-z]{2})?/HNAP1
+                - ^(/[a-z]{2})?/CHANGELOG.txt
+                - ^(/[a-z]{2})?/(?i)phpmyadmin
+#        handlers_group:
+#            type: group
+#            members:
+#                - nested
+#                - papertrail
+        nested:
+            type: stream
+            path: "%kernel.logs_dir%/%kernel.environment%.log"
+            level: debug
+#        papertrail:
+#            type: socket
+#            connection_string: 'tls://%papertrail_host%:%papertrail_port%'
+#            level: error
+#            max_files: 14
+#            channels: ['!event']
+        console:
+            type: console
+            process_psr_3_messages: false
+            channels: ["!event", "!doctrine"]
+        deprecation:
+            type: stream
+            path: "%kernel.logs_dir%/%kernel.environment%.deprecations.log"
+        deprecation_filter:
+            type: filter
+            handler: deprecation
+            max_level: info
+            channels: ["php"]

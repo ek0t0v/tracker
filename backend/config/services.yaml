@@ -1,0 +1,23 @@
+parameters:
+    locale: 'en'
+
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: false
+    App\:
+        resource: '../src/*'
+        exclude: '../src/{DependencyInjection,Entity,Migrations,Tests,Kernel.php}'
+    App\Controller\:
+        resource: '../src/Controller'
+        tags: ['controller.service_arguments']
+    App\EventListener\ExceptionListener:
+        tags:
+            - { name: kernel.event_listener, event: kernel.exception }
+    Symfony\Component\Serializer\SerializerInterface:
+        factory: 'App\Service\SerializerFactory:create'
+    user_uniqie_email_validator:
+        class: App\Validator\UserUniqueEmailValidator
+        tags:
+            - { name: validator.constraint_validator, alias: user_unique_email }

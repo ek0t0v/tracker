@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+echo "$(tput setab 4)[php-cs-fixer] pre commit hook start$(tput sgr 0)"
+
+PHP_CS_FIXER="php php-cs-fixer.phar"
+
+CHANGED_FILES=$(git diff --cached --name-only --diff-filter=ACM -- '*.php')
+
+if [ -n "$CHANGED_FILES" ]; then
+    $PHP_CS_FIXER fix $CHANGED_FILES;
+    git add $CHANGED_FILES;
+fi
+
+echo "$(tput setab 4)[php-cs-fixer] pre commit hook finish$(tput sgr 0)"

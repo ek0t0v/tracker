@@ -1,0 +1,33 @@
+version: '3'
+
+services:
+    nginx:
+        build: docker/nginx
+        working_dir: /var/www/tracker
+        depends_on:
+            - php
+        ports:
+            - ${SERVER_NGINX_PORT}:80
+        volumes:
+            - ./backend:/var/www/tracker
+    php:
+        build: docker/php
+        user: www-data:www-data
+        working_dir: /var/www/tracker
+        depends_on:
+            - db
+        volumes:
+            - ./backend:/var/www/tracker
+    db:
+        build: docker/postgres
+        user: postgres:postgres
+        ports:
+            - ${SERVER_POSTGRES_PORT}:5432
+        environment:
+            POSTGRES_DB: ${POSTGRES_DB}
+            POSTGRES_USER: ${POSTGRES_USER}
+            POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+#    mailhog:
+#        image: mailhog/mailhog
+#        ports:
+#            - ${SERVER_MAILHOG_DASHBOARD_PORT}:8025
