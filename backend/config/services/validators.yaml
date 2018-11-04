@@ -1,0 +1,11 @@
+parameters:
+
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: false
+    user_uniqie_email:
+        class: App\Validator\UserUniqueEmailValidator
+        tags:
+            - { name: validator.constraint_validator, alias: user_unique_email }

@@ -1,3 +1,6 @@
+imports:
+    - { resource: services/validators.yaml }
+
 parameters:
     locale: 'en'
 
@@ -17,7 +20,3 @@ services:
             - { name: kernel.event_listener, event: kernel.exception }
     Symfony\Component\Serializer\SerializerInterface:
         factory: 'App\Service\SerializerFactory:create'
-    user_uniqie_email_validator:
-        class: App\Validator\UserUniqueEmailValidator
-        tags:
-            - { name: validator.constraint_validator, alias: user_unique_email }
