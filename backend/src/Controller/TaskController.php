@@ -5,10 +5,10 @@ namespace App\Controller;
 use App\Entity\Task;
 use App\Request\Task\AddTaskRequest;
 use App\Request\Task\MoveTaskRequest;
+use App\Request\Task\RemoveTaskRequest;
 use App\Request\Task\RenameTaskRequest;
 use App\Service\Task\TaskManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -65,16 +65,16 @@ class TaskController extends ApiController
     }
 
     /**
-     * @param Request              $request
+     * @param RemoveTaskRequest    $request
      * @param TaskManagerInterface $taskManager
      *
      * @return JsonResponse
      *
      * @Route(name="api_task_remove_tasks_by_ids", methods={"DELETE"})
      */
-    public function remove(Request $request, TaskManagerInterface $taskManager): JsonResponse
+    public function remove(RemoveTaskRequest $request, TaskManagerInterface $taskManager): JsonResponse
     {
-        $taskManager->remove(json_decode($request->getContent(), true)['ids']);
+        $taskManager->remove($request->ids);
 
         return $this->apiResponse();
     }
