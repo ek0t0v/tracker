@@ -11,7 +11,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 class RemoveTaskRequest implements RequestDtoInterface
 {
     /**
-     * @var array
+     * @var int[]
      *
      * @Assert\NotNull()
      * @Assert\All({

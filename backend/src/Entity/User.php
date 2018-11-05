@@ -55,6 +55,8 @@ class User implements UserInterface, JWTUserInterface
     private $plainPassword;
 
     /**
+     * @var string[]
+     *
      * @ORM\Column(name="roles", type="json")
      */
     private $roles = [];
@@ -87,6 +89,13 @@ class User implements UserInterface, JWTUserInterface
      */
     private $createdAt;
 
+    /**
+     * User constructor.
+     *
+     * @param       $username
+     * @param array $roles
+     * @param       $email
+     */
     public function __construct($username, array $roles, $email)
     {
         $this->username = $username;
