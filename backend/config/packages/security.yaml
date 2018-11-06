@@ -1,9 +1,6 @@
 security:
     providers:
-#        jwt_user_provider:
-#            lexik_jwt:
-#                class: App\Entity\User
-        main:
+        user_provider:
             entity:
                 class: App\Entity\User
                 property: email
@@ -25,18 +22,17 @@ security:
                 success_handler: lexik_jwt_authentication.handler.authentication_success
                 failure_handler: lexik_jwt_authentication.handler.authentication_failure
                 username_path: email
-            provider: main
-#        api_token_refresh:
-#            pattern: ^/api/token/refresh
-#            stateless: true
-#            anonymous: true
+        api_token_refresh:
+            pattern: ^/api/token/refresh
+            stateless: true
+            anonymous: true
         api:
             pattern: ^/api
             stateless: true
             guard:
                 authenticators:
                     - lexik_jwt_authentication.jwt_token_authenticator
-            provider: main
+            provider: user_provider # ?
         main:
             anonymous: true
     access_control:

@@ -1,2 +1,7 @@
 api_token_create:
     path: /api/token/create
+
+api_token_refresh:
+    path: /api/token/refresh
+    defaults:
+        _controller: gesdinet.jwtrefreshtoken:refresh
