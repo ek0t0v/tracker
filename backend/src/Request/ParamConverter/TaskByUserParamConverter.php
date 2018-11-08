@@ -43,17 +43,13 @@ class TaskByUserParamConverter implements ParamConverterInterface
      */
     public function apply(Request $request, ParamConverter $configuration)
     {
-        $id = $request->attributes->get('id');
-
-        if (is_null($id)) {
+        if (is_null($request->attributes->get('id'))) {
             throw new \InvalidArgumentException('Route attribute is missing.');
         }
 
         $em = $this->registry->getManagerForClass($configuration->getClass());
-        $taskRepository = $em->getRepository($configuration->getClass());
-
-        $task = $taskRepository->findOneBy([
-            'id' => $id,
+        $task = $em->getRepository($configuration->getClass())->findOneBy([
+            'id' => $request->attributes->get('id'),
             'user' => $this->user,
         ]);
 
@@ -69,11 +65,7 @@ class TaskByUserParamConverter implements ParamConverterInterface
      */
     public function supports(ParamConverter $configuration)
     {
-        if (Task::class !== $configuration->getClass()) {
-            return false;
-        }
-
-        if (is_null($this->registry) || !count($this->registry->getManagers())) {
+        if (Task::class !== $configuration->getClass() || is_null($this->registry) || !count($this->registry->getManagers())) {
             return false;
         }
 
