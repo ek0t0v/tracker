@@ -23,6 +23,14 @@ class Task
     private $id;
 
     /**
+     * @var User
+     *
+     * @ORM\ManyToOne(targetEntity="User")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
+     */
+    private $user;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="name", type="string", nullable=true)
@@ -42,16 +50,47 @@ class Task
      */
     private $position;
 
+    /**
+     * @return int|null
+     */
     public function getId(): ?int
     {
         return $this->id;
     }
 
+    /**
+     * @return User|null
+     */
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    /**
+     * @param User|null $user
+     *
+     * @return Task
+     */
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * @return null|string
+     */
     public function getName(): ?string
     {
         return $this->name;
     }
 
+    /**
+     * @param null|string $name
+     *
+     * @return Task
+     */
     public function setName(?string $name): self
     {
         $this->name = $name;
@@ -59,11 +98,19 @@ class Task
         return $this;
     }
 
+    /**
+     * @return int|null
+     */
     public function getPosition(): ?int
     {
         return $this->position;
     }
 
+    /**
+     * @param int $position
+     *
+     * @return Task
+     */
     public function setPosition(int $position): self
     {
         $this->position = $position;

@@ -3,6 +3,7 @@
 namespace App\Service\Task;
 
 use App\Entity\Task;
+use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 
 /**
@@ -28,11 +29,12 @@ class TaskManager implements TaskManagerInterface
     /**
      * {@inheritdoc}
      */
-    public function add(string $name): Task
+    public function add(string $name, User $user): Task
     {
         $task = new Task();
         $task->setName($name);
         $task->setPosition(0);
+        $task->setUser($user);
 
         $this->em->persist($task);
 
@@ -46,10 +48,11 @@ class TaskManager implements TaskManagerInterface
      *
      * todo: когда удаляем несколько элементов из середины списка, у некоторых элементов позиция не обновляется
      */
-    public function remove(array $ids)
+    public function remove(array $ids, User $user)
     {
         $tasks = $this->em->getRepository(Task::class)->findBy([
             'id' => $ids,
+            'user' => $user,
         ]);
 
         foreach ($tasks as $task) {

@@ -16,6 +16,8 @@ use Symfony\Component\Routing\Annotation\Route;
  * Class TaskController.
  *
  * @Route("/api/task")
+ *
+ * todo: сделать проверку на юзера - юзер может трогать только свои задачи
  */
 class TaskController extends ApiController
 {
@@ -43,7 +45,7 @@ class TaskController extends ApiController
      */
     public function add(AddTaskRequest $request, TaskManagerInterface $taskManager): JsonResponse
     {
-        $task = $taskManager->add($request->name);
+        $task = $taskManager->add($request->name, $this->getUser());
 
         return $this->apiResponse($task, ['frontend'], Response::HTTP_CREATED);
     }
@@ -74,7 +76,7 @@ class TaskController extends ApiController
      */
     public function remove(RemoveTaskRequest $request, TaskManagerInterface $taskManager): JsonResponse
     {
-        $taskManager->remove($request->ids);
+        $taskManager->remove($request->ids, $this->getUser());
 
         return $this->apiResponse();
     }
