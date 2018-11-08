@@ -47,6 +47,19 @@ class TaskManager implements TaskManagerInterface
      * {@inheritdoc}
      *
      * todo: когда удаляем несколько элементов из середины списка, у некоторых элементов позиция не обновляется
+     *
+     * Удаление нескольких элементов выглядит как-то так:
+     *
+     * [2018-11-08 04:54:26] doctrine.DEBUG: "START TRANSACTION" [] []
+     * [2018-11-08 04:54:26] doctrine.DEBUG: DELETE FROM tasks WHERE id = ? [84] []
+     * [2018-11-08 04:54:26] doctrine.DEBUG: UPDATE tasks SET position = position - 1 WHERE position >= 0 [] []
+     * [2018-11-08 04:54:26] doctrine.DEBUG: UPDATE tasks SET position = position - 1 WHERE position >= 1 [] []
+     * [2018-11-08 04:54:26] doctrine.DEBUG: UPDATE tasks SET position = position - 1 WHERE position >= 2 [] []
+     * [2018-11-08 04:54:26] doctrine.DEBUG: DELETE FROM tasks WHERE id = ? [85] []
+     * [2018-11-08 04:54:26] doctrine.DEBUG: DELETE FROM tasks WHERE id = ? [86] []
+     * [2018-11-08 04:54:26] doctrine.DEBUG: "COMMIT" [] []
+     *
+     * После удаления остальных элементов позиции не обновляются.
      */
     public function remove(array $ids, User $user)
     {

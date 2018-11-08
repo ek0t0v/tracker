@@ -8,6 +8,7 @@ use App\Request\Task\MoveTaskRequest;
 use App\Request\Task\RemoveTaskRequest;
 use App\Request\Task\RenameTaskRequest;
 use App\Service\Task\TaskManagerInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -18,6 +19,8 @@ use Symfony\Component\Routing\Annotation\Route;
  * @Route("/api/task")
  *
  * todo: сделать проверку на юзера - юзер может трогать только свои задачи
+ *
+ * Может быть написать кастомный ParamConverter, в котором будет условие типа 'WHERE user_id = 1'?
  */
 class TaskController extends ApiController
 {
@@ -28,7 +31,9 @@ class TaskController extends ApiController
      */
     public function index(): JsonResponse
     {
-        $tasks = $this->getDoctrine()->getRepository(Task::class)->findBy([], [
+        $tasks = $this->getDoctrine()->getRepository(Task::class)->findBy([
+            'user' => $this->getUser(),
+        ], [
             'position' => 'asc',
         ]);
 
@@ -58,10 +63,11 @@ class TaskController extends ApiController
      * @return JsonResponse
      *
      * @Route("/{id}/name", name="api_task_rename_task", methods={"POST"})
+     * @ParamConverter("task", class="App\Entity\Task", converter="task_by_user")
      */
     public function rename(Task $task, RenameTaskRequest $request, TaskManagerInterface $taskManager): JsonResponse
     {
-        $task = $taskManager->rename($task, $request->name);
+        $taskManager->rename($task, $request->name);
 
         return $this->apiResponse($task, ['frontend']);
     }
@@ -89,6 +95,7 @@ class TaskController extends ApiController
      * @return JsonResponse
      *
      * @Route("/{id}/move", name="api_task_move_task", methods={"POST"})
+     * @ParamConverter("task", class="App\Entity\Task", converter="task_by_user")
      */
     public function move(Task $task, MoveTaskRequest $request, TaskManagerInterface $taskManager): JsonResponse
     {
