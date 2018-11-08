@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Class TaskListener.
  */
-class TaskListener
+final class TaskListener
 {
     /**
      * @param Task               $task

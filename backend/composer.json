@@ -23,6 +23,7 @@
         "symfony/yaml": "*"
     },
     "require-dev": {
+        "hautelook/alice-bundle": "^2.3",
         "sensiolabs/security-checker": "^5.0",
         "symfony/dotenv": "*",
         "symfony/maker-bundle": "^1.8",

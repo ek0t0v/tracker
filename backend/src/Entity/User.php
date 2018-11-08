@@ -9,6 +9,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 /**
  * @ORM\Table(name="users")
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
+ * @ORM\EntityListeners({"App\Doctrine\EventListener\UserListener"})
  */
 class User implements UserInterface, JWTUserInterface
 {

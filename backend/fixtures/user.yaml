@@ -1,0 +1,9 @@
+App\Entity\User:
+    user_template (template):
+        __construct: false
+        plainPassword: 'passw0rd'
+        enabled: true
+
+    user (extends user_template):
+        email: 'user@mail.ru'
+        username: 'user'

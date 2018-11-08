@@ -43,6 +43,8 @@ class TaskManager implements TaskManagerInterface
 
     /**
      * {@inheritdoc}
+     *
+     * todo: когда удаляем несколько элементов из середины списка, у некоторых элементов позиция не обновляется
      */
     public function remove(array $ids)
     {
