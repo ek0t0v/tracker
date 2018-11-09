@@ -17,10 +17,6 @@ use Symfony\Component\Routing\Annotation\Route;
  * Class TaskController.
  *
  * @Route("/api/task")
- *
- * todo: сделать проверку на юзера - юзер может трогать только свои задачи
- *
- * Может быть написать кастомный ParamConverter, в котором будет условие типа 'WHERE user_id = 1'?
  */
 class TaskController extends ApiController
 {

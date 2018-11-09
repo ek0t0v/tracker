@@ -27,7 +27,3 @@ services:
             POSTGRES_DB: ${POSTGRES_DB}
             POSTGRES_USER: ${POSTGRES_USER}
             POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-#    mailhog:
-#        image: mailhog/mailhog
-#        ports:
-#            - ${SERVER_MAILHOG_DASHBOARD_PORT}:8025

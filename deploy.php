@@ -18,7 +18,7 @@ add('shared_files', [
 add('shared_dirs', []);
 add('writable_dirs', []);
 
-host('symfony-sample-project.localhost')
+host('tracker.local')
     ->set('deploy_path', '~/{{application}}');    
 
 task('build', function () {

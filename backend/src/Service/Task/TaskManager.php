@@ -60,6 +60,8 @@ class TaskManager implements TaskManagerInterface
      * [2018-11-08 04:54:26] doctrine.DEBUG: "COMMIT" [] []
      *
      * После удаления остальных элементов позиции не обновляются.
+     *
+     * todo: можно удалять таски одним запросом
      */
     public function remove(array $ids, User $user)
     {
