@@ -12,4 +12,9 @@
 - `docker-compose exec php php bin/console d:s:u --force`
 - `docker-compose exec php php bin/console h:f:l`
 
-After fixtures rolling, the user will be available with the following data: `user@mail.ru` | `passw0rd`.
+### Generate the SSH keys
+
+- `mkdir backend/config/jwt`
+- `openssl genrsa -out backend/config/jwt/private.pem -aes256 4096`
+- `openssl rsa -pubout -in backend/config/jwt/private.pem -out backend/config/jwt/public.pem`
+- update `pass_phrase` in `backend/.env`
