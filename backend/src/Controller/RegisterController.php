@@ -19,8 +19,6 @@ class RegisterController extends ApiController
      * @return JsonResponse
      *
      * @Route("/register", name="api_user_register", methods={"POST"})
-     *
-     * @todo сделать регистрацию юзеров
      */
     public function register(UserRegisterRequest $request): JsonResponse
     {

@@ -19,8 +19,8 @@ interface TaskManagerInterface
     public function add(string $name, User $user): Task;
 
     /**
-     * @param array|int[] $ids
-     * @param User        $user
+     * @param int[] $ids
+     * @param User  $user
      */
     public function remove(array $ids, User $user);
 
