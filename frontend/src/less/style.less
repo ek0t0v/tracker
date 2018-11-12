@@ -1,0 +1,10 @@
+@import 'common';
+@import 'mixins';
+
+@background: #eee;
+
+body {
+    .flex(column, nowrap, flex-start, flex-start);
+    .font(@primary-font, 16px, 400, #333);
+    background-color: @background;
+}

@@ -3,22 +3,22 @@ version: '3'
 services:
     nginx:
         build: docker/nginx
-        working_dir: /var/www/tracker
         depends_on:
             - php
         ports:
             - ${SERVER_NGINX_PORT}:80
         volumes:
-            - ./backend:/var/www/tracker
+            - ./backend:/var/www/backend
+            - ./frontend:/var/www/frontend
     php:
         build: docker/php
         user: www-data:www-data
-        working_dir: /var/www/tracker
+        working_dir: /var/www/backend
         depends_on:
-            - db
+            - postgres
         volumes:
-            - ./backend:/var/www/tracker
-    db:
+            - ./backend:/var/www/backend
+    postgres:
         build: docker/postgres
         user: postgres:postgres
         ports:
@@ -27,3 +27,13 @@ services:
             POSTGRES_DB: ${POSTGRES_DB}
             POSTGRES_USER: ${POSTGRES_USER}
             POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    node:
+        build: docker/node
+        working_dir: /var/www/frontend
+        depends_on:
+            - php
+        ports:
+            - ${SERVER_NODE_PORT}:8080
+        volumes:
+            - ./frontend:/var/www/frontend
+

@@ -9,6 +9,7 @@
 - `docker-compose up -d --build`
 - `docker-compose exec php composer install`
 - `docker-compose exec php php bin/console d:m:m`
+- `docker-compose exec php php bin/console d:s:u --force`
 - `docker-compose exec php php bin/console h:f:l`
 
 After fixtures rolling, the user will be available with the following data: `user@mail.ru` | `passw0rd`.

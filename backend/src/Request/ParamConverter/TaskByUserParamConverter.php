@@ -13,6 +13,8 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 
 /**
  * Class TaskByUserParamConverter.
+ *
+ * todo: пофиксить - срабатывает при запросах когда должна происходить ошибка 401, не может выполнить ->getUser
  */
 class TaskByUserParamConverter implements ParamConverterInterface
 {
