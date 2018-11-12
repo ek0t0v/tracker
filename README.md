@@ -1,8 +1,8 @@
-# tracker-backend
+# tracker
 
 ## Install
 
-- `git clone git@bitbucket.org:seniorcote/tracker-backend.git && cd tracker-backend`
+- `git clone git@bitbucket.org:seniorcote/tracker.git && cd tracker`
 - `cp .env.dist .env`
 - `cp backend/.env.dist backend/.env`
 - `cp pre-commit.dist .git/hooks/pre-commit && chmod +x .git/hooks/pre-commit`
