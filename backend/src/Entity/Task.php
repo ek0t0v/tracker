@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -49,6 +50,26 @@ class Task
      * @Gedmo\SortablePosition()
      */
     private $position;
+
+    /**
+     * todo: Определиться, хотим ли мы удалять тайминги, если задача удалена.
+     *
+     * Возможно, удаление нужно сделать не реальным удалением, а перемещением
+     * задачи в архив, т.е. soft delete.
+     *
+     * @var Timing[]
+     *
+     * @ORM\OneToMany(targetEntity="Timing", mappedBy="task", orphanRemoval=true)
+     */
+    private $timings;
+
+    /**
+     * Task constructor.
+     */
+    public function __construct()
+    {
+        $this->timings = new ArrayCollection();
+    }
 
     /**
      * @return int|null
@@ -114,6 +135,59 @@ class Task
     public function setPosition(int $position): self
     {
         $this->position = $position;
+
+        return $this;
+    }
+
+    /**
+     * @return array|Timing[]
+     */
+    public function getTimings(): array
+    {
+        return $this->timings;
+    }
+
+    /**
+     * @param array|Timing[] $timings
+     *
+     * @return Task
+     */
+    public function setTimings(array $timings): self
+    {
+        $this->timings = $timings;
+
+        return $this;
+    }
+
+    /**
+     * @param Timing $timing
+     *
+     * @return Task
+     */
+    public function addTiming(Timing $timing): self
+    {
+        if (!$this->timings->contains($timing)) {
+            $this->timings[] = $timing;
+            $timing->setTask($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param Timing $timing
+     *
+     * @return Task
+     */
+    public function removeFavoriteItem(Timing $timing): self
+    {
+        if ($this->timings->contains($timing)) {
+            $this->timings->removeElement($timing);
+            // set the owning side to null (unless already changed)
+            if ($timing->getTask() === $this) {
+                $timing->setTask(null);
+            }
+        }
 
         return $this;
     }

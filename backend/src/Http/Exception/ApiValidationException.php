@@ -2,13 +2,14 @@
 
 namespace App\Http\Exception;
 
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
 
 /**
  * Class ApiValidationException.
  */
-class ApiValidationException extends BadRequestHttpException
+class ApiValidationException extends HttpException
 {
     /**
      * @var ConstraintViolationListInterface
@@ -22,7 +23,13 @@ class ApiValidationException extends BadRequestHttpException
      */
     public function __construct(ConstraintViolationListInterface $violations)
     {
-        parent::__construct('Validation Failed', null, 400, []);
+        parent::__construct(
+            Response::HTTP_UNPROCESSABLE_ENTITY,
+            'Validation Failed',
+            null,
+            [],
+            Response::HTTP_UNPROCESSABLE_ENTITY
+        );
 
         $this->violations = $violations;
     }

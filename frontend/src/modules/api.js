@@ -1,6 +1,8 @@
 import axios from 'axios';
 import store from '../store';
 
+// todo: Пофиксить, вроде бы обнаружил вылет при ошибке валидации (422).
+
 let retry = false;
 
 export const api = axios.create({
