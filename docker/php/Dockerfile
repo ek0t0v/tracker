@@ -1,4 +1,4 @@
-FROM php:7.2.10-fpm
+FROM php:7.2.12-fpm
 
 ENV TIMEZONE=UTC
 
@@ -18,8 +18,4 @@ RUN docker-php-ext-install \
     pdo \
     pdo_pgsql \
     zip
-RUN curl --silent --show-error https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer && \
-    chmod +x /usr/local/bin/composer && \
-    usermod www-data -u 1000 && \
-    chown -R www-data:www-data /var/www
 RUN ln -snf /usr/share/zoneinfo/$TIMEZONE /etc/localtime && echo $TIMEZONE > /etc/timezone

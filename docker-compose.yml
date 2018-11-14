@@ -27,13 +27,20 @@ services:
             POSTGRES_DB: ${POSTGRES_DB}
             POSTGRES_USER: ${POSTGRES_USER}
             POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    composer:
+        build: docker/composer
+        user: 1000:1000
+        working_dir: /var/www/backend
+        volumes:
+            - ./backend:/var/www/backend
     node:
-        build: docker/node
+        image: node:9.11
+        user: 1000:1000
         working_dir: /var/www/frontend
-        depends_on:
-            - php
         ports:
             - ${SERVER_NODE_PORT}:8080
+        expose:
+            - 8080
         volumes:
             - ./frontend:/var/www/frontend
 
