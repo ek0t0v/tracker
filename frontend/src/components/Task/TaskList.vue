@@ -30,6 +30,12 @@
                 </div>
             </div>
         </div>
+        <div
+            v-if="loading"
+            class="loading"
+        >
+            <Loader />
+        </div>
         <Draggable
             :list="items"
             :options="dragOptions"
@@ -58,6 +64,8 @@
     import { mapGetters, mapActions } from 'vuex';
     import TaskItem from './TaskItem';
     import Checkbox from '../Common/Checkbox';
+    import Loader from '../Common/Loader';
+
     import { UNCHECKED, CHECKED, INDETERMINATE } from '../Common/Checkbox';
 
     export default {
@@ -65,10 +73,12 @@
         components: {
             TaskItem,
             Checkbox,
+            Loader,
             Draggable,
         },
         data() {
             return {
+                loading: true,
                 batchMode: false,
                 check: UNCHECKED,
                 checkedTasksIds: [],
@@ -86,11 +96,22 @@
                 'items',
             ]),
         },
+        watch: {
+            items() {
+                if (this.items.length > 0) {
+                    this.loading = false;
+                }
+            },
+        },
+        mounted() {
+            this.taskLoad();
+        },
         methods: {
             ...mapActions('task', [
                 'taskRename',
                 'taskRemove',
                 'taskMove',
+                'taskLoad',
             ]),
             onChecked() {
                 if (this.check === UNCHECKED) {
@@ -181,6 +202,12 @@
 
 <style lang="less" scoped>
     @import '../../less/common';
+
+    .loading {
+        .flex(row, nowrap, center, center);
+        width: 100%;
+        height: 128px;
+    }
 
     .flip-list-move,
     .no-move {

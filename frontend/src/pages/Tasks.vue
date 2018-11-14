@@ -13,7 +13,7 @@
     import TaskList from '../components/Task/TaskList';
     import TaskCreate from '../components/Task/TaskCreate';
     import TimingList from '../components/Timing/TimingList';
-    import { mapGetters, mapActions } from 'vuex';
+    import { mapGetters } from 'vuex';
 
     export default {
         name: 'Tasks',
@@ -25,18 +25,6 @@
         computed: {
             ...mapGetters('task', [
                 'tasksCount',
-            ]),
-        },
-        mounted() {
-            this.taskLoad();
-            this.timingLoad();
-        },
-        methods: {
-            ...mapActions('task', [
-                'taskLoad',
-            ]),
-            ...mapActions('timing', [
-                'timingLoad',
             ]),
         },
     };
