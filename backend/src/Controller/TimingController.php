@@ -17,13 +17,17 @@ use Symfony\Component\Routing\Annotation\Route;
 class TimingController extends ApiController
 {
     /**
+     * todo: Добавить связь Timing с User.
+     *
      * @return JsonResponse
      *
      * @Route(name="api_timing_index", methods={"GET"})
      */
     public function index()
     {
-        $items = $this->getDoctrine()->getRepository(Timing::class)->findAll();
+        $items = $this->getDoctrine()->getRepository(Timing::class)->findBy([], [
+            'startedAt' => 'desc',
+        ]);
 
         return $this->apiResponse($items, ['frontend']);
     }

@@ -47,11 +47,18 @@ export default {
             timings.forEach(timing => state.items.push(timing));
         },
         timingAdd(state, { id, taskId, start, end }) {
-            state.items.push({
+            state.items.unshift({
                 id,
                 taskId,
                 start,
                 end,
+            });
+        },
+        reset(state) {
+            const s = initialState();
+
+            Object.keys(s).forEach(key => {
+                state[key] = s[key];
             });
         },
     },
