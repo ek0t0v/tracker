@@ -1,7 +1,11 @@
 <template>
     <div
         class="task-item"
-        :class="{ 'task-item--active': timerStarted }"
+        :class="{
+            'task-item--active': timerStarted,
+            'task-item--hover': isMouseOver,
+            'task-item--drag-in-progress': isDragInProgress,
+        }"
         :data-id="id"
     >
         <div class="task-item-left-block">
@@ -56,7 +60,6 @@
 
     import Checkbox from '../Common/Checkbox';
     import { UNCHECKED, CHECKED } from '../Common/Checkbox';
-    import { notify, tick } from '../../modules/notify';
     import { mapActions } from 'vuex';
 
     const DEFAULT_TIMER_VALUE = '00:00:00';
@@ -88,6 +91,7 @@
                 type: Number,
                 default: null,
             },
+            isDragInProgress: Boolean,
         },
         data() {
             return {
@@ -101,6 +105,7 @@
                     start: null,
                     end: null,
                 },
+                isMouseOver: false,
             };
         },
         watch: {
@@ -154,8 +159,6 @@
                     });
 
                     this.worker.onmessage = e => {
-                        tick();
-
                         let date = new Date(null);
                         date.setSeconds(e.data);
 
@@ -210,11 +213,7 @@
             background-color: #fff4ca !important;
         }
 
-        &:nth-child(even) {
-            background-color: #fcfcfc;
-        }
-
-        &:hover {
+        &:hover:not(&--drag-in-progress) {
 
             background-color: #f5f5f5;
 
@@ -226,6 +225,10 @@
                 opacity: 1;
             }
 
+        }
+
+        &:nth-child(even) {
+            background-color: #fcfcfc;
         }
 
         &__name {
@@ -249,7 +252,6 @@
         .flex(row, nowrap, center, center);
         width: 48px;
         height: 48px;
-
 
         &__drag-icon {
 

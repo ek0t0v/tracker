@@ -39,6 +39,7 @@
         <Draggable
             :list="items"
             :options="dragOptions"
+            @start="isDragInProgress = true"
             @end="onDragEnd"
         >
             <TaskItem
@@ -49,7 +50,7 @@
                 :position="item.position"
                 :batch-mode="batchMode"
                 :common-check="check"
-                :active-task-id="activeTaskId"
+                :is-drag-in-progress="isDragInProgress"
                 @on-checked="onTaskChecked"
                 @on-removed="onTaskRemoved"
                 @on-name-updated="onTaskNameUpdated"
@@ -89,6 +90,7 @@
                     ghostClass: 'task-item--ghost',
                     animation: 100,
                 },
+                isDragInProgress: false,
             };
         },
         computed: {
@@ -186,7 +188,13 @@
                 this.check = UNCHECKED;
             },
             onDragEnd(e) {
-                // todo: во время перетаскивания, выделение "перебрасывается" на другие элементы, т.е. привязано к позиции
+                // Во время перетаскивания, выделение "перебрасывается" на другие элементы, т.е. привязано к позиции.
+
+                // исправлено - при перетаскивании потомкам передается isDragInProgress, потомок в случае true прицепляет
+                // к себе класс &--drag-in-progress, hover теперь выглядит так: &:hover:not(&--drag-in-progress)
+
+                this.isDragInProgress = false;
+
                 this.taskMove({
                     id: parseInt(e.item.getAttribute('data-id')),
                     position: e.newIndex,
@@ -214,7 +222,17 @@
         transition: transform 0.25s;
     }
 
-    .task-item--drag {}
+    .task-item--drag {
+        background-color: unset;
+
+        .task-item-left-block__drag-icon {
+            opacity: unset !important;
+        }
+
+        .task-item-right-block__start-icon {
+            opacity: unset !important;
+        }
+    }
 
     .task-item--ghost {}
 
