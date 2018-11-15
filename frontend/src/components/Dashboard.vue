@@ -50,9 +50,19 @@
                 'newTimingItemsAdded',
             ]),
         },
+        mounted() {
+            this.taskLoad();
+            this.timingLoad();
+        },
         methods: {
             ...mapActions('user', [
                 'userLogout',
+            ]),
+            ...mapActions('task', [
+                'taskLoad',
+            ]),
+            ...mapActions('timing', [
+                'timingLoad',
             ]),
             onLogout() {
                 this.userLogout();

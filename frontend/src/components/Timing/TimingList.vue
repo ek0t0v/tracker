@@ -46,7 +46,9 @@
             },
         },
         mounted() {
-            this.timingLoad();
+            if (this.items.length > 0) {
+                this.loading = false;
+            }
         },
         methods: {
             ...mapActions('timing', [

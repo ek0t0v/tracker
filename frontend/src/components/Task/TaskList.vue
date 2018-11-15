@@ -106,14 +106,15 @@
             },
         },
         mounted() {
-            this.taskLoad();
+            if (this.items.length > 0) {
+                this.loading = false;
+            }
         },
         methods: {
             ...mapActions('task', [
                 'taskRename',
                 'taskRemove',
                 'taskMove',
-                'taskLoad',
             ]),
             onChecked() {
                 if (this.check === UNCHECKED) {
@@ -190,8 +191,8 @@
             onDragEnd(e) {
                 // Во время перетаскивания, выделение "перебрасывается" на другие элементы, т.е. привязано к позиции.
 
-                // исправлено - при перетаскивании потомкам передается isDragInProgress, потомок в случае true прицепляет
-                // к себе класс &--drag-in-progress, hover теперь выглядит так: &:hover:not(&--drag-in-progress)
+                // Исправлено - при перетаскивании потомкам передается isDragInProgress, потомок в случае true прицепляет
+                // к себе класс &--drag-in-progress, hover теперь выглядит так: &:hover:not(&--drag-in-progress).
 
                 this.isDragInProgress = false;
 
