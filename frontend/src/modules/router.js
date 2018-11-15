@@ -49,6 +49,10 @@ const router = new VueRouter({
             meta: {
                 requiresAuth: true,
             },
+            beforeEnter: (to, from, next) => {
+                store.dispatch('sidebar/removeNewTimingsNotification');
+                next();
+            },
         },
         {
             path: '/settings',

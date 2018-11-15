@@ -12,6 +12,10 @@
                     class="dashboard-sidebar-menu__item"
                     :to="{ name: 'history' }"
                 >
+                    <span
+                        v-if="newTimingItemsAdded"
+                        class="dashboard-sidebar-menu__item-notification"
+                    />
                     <i class="fas fa-history" />
                 </router-link>
                 <router-link
@@ -37,10 +41,15 @@
 </template>
 
 <script>
-    import { mapActions } from 'vuex';
+    import { mapGetters, mapActions } from 'vuex';
 
     export default {
         name: 'Dashboard',
+        computed: {
+            ...mapGetters('sidebar', [
+                'newTimingItemsAdded',
+            ]),
+        },
         methods: {
             ...mapActions('user', [
                 'userLogout',
@@ -90,6 +99,7 @@
             height: 48px;
             margin: 0 0 4px 0;
             border-radius: 3px;
+            position: relative;
 
             &:last-child {
                 margin: 0;
@@ -104,6 +114,17 @@
                 font-size: 22px;
             }
 
+        }
+
+        &__item-notification {
+            .flex(row, nowrap, center, center);
+            width: 8px;
+            height: 8px;
+            border-radius: 4px;
+            top: 4px;
+            right: 4px;
+            position: absolute;
+            background-color: #00ffff;
         }
 
     }

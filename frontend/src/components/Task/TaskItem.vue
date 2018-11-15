@@ -18,9 +18,9 @@
             />
         </div>
         <input
+            v-model="localName"
             class="task-item__name"
             type="text"
-            :value="name"
             @blur="onNameUpdated"
         />
         <div class="task-item__time">
@@ -52,6 +52,8 @@
 </template>
 
 <script>
+    // todo: Не создавать тайминг, если быстро кликнули (интервал равен 0).
+
     import Checkbox from '../Common/Checkbox';
     import { UNCHECKED, CHECKED } from '../Common/Checkbox';
     import { notify, tick } from '../../modules/notify';
@@ -93,6 +95,7 @@
                 timerStarted: false,
                 check: UNCHECKED,
                 worker: null,
+                localName: this.name,
                 timing: {
                     taskId: this.id,
                     start: null,
@@ -116,6 +119,9 @@
         methods: {
             ...mapActions('timing', [
                 'timingAdd',
+            ]),
+            ...mapActions('sidebar', [
+                'addNewTiming',
             ]),
             onChecked() {
                 this.check = this.check === UNCHECKED ? CHECKED : UNCHECKED;
@@ -170,6 +176,7 @@
                 if (withTiming) {
                     this.timing.end = new Date();
                     this.timingAdd(this.timing);
+                    this.addNewTiming();
                 }
 
                 this.resetTimerData();

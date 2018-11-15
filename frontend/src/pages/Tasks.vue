@@ -5,14 +5,12 @@
         </div>
         <TaskCreate />
         <TaskList />
-        <TimingList />
     </div>
 </template>
 
 <script>
     import TaskList from '../components/Task/TaskList';
     import TaskCreate from '../components/Task/TaskCreate';
-    import TimingList from '../components/Timing/TimingList';
     import { mapGetters } from 'vuex';
 
     export default {
@@ -20,7 +18,6 @@
         components: {
             TaskList,
             TaskCreate,
-            TimingList,
         },
         computed: {
             ...mapGetters('task', [

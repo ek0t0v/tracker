@@ -30,7 +30,7 @@
             },
             color: {
                 type: String,
-                default: '#333',
+                default: 'blue',
             },
             strokeWidth: {
                 type: Number,
