@@ -3,7 +3,6 @@
 namespace App\Request\ParamConverter;
 
 use App\Entity\Task;
-use App\Entity\User;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\ParamConverterInterface;
 use Symfony\Bridge\Doctrine\ManagerRegistry;
@@ -13,8 +12,6 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 
 /**
  * Class TaskByUserParamConverter.
- *
- * todo: пофиксить - срабатывает при запросах когда должна происходить ошибка 401, не может выполнить ->getUser
  */
 class TaskByUserParamConverter implements ParamConverterInterface
 {
@@ -24,9 +21,9 @@ class TaskByUserParamConverter implements ParamConverterInterface
     private $registry;
 
     /**
-     * @var User
+     * @var TokenStorageInterface
      */
-    private $user;
+    private $tokenStorage;
 
     /**
      * TaskByUserParamConverter constructor.
@@ -37,7 +34,7 @@ class TaskByUserParamConverter implements ParamConverterInterface
     public function __construct(ManagerRegistry $registry = null, TokenStorageInterface $tokenStorage)
     {
         $this->registry = $registry;
-        $this->user = $tokenStorage->getToken()->getUser();
+        $this->tokenStorage = $tokenStorage;
     }
 
     /**
@@ -52,7 +49,7 @@ class TaskByUserParamConverter implements ParamConverterInterface
         $em = $this->registry->getManagerForClass($configuration->getClass());
         $task = $em->getRepository($configuration->getClass())->findOneBy([
             'id' => $request->attributes->get('id'),
-            'user' => $this->user,
+            'user' => $this->tokenStorage->getToken()->getUser(),
         ]);
 
         if (is_null($task) || !($task instanceof Task)) {
