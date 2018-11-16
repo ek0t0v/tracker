@@ -34,6 +34,8 @@ export default {
             ;
         },
         taskRemove({ commit }, { ids }) {
+            // todo: Удалять также связанные тайминги (или нет?).
+
             api.delete('/task', {
                 data: {
                     ids,

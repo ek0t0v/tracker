@@ -1,19 +1,43 @@
 <template>
-    <div class="timing-list">
-        <div
-            v-if="loading"
-            class="loading"
-        >
-            <Loader />
+    <div>
+        <div class="timing-list">
+            <div
+                v-if="loading"
+                class="loading"
+            >
+                <Loader />
+            </div>
+            <div class="timing-list__header">
+                <span>Today [{{ todayTimingsCount }}]</span>
+            </div>
+            <TimingItem
+                v-for="item in todayTimings"
+                :id="item.id"
+                :key="item.id"
+                :task-id="item.taskId"
+                :start="item.start"
+                :end="item.end"
+            />
         </div>
-        <TimingItem
-            v-for="item in items"
-            :id="item.id"
-            :key="item.id"
-            :task-id="item.taskId"
-            :start="item.start"
-            :end="item.end"
-        />
+        <div class="timing-list">
+            <div
+                v-if="loading"
+                class="loading"
+            >
+                <Loader />
+            </div>
+            <div class="timing-list__header">
+                <span>Earlier [{{ otherTimingsCount }}]</span>
+            </div>
+            <TimingItem
+                v-for="item in otherTimings"
+                :id="item.id"
+                :key="item.id"
+                :task-id="item.taskId"
+                :start="item.start"
+                :end="item.end"
+            />
+        </div>
     </div>
 </template>
 
@@ -36,6 +60,10 @@
         computed: {
             ...mapGetters('timing', [
                 'items',
+                'todayTimings',
+                'otherTimings',
+                'todayTimingsCount',
+                'otherTimingsCount',
             ]),
         },
         watch: {
@@ -68,6 +96,23 @@
     }
 
     .timing-list {
+
         .flex(column, nowrap, flex-start, flex-start);
+
+        &__header {
+
+            .flex(row, nowrap, flex-start, center);
+            width: 100%;
+            height: 56px;
+            padding: 0 48px;
+            box-sizing: border-box;
+            background-color: #F5F5F5;
+
+            span {
+                .font(@primary-font, 16px, 700, #888);
+            }
+
+        }
+
     }
 </style>

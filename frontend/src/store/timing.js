@@ -12,6 +12,27 @@ export default {
     state: initialState,
     getters: {
         items: state => state.items,
+        timingsCount: state => state.items.length,
+        todayTimings: state => state.items.filter(timing => {
+            if (moment(timing.start).isSame(moment(), 'day')) {
+                return timing;
+            }
+        }),
+        otherTimings: state => state.items.filter(timing => {
+            if (!moment(timing.start).isSame(moment(), 'day')) {
+                return timing;
+            }
+        }),
+        todayTimingsCount: state => state.items.filter(timing => {
+            if (moment(timing.start).isSame(moment(), 'day')) {
+                return timing;
+            }
+        }).length,
+        otherTimingsCount: state => state.items.filter(timing => {
+            if (!moment(timing.start).isSame(moment(), 'day')) {
+                return timing;
+            }
+        }).length,
     },
     actions: {
         timingLoad({ commit }) {

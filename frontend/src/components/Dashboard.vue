@@ -141,7 +141,7 @@
 
     .dashboard-content {
         width: 1056px;
-        height: 100vh;
+        min-height: 100vh;
         background-color: #fff;
         margin: 0 0 0 64px;
     }
