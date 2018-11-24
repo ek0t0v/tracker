@@ -7,14 +7,3 @@ modules:
             part: Json
         - Asserts
         - \App\Tests\Helper\Api
-#        - Symfony:
-#            app_path: 'src'
-#            environment: 'test'
-#            debug: true
-#        - Db:
-#            dsn: 'pgsql:host=localhost;port=5432;dbname=symfony'
-#            user: 'symfony'
-#            password: 'symfony'
-#        - Doctrine2:
-#            depends: Symfony
-#            cleanup: true

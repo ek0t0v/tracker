@@ -5,9 +5,9 @@ namespace App\Tests;
 use Codeception\Util\HttpCode;
 
 /**
- * Class CreateUserCest.
+ * Class UserCest.
  */
-class CreateUserCest
+class UserCest
 {
     /**
      * @param ApiTester $I
@@ -20,7 +20,7 @@ class CreateUserCest
     /**
      * @param ApiTester $I
      */
-    public function emailValidationTest(ApiTester $I)
+    public function createUserEmailValidationTest(ApiTester $I)
     {
         $I->sendPOST('/users');
         $I->seeResponseCodeIsClientError();
@@ -70,7 +70,7 @@ class CreateUserCest
     /**
      * @param ApiTester $I
      */
-    public function passwordValidationTest(ApiTester $I)
+    public function createUserPasswordValidationTest(ApiTester $I)
     {
         $I->sendPOST('/users', [
             'email' => 'test2@mail.ru',
