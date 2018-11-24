@@ -29,3 +29,7 @@ Pass phrase can be taken from `backend/.env` or set your own pass phrase, do not
 ### Optional
 
 - `cp pre-commit.dist .git/hooks/pre-commit && chmod +x .git/hooks/pre-commit` set php-cs-fixer in pre-commit hook
+
+## Tests
+
+- `cd backend && php vendor/bin/codecept run`
