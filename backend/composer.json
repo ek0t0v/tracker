@@ -23,6 +23,7 @@
         "symfony/yaml": "*"
     },
     "require-dev": {
+        "codeception/codeception": "^2.5",
         "hautelook/alice-bundle": "^2.3",
         "sensiolabs/security-checker": "^5.0",
         "symfony/dotenv": "*",
