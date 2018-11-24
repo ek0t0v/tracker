@@ -5,6 +5,8 @@ modules:
             url: http://localhost/api
             depends: PhpBrowser
             part: Json
+        - Asserts
+        - \App\Tests\Helper\Api
 #        - Symfony:
 #            app_path: 'src'
 #            environment: 'test'
@@ -16,4 +18,3 @@ modules:
 #        - Doctrine2:
 #            depends: Symfony
 #            cleanup: true
-#        - \App\Tests\Helper\Api

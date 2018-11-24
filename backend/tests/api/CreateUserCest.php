@@ -92,7 +92,7 @@ class CreateUserCest
     /**
      * @param ApiTester $I
      */
-    public function registerTest(ApiTester $I)
+    public function createUserTest(ApiTester $I)
     {
         $I->sendPOST('/users', [
             'email' => 'test2@mail.ru',
