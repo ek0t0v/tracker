@@ -12,7 +12,7 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * Class TimingController.
  *
- * @Route("/api/timing")
+ * @Route("/api/timings")
  */
 class TimingController extends ApiController
 {

@@ -1,0 +1,19 @@
+actor: ApiTester
+modules:
+    enabled:
+        - REST:
+            url: http://localhost/api
+            depends: PhpBrowser
+            part: Json
+#        - Symfony:
+#            app_path: 'src'
+#            environment: 'test'
+#            debug: true
+#        - Db:
+#            dsn: 'pgsql:host=localhost;port=5432;dbname=symfony'
+#            user: 'symfony'
+#            password: 'symfony'
+#        - Doctrine2:
+#            depends: Symfony
+#            cleanup: true
+#        - \App\Tests\Helper\Api

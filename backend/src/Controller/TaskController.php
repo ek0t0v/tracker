@@ -10,23 +10,29 @@ use App\Request\Task\RenameTaskRequest;
 use App\Service\Task\TaskManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Class TaskController.
  *
- * @Route("/api/task")
+ * @Route("/api/tasks")
  */
 class TaskController extends ApiController
 {
     /**
+     * @param Request $request
+     *
      * @return JsonResponse
      *
      * @Route(name="api_task_index", methods={"GET"})
      */
-    public function index(): JsonResponse
+    public function index(Request $request): JsonResponse
     {
+        $start = $request->query->get('start');
+        $end = $request->query->get('end');
+
         $tasks = $this->getDoctrine()->getRepository(Task::class)->findBy([
             'user' => $this->getUser(),
         ], [

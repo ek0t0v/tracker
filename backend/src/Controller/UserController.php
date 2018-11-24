@@ -4,24 +4,25 @@ namespace App\Controller;
 
 use App\Request\User\UserRegisterRequest;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * Class RegisterController.
+ * Class UserController.
  *
- * @Route("/api/user")
+ * @Route("/api/users")
  */
-class RegisterController extends ApiController
+class UserController extends ApiController
 {
     /**
      * @param UserRegisterRequest $request
      *
      * @return JsonResponse
      *
-     * @Route("/register", name="api_user_register", methods={"POST"})
+     * @Route(name="api_user_register", methods={"POST"})
      */
     public function register(UserRegisterRequest $request): JsonResponse
     {
-        return $this->apiResponse();
+        return $this->apiResponse([], ['frontend'], Response::HTTP_CREATED);
     }
 }
