@@ -13,24 +13,7 @@ class Api extends Module
     /**
      * @var string
      */
-    private $accessToken;
-
-    /**
-     * @param array $settings
-     *
-     * @throws ModuleException
-     */
-    public function _beforeSuite($settings = [])
-    {
-        $I = $this->getModule('REST');
-        $I->haveHttpHeader('Content-Type', 'application/json');
-        $I->sendPOST('/token/create', [
-            'email' => 'user@mail.ru',
-            'password' => 'passw0rd',
-        ]);
-
-        $this->accessToken = json_decode($I->grabResponse(), true)['token'];
-    }
+    private $token;
 
     /**
      * @return string
@@ -39,8 +22,20 @@ class Api extends Module
      */
     public function getAccessToken()
     {
-        unset($this->getModule('REST')->headers['Authorization']);
+        $rest = $this->getModule('REST');
 
-        return $this->accessToken;
+        if (!$this->token) {
+            $rest->haveHttpHeader('Content-Type', 'application/json');
+            $rest->sendPOST('/token/create', [
+                'email' => 'user@mail.ru',
+                'password' => 'passw0rd',
+            ]);
+
+            $this->token = json_decode($rest->grabResponse(), true)['token'];
+        }
+
+        unset($rest->headers['Authorization']);
+
+        return $this->token;
     }
 }

@@ -10,4 +10,14 @@ extensions:
     enabled:
         - Codeception\Extension\RunFailed
 params:
-    - .env
+    - .env.test
+modules:
+    config:
+        Db:
+            dsn: 'pgsql:host=postgres_test;dbname=symfony'
+            user: symfony
+            password: symfony
+            dump: tests/_data/dump.sql
+            populate: true
+            cleanup: true
+            reconnect: false

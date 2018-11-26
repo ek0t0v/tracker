@@ -16,6 +16,7 @@ services:
         working_dir: /var/www/backend
         depends_on:
             - postgres
+            - postgres_test
         volumes:
             - ./backend:/var/www/backend
     postgres:
@@ -23,6 +24,13 @@ services:
         user: postgres:postgres
         ports:
             - ${SERVER_POSTGRES_PORT}:5432
+        environment:
+            POSTGRES_DB: ${POSTGRES_DB}
+            POSTGRES_USER: ${POSTGRES_USER}
+            POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    postgres_test:
+        build: docker/postgres
+        user: postgres:postgres
         environment:
             POSTGRES_DB: ${POSTGRES_DB}
             POSTGRES_USER: ${POSTGRES_USER}

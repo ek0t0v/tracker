@@ -5,8 +5,8 @@ namespace App\Tests\Helper;
 use Codeception\Module;
 
 /**
- * Class Functional.
+ * Class Integration.
  */
-class Functional extends Module
+class Integration extends Module
 {
 }

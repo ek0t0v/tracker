@@ -11,10 +11,12 @@ RUN apt-get update && \
     git \
     zip \
     unzip \
-    cron
+    cron \
+    htop
 RUN docker-php-ext-install \
     bcmath \
     opcache \
+    pgsql \
     pdo \
     pdo_pgsql \
     zip

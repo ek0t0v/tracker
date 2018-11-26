@@ -22,6 +22,8 @@ class TaskCest
 
     /**
      * @param ApiTester $I
+     *
+     * @throws
      */
     public function getTasksForTodayTest(ApiTester $I)
     {
@@ -48,9 +50,15 @@ class TaskCest
 
     /**
      * @param ApiTester $I
+     *
+     * @throws
      */
     public function createTaskTest(ApiTester $I)
     {
+        $I->sendPOST('/tasks', [
+            'name' => 'task',
+        ]);
+        $I->seeResponseCodeIsSuccessful();
     }
 
     /**

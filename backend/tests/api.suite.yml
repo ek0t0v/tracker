@@ -1,9 +1,17 @@
 actor: ApiTester
 modules:
     enabled:
-        - REST:
-            url: http://localhost/api
-            depends: PhpBrowser
-            part: Json
-        - Asserts
         - \App\Tests\Helper\Api
+        - Db
+        - Asserts
+        - Symfony:
+              app_path: 'src'
+              environment: 'test'
+              debug: true
+        - Doctrine2:
+              depends: Symfony
+              cleanup: false
+        - REST:
+            depends: Symfony
+            url: /api
+            part: Json
