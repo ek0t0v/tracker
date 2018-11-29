@@ -48,10 +48,7 @@ class TaskService implements TaskServiceInterface
      */
     public function get(\DateTime $start, \DateTime $end = null): array
     {
-        $tasks = is_null($end)
-            ? $this->em->getRepository(Task::class)->findByStartDate($start)
-            : $this->em->getRepository(Task::class)->findByDateRange($start, $end);
-
+        $tasks = $this->em->getRepository(Task::class)->findByDate($start);
         $tasks = $this->taskSchedule->filter($tasks, $start);
 
         return $tasks;

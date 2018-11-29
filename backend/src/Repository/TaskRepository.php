@@ -29,7 +29,7 @@ class TaskRepository extends ServiceEntityRepository
      *
      * @return mixed
      */
-    public function findByStartDate(\DateTime $start)
+    public function findByDate(\DateTime $start)
     {
         return $this->createQueryBuilder('t')
             ->addSelect('c')
@@ -37,20 +37,6 @@ class TaskRepository extends ServiceEntityRepository
             ->andWhere('t.endDate IS NULL OR t.endDate > :start')
             ->setParameter('start', $start)
             ->leftJoin('t.changes', 'c')
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-
-    /**
-     * @param \DateTime $start
-     * @param \DateTime $end
-     *
-     * @return mixed
-     */
-    public function findByDateRange(\DateTime $start, \DateTime $end)
-    {
-        return $this->createQueryBuilder('t')
             ->getQuery()
             ->getResult()
         ;
