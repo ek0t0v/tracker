@@ -32,4 +32,5 @@ Pass phrase can be taken from `backend/.env` or set your own pass phrase, do not
 
 ## Tests
 
-- `cd backend && php vendor/bin/codecept run`
+- `docker-compose exec postgres pg_dump -U symfony symfony > ./backend/tests/_data/dump.sql`
+- `docker-compose exec php php vendor/bin/codecept run api`

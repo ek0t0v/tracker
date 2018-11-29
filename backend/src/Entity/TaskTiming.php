@@ -3,20 +3,19 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
- * @ORM\Table(name="timings")
- * @ORM\Entity(repositoryClass="App\Repository\TimingRepository")
+ * Class TaskTiming.
+ *
+ * @ORM\Table(name="task_timings")
+ * @ORM\Entity(repositoryClass="App\Repository\TaskTimingRepository")
  */
-class Timing
+class TaskTiming
 {
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     *
-     * @Groups({"frontend"})
      */
     private $id;
 
@@ -25,8 +24,6 @@ class Timing
      *
      * @ORM\ManyToOne(targetEntity="Task")
      * @ORM\JoinColumn(name="task_id", referencedColumnName="id")
-     *
-     * @Groups({"frontend"})
      */
     private $task;
 
@@ -34,8 +31,6 @@ class Timing
      * @var \DateTime
      *
      * @ORM\Column(name="started_at", type="datetime")
-     *
-     * @Groups({"frontend"})
      */
     private $startedAt;
 
@@ -43,8 +38,6 @@ class Timing
      * @var \DateTime
      *
      * @ORM\Column(name="ended_at", type="datetime")
-     *
-     * @Groups({"frontend"})
      */
     private $endedAt;
 
@@ -67,7 +60,7 @@ class Timing
     /**
      * @param Task|null $task
      *
-     * @return Timing
+     * @return TaskTiming
      */
     public function setTask(?Task $task): self
     {
@@ -87,7 +80,7 @@ class Timing
     /**
      * @param \DateTimeInterface $startedAt
      *
-     * @return Timing
+     * @return TaskTiming
      */
     public function setStartedAt(\DateTimeInterface $startedAt): self
     {
@@ -107,7 +100,7 @@ class Timing
     /**
      * @param \DateTimeInterface $endedAt
      *
-     * @return Timing
+     * @return TaskTiming
      */
     public function setEndedAt(\DateTimeInterface $endedAt): self
     {

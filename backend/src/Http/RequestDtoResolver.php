@@ -4,9 +4,12 @@ namespace App\Http;
 
 use App\Http\Exception\ApiJsonException;
 use App\Http\Exception\ApiValidationException;
+use App\Request\AnotherTask\GetTasksRequest;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Controller\ArgumentValueResolverInterface;
 use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
+use Symfony\Component\Serializer\Normalizer\ArrayDenormalizer;
+use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
@@ -52,11 +55,17 @@ final class RequestDtoResolver implements ArgumentValueResolverInterface
      */
     public function resolve(Request $request, ArgumentMetadata $argument)
     {
-        if (!$this->isJson($request->getContent())) {
+        if (in_array($request->getMethod(), ['POST', 'PUT']) && !$this->isJson($request->getContent())) {
             throw new ApiJsonException();
         }
 
-        $dto = $this->serializer->deserialize($request->getContent(), $argument->getType(), 'json');
+        $bodyAsArray = json_decode($request->getContent(), true);
+
+        $data = !is_null($bodyAsArray)
+            ? json_encode(array_merge($bodyAsArray, $request->query->all()))
+            : json_encode($request->query->all());
+
+        $dto = $this->serializer->deserialize($data, $argument->getType(), 'json');
         $violations = $this->validator->validate($dto);
 
         if (count($violations)) {

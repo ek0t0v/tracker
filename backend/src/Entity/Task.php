@@ -3,11 +3,12 @@
 namespace App\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Mapping\Annotation as Gedmo;
-use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
+ * Class Task.
+ *
  * @ORM\Table(name="tasks")
  * @ORM\Entity(repositoryClass="App\Repository\TaskRepository")
  * @ORM\EntityListeners({"App\Doctrine\EventListener\TaskListener"})
@@ -15,11 +16,11 @@ use Symfony\Component\Serializer\Annotation\Groups;
 class Task
 {
     /**
+     * @var int
+     *
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     *
-     * @Groups({"frontend"})
      */
     private $id;
 
@@ -34,40 +35,69 @@ class Task
     /**
      * @var string
      *
-     * @ORM\Column(name="name", type="string", nullable=true)
-     *
-     * @Groups({"frontend"})
+     * @ORM\Column(name="name", type="text")
      */
     private $name;
 
     /**
-     * @var int
+     * @var \DateTime
      *
-     * @ORM\Column(name="position", type="integer")
-     *
-     * @Groups({"frontend"})
-     *
-     * @Gedmo\SortablePosition()
+     * @ORM\Column(name="start_date", type="date")
      */
-    private $position;
+    private $startDate;
 
     /**
-     * todo: Определиться, хотим ли мы удалять тайминги, если задача удалена.
+     * Удаления как такового не будет - чтобы удалить задачу, нужно установить endDate.
      *
-     * Возможно, удаление нужно сделать не реальным удалением, а перемещением
-     * задачи в архив, т.е. soft delete.
+     * @var \DateTime
      *
-     * @var Timing[]
+     * @ORM\Column(name="end_date", type="date", nullable=true)
+     */
+    private $endDate;
+
+    /**
+     * Если расписания нет - то задача одноразовая.
      *
-     * @ORM\OneToMany(targetEntity="Timing", mappedBy="task", orphanRemoval=true)
+     * @var int[]|null
+     *
+     * @ORM\Column(name="schedule", type="array", nullable=true)
+     */
+    private $schedule;
+
+    /**
+     * @var TaskChange[]
+     *
+     * @ORM\OneToMany(targetEntity="TaskChange", mappedBy="task")
+     */
+    private $changes;
+
+    /**
+     * @var TaskTiming[]
+     *
+     * @ORM\OneToMany(targetEntity="TaskTiming", mappedBy="task")
      */
     private $timings;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="updated_at", type="datetime")
+     */
+    private $updatedAt;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="created_at", type="datetime")
+     */
+    private $createdAt;
 
     /**
      * Task constructor.
      */
     public function __construct()
     {
+        $this->changes = new ArrayCollection();
         $this->timings = new ArrayCollection();
     }
 
@@ -77,6 +107,126 @@ class Task
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    /**
+     * @param string $name
+     *
+     * @return Task
+     */
+    public function setName(string $name): self
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * @return \DateTimeInterface|null
+     */
+    public function getStartDate(): ?\DateTimeInterface
+    {
+        return $this->startDate;
+    }
+
+    /**
+     * @param \DateTimeInterface $startDate
+     *
+     * @return Task
+     */
+    public function setStartDate(\DateTimeInterface $startDate): self
+    {
+        $this->startDate = $startDate;
+
+        return $this;
+    }
+
+    /**
+     * @return \DateTimeInterface|null
+     */
+    public function getEndDate(): ?\DateTimeInterface
+    {
+        return $this->endDate;
+    }
+
+    /**
+     * @param \DateTimeInterface|null $endDate
+     *
+     * @return Task
+     */
+    public function setEndDate(?\DateTimeInterface $endDate): self
+    {
+        $this->endDate = $endDate;
+
+        return $this;
+    }
+
+    /**
+     * @return array|null
+     */
+    public function getSchedule(): ?array
+    {
+        return $this->schedule;
+    }
+
+    /**
+     * @param array|null $schedule
+     *
+     * @return Task
+     */
+    public function setSchedule(?array $schedule): self
+    {
+        $this->schedule = $schedule;
+
+        return $this;
+    }
+
+    /**
+     * @return \DateTimeInterface|null
+     */
+    public function getUpdatedAt(): ?\DateTimeInterface
+    {
+        return $this->updatedAt;
+    }
+
+    /**
+     * @param \DateTimeInterface $updatedAt
+     *
+     * @return Task
+     */
+    public function setUpdatedAt(\DateTimeInterface $updatedAt): self
+    {
+        $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    /**
+     * @return \DateTimeInterface|null
+     */
+    public function getCreatedAt(): ?\DateTimeInterface
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * @param \DateTimeInterface $createdAt
+     *
+     * @return Task
+     */
+    public function setCreatedAt(\DateTimeInterface $createdAt): self
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
     }
 
     /**
@@ -100,71 +250,60 @@ class Task
     }
 
     /**
-     * @return null|string
+     * @return Collection|TaskChange[]
      */
-    public function getName(): ?string
+    public function getChanges(): Collection
     {
-        return $this->name;
+        return $this->changes;
     }
 
     /**
-     * @param null|string $name
+     * @param TaskChange $change
      *
      * @return Task
      */
-    public function setName(?string $name): self
+    public function addChange(TaskChange $change): self
     {
-        $this->name = $name;
+        if (!$this->changes->contains($change)) {
+            $this->changes[] = $change;
+            $change->setTask($this);
+        }
 
         return $this;
     }
 
     /**
-     * @return int|null
-     */
-    public function getPosition(): ?int
-    {
-        return $this->position;
-    }
-
-    /**
-     * @param int $position
+     * @param TaskChange $change
      *
      * @return Task
      */
-    public function setPosition(int $position): self
+    public function removeChange(TaskChange $change): self
     {
-        $this->position = $position;
+        if ($this->changes->contains($change)) {
+            $this->changes->removeElement($change);
+            // set the owning side to null (unless already changed)
+            if ($change->getTask() === $this) {
+                $change->setTask(null);
+            }
+        }
 
         return $this;
     }
 
     /**
-     * @return array|Timing[]
+     * @return Collection|TaskTiming[]
      */
-    public function getTimings(): array
+    public function getTimings(): Collection
     {
         return $this->timings;
     }
 
     /**
-     * @param array|Timing[] $timings
+     * @param TaskTiming $timing
      *
      * @return Task
      */
-    public function setTimings(array $timings): self
-    {
-        $this->timings = $timings;
-
-        return $this;
-    }
-
-    /**
-     * @param Timing $timing
-     *
-     * @return Task
-     */
-    public function addTiming(Timing $timing): self
+    public function addTiming(TaskTiming $timing): self
     {
         if (!$this->timings->contains($timing)) {
             $this->timings[] = $timing;
@@ -175,11 +314,11 @@ class Task
     }
 
     /**
-     * @param Timing $timing
+     * @param TaskTiming $timing
      *
      * @return Task
      */
-    public function removeFavoriteItem(Timing $timing): self
+    public function removeTiming(TaskTiming $timing): self
     {
         if ($this->timings->contains($timing)) {
             $this->timings->removeElement($timing);

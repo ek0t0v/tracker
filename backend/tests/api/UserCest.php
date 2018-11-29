@@ -27,12 +27,9 @@ class UserCest
         $I->seeResponseCodeIs(HttpCode::UNPROCESSABLE_ENTITY);
         $I->seeResponseIsJson();
         $I->seeResponseContainsJson([
-            'message' => 'Validation error.',
-            'violations' => [
-                'email' => [
-                    'This value should not be null.',
-                    'This value should not be blank.',
-                ],
+            'email' => [
+                'This value should not be null.',
+                'This value should not be blank.',
             ],
         ]);
 
@@ -43,26 +40,20 @@ class UserCest
         $I->seeResponseCodeIs(HttpCode::UNPROCESSABLE_ENTITY);
         $I->seeResponseIsJson();
         $I->seeResponseContainsJson([
-            'message' => 'Validation error.',
-            'violations' => [
-                'email' => [
-                    'This value is not a valid email address.',
-                ],
+            'email' => [
+                'This value is not a valid email address.',
             ],
         ]);
 
         $I->sendPOST('/users', [
-            'email' => 'user@mail.ru',
+            'email' => 'test_user_1@mail.ru',
         ]);
         $I->seeResponseCodeIsClientError();
         $I->seeResponseCodeIs(HttpCode::UNPROCESSABLE_ENTITY);
         $I->seeResponseIsJson();
         $I->seeResponseContainsJson([
-            'message' => 'Validation error.',
-            'violations' => [
-                'email' => [
-                    'A user with this email address already exists.',
-                ],
+            'email' => [
+                'A user with this email address already exists.',
             ],
         ]);
     }
@@ -80,11 +71,8 @@ class UserCest
         $I->seeResponseCodeIs(HttpCode::UNPROCESSABLE_ENTITY);
         $I->seeResponseIsJson();
         $I->seeResponseContainsJson([
-            'message' => 'Validation error.',
-            'violations' => [
-                'password' => [
-                    'This value is too short. It should have 6 characters or more.',
-                ],
+            'password' => [
+                'This value is too short. It should have 6 characters or more.',
             ],
         ]);
     }

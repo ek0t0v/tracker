@@ -2,25 +2,25 @@
 
 namespace App\Repository;
 
-use App\Entity\Timing;
+use App\Entity\TaskChange;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
- * @method Timing|null find($id, $lockMode = null, $lockVersion = null)
- * @method Timing|null findOneBy(array $criteria, array $orderBy = null)
- * @method Timing[]    findAll()
- * @method Timing[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method TaskChange|null find($id, $lockMode = null, $lockVersion = null)
+ * @method TaskChange|null findOneBy(array $criteria, array $orderBy = null)
+ * @method TaskChange[]    findAll()
+ * @method TaskChange[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class TimingRepository extends ServiceEntityRepository
+class TaskChangeRepository extends ServiceEntityRepository
 {
     public function __construct(RegistryInterface $registry)
     {
-        parent::__construct($registry, Timing::class);
+        parent::__construct($registry, TaskChange::class);
     }
 
 //    /**
-//     * @return Timing[] Returns an array of Timing objects
+//     * @return TaskChange[] Returns an array of TaskChange objects
 //     */
     /*
     public function findByExampleField($value)
@@ -37,7 +37,7 @@ class TimingRepository extends ServiceEntityRepository
     */
 
     /*
-    public function findOneBySomeField($value): ?Timing
+    public function findOneBySomeField($value): ?TaskChange
     {
         return $this->createQueryBuilder('t')
             ->andWhere('t.exampleField = :val')

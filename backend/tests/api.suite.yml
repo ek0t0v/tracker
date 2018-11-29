@@ -10,7 +10,7 @@ modules:
               debug: true
         - Doctrine2:
               depends: Symfony
-              cleanup: false
+              cleanup: true
         - REST:
             depends: Symfony
             url: /api

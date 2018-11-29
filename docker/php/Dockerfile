@@ -21,3 +21,5 @@ RUN docker-php-ext-install \
     pdo_pgsql \
     zip
 RUN ln -snf /usr/share/zoneinfo/$TIMEZONE /etc/localtime && echo $TIMEZONE > /etc/timezone
+RUN usermod -u 1000 www-data
+RUN groupmod -g 1000 www-data

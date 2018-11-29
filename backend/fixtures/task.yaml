@@ -1,4 +1,23 @@
 App\Entity\Task:
-    task_{1..4}:
-        name: Task <current()>
-        user: '@user'
+    task_exercises:
+        user: '@test_user_1'
+        name: Exercises
+        startDate: <dateTimeBetween(2018-11-01, 2018-11-01)>
+        endDate: <dateTimeBetween(2018-12-01, 2018-12-01)>
+        schedule: [1,1,1,0]
+        updatedAt: <dateTimeBetween(2018-11-01, 2018-11-01)>
+        createdAt: <dateTimeBetween(2018-11-01, 2018-11-01)>
+    task_work:
+        user: '@test_user_1'
+        name: Work
+        startDate: <dateTimeBetween(2018-10-29, 2018-10-29)>
+        schedule: [1,1,1,1,1,0,0]
+        updatedAt: <dateTimeBetween(2018-10-29, 2018-10-29)>
+        createdAt: <dateTimeBetween(2018-10-29, 2018-10-29)>
+    task_reading:
+        user: '@test_user_1'
+        name: Reading
+        startDate: <dateTimeBetween(2018-11-19, 2018-11-19)>
+        schedule: [1]
+        updatedAt: <dateTimeBetween(2018-11-19, 2018-11-19)>
+        createdAt: <dateTimeBetween(2018-11-19, 2018-11-19)>

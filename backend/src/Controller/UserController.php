@@ -23,6 +23,6 @@ class UserController extends ApiController
      */
     public function register(UserRegisterRequest $request): JsonResponse
     {
-        return $this->apiResponse([], ['frontend'], Response::HTTP_CREATED);
+        return $this->apiResponse(null, ['frontend'], Response::HTTP_CREATED);
     }
 }

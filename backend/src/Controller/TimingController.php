@@ -3,7 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Task;
-use App\Entity\Timing;
+use App\Entity\TaskTiming;
 use App\Request\Timing\AddTimingRequest;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -25,7 +25,7 @@ class TimingController extends ApiController
      */
     public function index()
     {
-        $items = $this->getDoctrine()->getRepository(Timing::class)->findBy([], [
+        $items = $this->getDoctrine()->getRepository(TaskTiming::class)->findBy([], [
             'startedAt' => 'desc',
         ]);
 
@@ -43,7 +43,7 @@ class TimingController extends ApiController
     {
         $task = $this->getDoctrine()->getRepository(Task::class)->find($request->taskId);
 
-        $timing = new Timing();
+        $timing = new TaskTiming();
         $timing->setTask($task);
         $timing->setStartedAt(new \DateTime('@'.$request->startedAt));
         $timing->setEndedAt(new \DateTime('@'.$request->endedAt));

@@ -2,10 +2,8 @@
 
 namespace App\Doctrine\EventListener;
 
-use Doctrine\ORM\Event\LifecycleEventArgs;
-use Doctrine\ORM\Event\PreUpdateEventArgs;
-use Doctrine\ORM\Mapping as ORM;
 use App\Entity\User;
+use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 /**
@@ -29,26 +27,15 @@ final class UserListener
     }
 
     /**
-     * @param User               $user
-     * @param LifecycleEventArgs $event
+     * @param User $user
      *
-     * @ORM\PrePersist
+     * @ORM\PrePersist()
      */
-    public function prePersistHandler(User $user, LifecycleEventArgs $event)
+    public function prePersist(User $user)
     {
         $user->setEmailCanonical($this->generateCanonicalEmail($user->getEmail()));
         $user->setPassword($this->encoder->encodePassword($user, $user->getPlainPassword()));
         $user->setCreatedAt(new \DateTime());
-    }
-
-    /**
-     * @param User               $user
-     * @param PreUpdateEventArgs $event
-     *
-     * @ORM\PreUpdate
-     */
-    public function preUpdateHandler(User $user, PreUpdateEventArgs $event)
-    {
     }
 
     /**
