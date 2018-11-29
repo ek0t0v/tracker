@@ -8,6 +8,7 @@ use App\Request\Task\ChangeTaskStateRequest;
 use App\Request\Task\CreateTaskRequest;
 use App\Request\Task\GetTasksRequest;
 use App\Request\Task\TransferTaskRequest;
+use App\Service\Task\TaskServiceInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -19,16 +20,17 @@ use Symfony\Component\Routing\Annotation\Route;
 class TaskController extends ApiController
 {
     /**
-     * @param GetTasksRequest $request
+     * @param GetTasksRequest      $request
+     * @param TaskServiceInterface $taskService
      *
      * @return JsonResponse
      *
      * @Route(name="api_tasks_get_tasks", methods={"GET"})
      */
-    public function getTasks(GetTasksRequest $request): JsonResponse
+    public function getTasks(GetTasksRequest $request, TaskServiceInterface $taskService): JsonResponse
     {
         return $this->apiResponse([
-            'items' => [],
+            'items' => $taskService->get(new \DateTime($request->start), new \DateTime($request->end)),
         ], ['frontend']);
     }
 

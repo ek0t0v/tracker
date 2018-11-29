@@ -23,8 +23,8 @@ services:
     App\Doctrine\EventListener\UserListener:
         tags:
             - { name: doctrine.orm.entity_listener }
-#    App\Request\ParamConverter\TaskByUserParamConverter:
-#        tags:
-#            - { name: request.param_converter, converter: task_by_user }
-#        arguments:
-#            - '@doctrine'
+    App\Request\ParamConverter\TaskByUserParamConverter:
+        tags:
+            - { name: request.param_converter, converter: task_by_user }
+        arguments:
+            - '@doctrine'

@@ -8,9 +8,6 @@ modules:
               app_path: 'src'
               environment: 'test'
               debug: true
-        - Doctrine2:
-              depends: Symfony
-              cleanup: true
         - REST:
             depends: Symfony
             url: /api

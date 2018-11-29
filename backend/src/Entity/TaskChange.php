@@ -2,7 +2,6 @@
 
 namespace App\Entity;
 
-use App\Enum\TaskChangeActionType;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
