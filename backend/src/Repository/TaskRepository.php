@@ -14,37 +14,44 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
  */
 class TaskRepository extends ServiceEntityRepository
 {
+    /**
+     * TaskRepository constructor.
+     *
+     * @param RegistryInterface $registry
+     */
     public function __construct(RegistryInterface $registry)
     {
         parent::__construct($registry, Task::class);
     }
 
-//    /**
-//     * @return Task[] Returns an array of Task objects
-//     */
-    /*
-    public function findByExampleField($value)
+    /**
+     * @param \DateTime $start
+     *
+     * @return mixed
+     */
+    public function findByStartDate(\DateTime $start)
     {
         return $this->createQueryBuilder('t')
-            ->andWhere('t.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('t.id', 'ASC')
-            ->setMaxResults(10)
+            ->addSelect('c')
+            ->andWhere('t.startDate <= :start')
+            ->setParameter('start', $start)
+            ->leftJoin('t.changes', 'c')
             ->getQuery()
             ->getResult()
         ;
     }
-    */
 
-    /*
-    public function findOneBySomeField($value): ?Task
+    /**
+     * @param \DateTime $start
+     * @param \DateTime $end
+     *
+     * @return mixed
+     */
+    public function findByDateRange(\DateTime $start, \DateTime $end)
     {
         return $this->createQueryBuilder('t')
-            ->andWhere('t.exampleField = :val')
-            ->setParameter('val', $value)
             ->getQuery()
-            ->getOneOrNullResult()
+            ->getResult()
         ;
     }
-    */
 }

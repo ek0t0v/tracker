@@ -22,15 +22,25 @@ class TaskService implements TaskServiceInterface
     private $tokenStorage;
 
     /**
+     * @var TaskScheduleServiceInterface
+     */
+    private $taskSchedule;
+
+    /**
      * TaskService constructor.
      *
-     * @param EntityManagerInterface $em
-     * @param TokenStorageInterface  $tokenStorage
+     * @param EntityManagerInterface       $em
+     * @param TokenStorageInterface        $tokenStorage
+     * @param TaskScheduleServiceInterface $taskSchedule
      */
-    public function __construct(EntityManagerInterface $em, TokenStorageInterface $tokenStorage)
-    {
+    public function __construct(
+        EntityManagerInterface $em,
+        TokenStorageInterface $tokenStorage,
+        TaskScheduleServiceInterface $taskSchedule
+    ) {
         $this->em = $em;
         $this->tokenStorage = $tokenStorage;
+        $this->taskSchedule = $taskSchedule;
     }
 
     /**
@@ -38,7 +48,13 @@ class TaskService implements TaskServiceInterface
      */
     public function get(\DateTime $start, \DateTime $end = null): array
     {
-        return [];
+        $tasks = is_null($end)
+            ? $this->em->getRepository(Task::class)->findByStartDate($start)
+            : $this->em->getRepository(Task::class)->findByDateRange($start, $end);
+
+        $tasks = $this->taskSchedule->filter($tasks, $start);
+
+        return $tasks;
     }
 
     /**
