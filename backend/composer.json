@@ -6,6 +6,7 @@
         "ext-ctype": "*",
         "ext-iconv": "*",
         "doctrine/annotations": "^1.6",
+        "fresh/doctrine-enum-bundle": "~6.2",
         "gedmo/doctrine-extensions": "^2.4",
         "gesdinet/jwt-refresh-token-bundle": "^0.5.3",
         "lexik/jwt-authentication-bundle": "^2.6",

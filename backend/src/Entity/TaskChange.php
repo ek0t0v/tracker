@@ -2,7 +2,7 @@
 
 namespace App\Entity;
 
-use App\Enum\TaskChangeActionEnum;
+use App\Enum\TaskChangeActionType;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -32,11 +32,11 @@ class TaskChange
     private $task;
 
     /**
-     * @see TaskChangeActionEnum
+     * @see TaskChangeActionType
      *
      * @var string
      *
-     * @ORM\Column(name="action", type="text")
+     * @ORM\Column(name="action", type="task_change_action")
      */
     private $action;
 
@@ -50,7 +50,7 @@ class TaskChange
     /**
      * @var string
      *
-     * @ORM\Column(name="state", type="text", nullable=true)
+     * @ORM\Column(name="state", type="task_change_state", nullable=true)
      */
     private $state;
 
