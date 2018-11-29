@@ -140,13 +140,13 @@ ALTER TABLE public.task_timings_id_seq OWNER TO symfony;
 
 CREATE TABLE public.tasks (
     id integer NOT NULL,
-    name text NOT NULL,
     user_id integer,
-    updated_at timestamp(0) without time zone NOT NULL,
-    created_at timestamp(0) without time zone NOT NULL,
+    name text NOT NULL,
     start_date date NOT NULL,
     end_date date,
-    schedule text
+    schedule text,
+    updated_at timestamp(0) without time zone NOT NULL,
+    created_at timestamp(0) without time zone NOT NULL
 );
 
 
@@ -212,13 +212,7 @@ ALTER TABLE public.users_id_seq OWNER TO symfony;
 --
 
 COPY public.migration_versions (version) FROM stdin;
-20181102214131
-20181103202224
-20181108032357
-20181110122836
-20181127213513
-20181129000322
-20181129042509
+20181129043710
 \.
 
 
@@ -250,10 +244,10 @@ COPY public.task_timings (id, task_id, started_at, ended_at) FROM stdin;
 -- Data for Name: tasks; Type: TABLE DATA; Schema: public; Owner: symfony
 --
 
-COPY public.tasks (id, name, user_id, updated_at, created_at, start_date, end_date, schedule) FROM stdin;
-1	Exercises	1	2018-11-29 04:27:53	2018-11-29 04:27:53	2018-11-01	2018-12-01	a:4:{i:0;i:1;i:1;i:1;i:2;i:1;i:3;i:0;}
-2	Work	1	2018-11-29 04:27:53	2018-11-29 04:27:53	2018-10-29	\N	a:7:{i:0;i:1;i:1;i:1;i:2;i:1;i:3;i:1;i:4;i:1;i:5;i:0;i:6;i:0;}
-3	Reading	1	2018-11-29 04:27:53	2018-11-29 04:27:53	2018-11-19	\N	a:1:{i:0;i:1;}
+COPY public.tasks (id, user_id, name, start_date, end_date, schedule, updated_at, created_at) FROM stdin;
+1	1	Exercises	2018-11-01	2018-12-01	a:4:{i:0;i:1;i:1;i:1;i:2;i:1;i:3;i:0;}	2018-11-29 04:39:17	2018-11-29 04:39:17
+2	1	Work	2018-10-29	\N	a:7:{i:0;i:1;i:1;i:1;i:2;i:1;i:3;i:1;i:4;i:1;i:5;i:0;i:6;i:0;}	2018-11-29 04:39:17	2018-11-29 04:39:17
+3	1	Reading	2018-11-19	\N	a:1:{i:0;i:1;}	2018-11-29 04:39:17	2018-11-29 04:39:17
 \.
 
 
@@ -262,8 +256,8 @@ COPY public.tasks (id, name, user_id, updated_at, created_at, start_date, end_da
 --
 
 COPY public.users (id, email, email_canonical, username, password, roles, enabled, last_login, password_requested_at, created_at) FROM stdin;
-1	test_user_1@mail.ru	test_user_1@mail.ru	test_user_1	$2y$13$icJBQF310ll8Rogs2HaH4ujK0beaShFFhdasgLqC19BTbIVrv119q	[]	t	\N	\N	2018-11-29 04:27:52
-2	test_user_2@mail.ru	test_user_2@mail.ru	test_user_2	$2y$13$dXDaQPu6G3OFz4b7soibr.bV2O/zoEleFvHq0AU5dibmFWe7M1OPW	[]	t	\N	\N	2018-11-29 04:27:53
+1	test_user_1@mail.ru	test_user_1@mail.ru	test_user_1	$2y$13$55oo3o2fjKjnxFfW1vcWKut6AdUV1OMad4g2V3K1piRnh3jou8eYq	[]	t	\N	\N	2018-11-29 04:39:16
+2	test_user_2@mail.ru	test_user_2@mail.ru	test_user_2	$2y$13$kP15AeR0zVYJ9qaXvDVtvORGtoEc9COU/dvcLLKzMx4wAy8V6PXrm	[]	t	\N	\N	2018-11-29 04:39:17
 \.
 
 
