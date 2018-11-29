@@ -23,7 +23,7 @@ class Task
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      *
-     * @Groups({"frontend"})
+     * @Groups({"api"})
      */
     private $id;
 
@@ -40,7 +40,7 @@ class Task
      *
      * @ORM\Column(name="name", type="text")
      *
-     * @Groups({"frontend"})
+     * @Groups({"api"})
      */
     private $name;
 

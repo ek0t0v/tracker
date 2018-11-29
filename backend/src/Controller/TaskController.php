@@ -33,7 +33,7 @@ class TaskController extends ApiController
 
         return $this->apiResponse([
             'items' => $taskService->get(new \DateTime($request->start), $endDate),
-        ], ['frontend']);
+        ]);
     }
 
     /**

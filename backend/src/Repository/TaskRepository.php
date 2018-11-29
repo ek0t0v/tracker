@@ -34,6 +34,7 @@ class TaskRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('t')
             ->addSelect('c')
             ->andWhere('t.startDate <= :start')
+            ->andWhere('t.endDate IS NULL OR t.endDate > :start')
             ->setParameter('start', $start)
             ->leftJoin('t.changes', 'c')
             ->getQuery()

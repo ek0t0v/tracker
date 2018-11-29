@@ -29,7 +29,9 @@ class TimingController extends ApiController
             'startedAt' => 'desc',
         ]);
 
-        return $this->apiResponse($items, ['frontend']);
+        return $this->apiResponse([
+            'items' => $items,
+        ]);
     }
 
     /**
@@ -54,6 +56,6 @@ class TimingController extends ApiController
 
         $em->flush();
 
-        return $this->apiResponse($timing, ['frontend'], Response::HTTP_CREATED);
+        return $this->apiResponse($timing, ['api'], Response::HTTP_CREATED);
     }
 }
