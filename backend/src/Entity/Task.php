@@ -5,7 +5,6 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * Class Task.
@@ -22,8 +21,6 @@ class Task
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     *
-     * @Groups({"api"})
      */
     private $id;
 
@@ -39,8 +36,6 @@ class Task
      * @var string
      *
      * @ORM\Column(name="name", type="text")
-     *
-     * @Groups({"api"})
      */
     private $name;
 

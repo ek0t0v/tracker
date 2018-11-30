@@ -5,15 +5,15 @@ namespace App\Tests;
 use App\Doctrine\DBAL\Type\TaskChangeActionType;
 use App\Entity\Task;
 use App\Entity\TaskChange;
-use App\Service\Task\TaskChangeServiceInterface;
 use App\Service\Task\TaskScheduleServiceInterface;
+use App\Service\Task\TaskTransferServiceInterface;
 use Codeception\Exception\ModuleException;
 use Codeception\Test\Unit;
 
 /**
- * Class TaskChangeServiceTest.
+ * Class TaskTransferServiceTest.
  */
-class TaskChangeServiceTest extends Unit
+class TaskTransferServiceTest extends Unit
 {
     /**
      * @var UnitTester
@@ -26,9 +26,9 @@ class TaskChangeServiceTest extends Unit
     private $taskScheduleService;
 
     /**
-     * @var TaskChangeServiceInterface
+     * @var TaskTransferServiceInterface
      */
-    private $taskChangeService;
+    private $taskTransferService;
 
     /**
      * @throws ModuleException
@@ -36,7 +36,7 @@ class TaskChangeServiceTest extends Unit
     protected function _before()
     {
         $this->taskScheduleService = $this->tester->getSymfonyService(TaskScheduleServiceInterface::class);
-        $this->taskChangeService = $this->tester->getSymfonyService(TaskChangeServiceInterface::class);
+        $this->taskTransferService = $this->tester->getSymfonyService(TaskTransferServiceInterface::class);
     }
 
     public function testFilterTransferredTasks()
@@ -48,11 +48,11 @@ class TaskChangeServiceTest extends Unit
         $task->setSchedule([1, 1, 1, 0]);
 
         $result = $this->taskScheduleService->filter([$task], new \DateTime('2018-11-01'));
-        $result = $this->taskChangeService->filterTransferredTasks($result, new \DateTime('2018-11-01'));
+        $result = $this->taskTransferService->filterTransferredTasks($result, new \DateTime('2018-11-01'));
         $this->assertCount(1, $result);
 
         $result = $this->taskScheduleService->filter([$task], new \DateTime('2018-11-04'));
-        $result = $this->taskChangeService->filterTransferredTasks($result, new \DateTime('2018-11-04'));
+        $result = $this->taskTransferService->filterTransferredTasks($result, new \DateTime('2018-11-04'));
         $this->assertCount(0, $result);
 
         $transferToChange = new TaskChange();
@@ -63,7 +63,7 @@ class TaskChangeServiceTest extends Unit
         $task->addChange($transferToChange);
 
         $result = $this->taskScheduleService->filter([$task], new \DateTime('2018-11-03'));
-        $result = $this->taskChangeService->filterTransferredTasks($result, new \DateTime('2018-11-03'));
+        $result = $this->taskTransferService->filterTransferredTasks($result, new \DateTime('2018-11-03'));
         $this->assertCount(0, $result);
 
         $transferFromChange = new TaskChange();
@@ -76,7 +76,7 @@ class TaskChangeServiceTest extends Unit
 
         $transferredTasks = [$task];
         $result = $this->taskScheduleService->filter([$task], new \DateTime('2018-11-04'));
-        $result = $this->taskChangeService->filterTransferredTasks($result, new \DateTime('2018-11-04'));
+        $result = $this->taskTransferService->filterTransferredTasks($result, new \DateTime('2018-11-04'));
         $result = array_merge($result, $transferredTasks);
         $this->assertCount(1, $result);
     }
