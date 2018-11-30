@@ -15,6 +15,21 @@ class TaskScheduleService implements TaskScheduleServiceInterface
         $result = [];
 
         foreach ($tasks as $task) {
+            // Отсекает неподходящие по дате задачи, вдруг из репозитория получим неправильный набор задач?
+            if ($task->getStartDate() > $start || (!is_null($task->getEndDate()) && $task->getEndDate() < $start)) {
+                continue;
+            }
+
+            if (is_null($task->getSchedule()) && $start == $task->getStartDate()) {
+                $result[] = $task;
+
+                continue;
+            }
+
+            if (is_null($task->getSchedule())) {
+                continue;
+            }
+
             $daysDiff = (int) date_diff($start, $task->getStartDate())->format('%a');
             $scheduleArraySize = count($task->getSchedule());
 

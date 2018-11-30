@@ -79,14 +79,16 @@ ALTER TABLE public.refresh_tokens_id_seq OWNER TO symfony;
 CREATE TABLE public.task_changes (
     id integer NOT NULL,
     task_id integer,
-    action text NOT NULL,
+    action character varying(255) NOT NULL,
     name text,
-    state text,
+    state character varying(255),
     "position" integer,
     transfer_from date,
     transfer_to date,
     for_date timestamp(0) without time zone NOT NULL,
-    created_at timestamp(0) without time zone NOT NULL
+    created_at timestamp(0) without time zone NOT NULL,
+    CONSTRAINT task_changes_action_check CHECK (((action)::text = ANY ((ARRAY['rename'::character varying, 'update_state'::character varying, 'update_position'::character varying, 'transfer_from'::character varying, 'transfer_to'::character varying])::text[]))),
+    CONSTRAINT task_changes_state_check CHECK (((state)::text = ANY ((ARRAY['in_progress'::character varying, 'done'::character varying, 'cancelled'::character varying])::text[])))
 );
 
 
@@ -213,6 +215,7 @@ ALTER TABLE public.users_id_seq OWNER TO symfony;
 
 COPY public.migration_versions (version) FROM stdin;
 20181129043710
+20181129101337
 \.
 
 
@@ -245,9 +248,11 @@ COPY public.task_timings (id, task_id, started_at, ended_at) FROM stdin;
 --
 
 COPY public.tasks (id, user_id, name, start_date, end_date, schedule, updated_at, created_at) FROM stdin;
-1	1	Exercises	2018-11-01	2018-12-01	a:4:{i:0;i:1;i:1;i:1;i:2;i:1;i:3;i:0;}	2018-11-29 04:39:17	2018-11-29 04:39:17
-2	1	Work	2018-10-29	\N	a:7:{i:0;i:1;i:1;i:1;i:2;i:1;i:3;i:1;i:4;i:1;i:5;i:0;i:6;i:0;}	2018-11-29 04:39:17	2018-11-29 04:39:17
-3	1	Reading	2018-11-19	\N	a:1:{i:0;i:1;}	2018-11-29 04:39:17	2018-11-29 04:39:17
+1	1	Exercises	2018-11-01	2018-12-01	a:4:{i:0;i:1;i:1;i:1;i:2;i:1;i:3;i:0;}	2018-11-29 15:05:49	2018-11-29 15:05:49
+2	1	Work	2018-10-29	\N	a:7:{i:0;i:1;i:1;i:1;i:2;i:1;i:3;i:1;i:4;i:1;i:5;i:0;i:6;i:0;}	2018-11-29 15:05:49	2018-11-29 15:05:49
+3	1	Reading	2018-11-19	\N	a:1:{i:0;i:1;}	2018-11-29 15:05:49	2018-11-29 15:05:49
+4	1	Single task 1	2018-11-07	\N	N;	2018-11-29 15:05:49	2018-11-29 15:05:49
+5	1	Single task 2	2018-12-01	\N	N;	2018-11-29 15:05:49	2018-11-29 15:05:49
 \.
 
 
@@ -256,8 +261,8 @@ COPY public.tasks (id, user_id, name, start_date, end_date, schedule, updated_at
 --
 
 COPY public.users (id, email, email_canonical, username, password, roles, enabled, last_login, password_requested_at, created_at) FROM stdin;
-1	test_user_1@mail.ru	test_user_1@mail.ru	test_user_1	$2y$13$55oo3o2fjKjnxFfW1vcWKut6AdUV1OMad4g2V3K1piRnh3jou8eYq	[]	t	\N	\N	2018-11-29 04:39:16
-2	test_user_2@mail.ru	test_user_2@mail.ru	test_user_2	$2y$13$kP15AeR0zVYJ9qaXvDVtvORGtoEc9COU/dvcLLKzMx4wAy8V6PXrm	[]	t	\N	\N	2018-11-29 04:39:17
+1	test_user_1@mail.ru	test_user_1@mail.ru	test_user_1	$2y$13$H5lN7znsKcN.uS2MVxK44OEU7aDwm.xYkqgdD0g5cvJovMFugkWzG	[]	t	\N	\N	2018-11-29 15:05:48
+2	test_user_2@mail.ru	test_user_2@mail.ru	test_user_2	$2y$13$4mK.hzxVZ94f2HcEEuIMjukwbnernSUJlbyna.4RQr8UiBmSPPwBi	[]	t	\N	\N	2018-11-29 15:05:49
 \.
 
 
@@ -286,7 +291,7 @@ SELECT pg_catalog.setval('public.task_timings_id_seq', 1, false);
 -- Name: tasks_id_seq; Type: SEQUENCE SET; Schema: public; Owner: symfony
 --
 
-SELECT pg_catalog.setval('public.tasks_id_seq', 3, true);
+SELECT pg_catalog.setval('public.tasks_id_seq', 5, true);
 
 
 --

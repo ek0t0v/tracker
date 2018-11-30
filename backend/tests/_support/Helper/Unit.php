@@ -9,4 +9,15 @@ use Codeception\Module;
  */
 class Unit extends Module
 {
+    /**
+     * @param string $id
+     *
+     * @return mixed
+     *
+     * @throws \Codeception\Exception\ModuleException
+     */
+    public function getSymfonyService(string $id)
+    {
+        return $this->getModule('Symfony')->grabService('test.service_container')->get($id);
+    }
 }
