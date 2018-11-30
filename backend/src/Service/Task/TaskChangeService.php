@@ -60,8 +60,29 @@ class TaskChangeService implements TaskChangeServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function getLastChanges(Task $task): array
+    public function getLatestChanges(Task $task, \DateTime $start): array
     {
-        // TODO: Implement getLastChanges() method.
+        $changesHash = [];
+
+        foreach ($task->getChanges() as $change) {
+            if ($change->getForDate() != $start) {
+                continue;
+            }
+
+            $newerChange = array_key_exists($change->getAction(), $changesHash)
+                && $change->getId() > $changesHash[$change->getAction()]->getId();
+
+            if (!array_key_exists($change->getAction(), $changesHash) || $newerChange) {
+                $changesHash[$change->getAction()] = $change;
+            }
+        }
+
+        $changes = [];
+
+        foreach ($changesHash as $element) {
+            $changes[] = $element;
+        }
+
+        return $changes;
     }
 }

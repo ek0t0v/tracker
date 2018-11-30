@@ -19,6 +19,8 @@ interface TaskChangeServiceInterface
     public function createNameChange(Task $task, \DateTime $forDate, string $name): Task;
 
     /**
+     * @todo Не забыть про перенос изменений типа rename, update_position и т.д.
+     *
      * @param Task      $task
      * @param \DateTime $forDate
      * @param \DateTime $transferFrom
@@ -47,9 +49,10 @@ interface TaskChangeServiceInterface
     public function createUpdateStateChange(Task $task, \DateTime $forDate, string $state): Task;
 
     /**
-     * @param Task $task
+     * @param Task      $task
+     * @param \DateTime $start
      *
      * @return array
      */
-    public function getLastChanges(Task $task): array;
+    public function getLatestChanges(Task $task, \DateTime $start): array;
 }
