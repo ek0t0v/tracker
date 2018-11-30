@@ -89,7 +89,7 @@ class TaskCest
      */
     public function getTasksByDateTest(ApiTester $I)
     {
-        $I->sendGET('/tasks?start=2018-11-27'); // Если взять 2018-12-02, то там должна быть только одна задача - "Чтение".
+        $I->sendGET('/tasks?start=2018-10-29'); // Если взять 2018-12-02, то там должна быть только одна задача - "Чтение".
         $I->seeResponseCodeIsSuccessful();
         $I->seeResponseCodeIs(HttpCode::OK);
         $I->seeResponseIsJson();
@@ -97,6 +97,7 @@ class TaskCest
         $responseAsArray = json_decode($I->grabResponse(), true);
 
         $I->assertArrayHasKey('items', $responseAsArray);
+        $I->assertCount(1, $responseAsArray['items']);
     }
 
     /**

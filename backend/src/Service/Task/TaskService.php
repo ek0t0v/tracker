@@ -24,23 +24,31 @@ class TaskService implements TaskServiceInterface
     /**
      * @var TaskScheduleServiceInterface
      */
-    private $taskSchedule;
+    private $taskScheduleService;
+
+    /**
+     * @var TaskChangeServiceInterface
+     */
+    private $taskChangeService;
 
     /**
      * TaskService constructor.
      *
      * @param EntityManagerInterface       $em
      * @param TokenStorageInterface        $tokenStorage
-     * @param TaskScheduleServiceInterface $taskSchedule
+     * @param TaskScheduleServiceInterface $taskScheduleService
+     * @param TaskChangeServiceInterface $taskChangeService
      */
     public function __construct(
         EntityManagerInterface $em,
         TokenStorageInterface $tokenStorage,
-        TaskScheduleServiceInterface $taskSchedule
+        TaskScheduleServiceInterface $taskScheduleService,
+        TaskChangeServiceInterface $taskChangeService
     ) {
         $this->em = $em;
         $this->tokenStorage = $tokenStorage;
-        $this->taskSchedule = $taskSchedule;
+        $this->taskScheduleService = $taskScheduleService;
+        $this->taskChangeService = $taskChangeService;
     }
 
     /**
@@ -49,7 +57,10 @@ class TaskService implements TaskServiceInterface
     public function get(\DateTime $start, \DateTime $end = null): array
     {
         $tasks = $this->em->getRepository(Task::class)->findByDate($start);
-        $tasks = $this->taskSchedule->filter($tasks, $start);
+        $transferredTasks = $this->taskChangeService->findTransferredTasks($start);
+        $tasks = $this->taskScheduleService->filter($tasks, $start);
+        $tasks = $this->taskChangeService->filterTransferredTasks($tasks, $start);
+        $tasks = array_merge($tasks, $transferredTasks);
 
         return $tasks;
     }

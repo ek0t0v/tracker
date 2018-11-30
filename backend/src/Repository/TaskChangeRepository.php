@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Doctrine\DBAL\Type\TaskChangeActionType;
 use App\Entity\TaskChange;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
@@ -14,37 +15,32 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
  */
 class TaskChangeRepository extends ServiceEntityRepository
 {
+    /**
+     * TaskChangeRepository constructor.
+     *
+     * @param RegistryInterface $registry
+     */
     public function __construct(RegistryInterface $registry)
     {
         parent::__construct($registry, TaskChange::class);
     }
 
-//    /**
-//     * @return TaskChange[] Returns an array of TaskChange objects
-//     */
-    /*
-    public function findByExampleField($value)
+    /**
+     * @param \DateTime $start
+     *
+     * @return \Doctrine\ORM\QueryBuilder
+     */
+    public function findTransferredFromWithTasks(\DateTime $start)
     {
-        return $this->createQueryBuilder('t')
-            ->andWhere('t.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('t.id', 'ASC')
-            ->setMaxResults(10)
+        return $this->createQueryBuilder('c')
+            ->addSelect('t')
+            ->andWhere('c.forDate = :start')
+            ->andWhere('c.action = :action')
+            ->setParameter('start', $start)
+            ->setParameter('action', TaskChangeActionType::TRANSFER_FROM)
+            ->leftJoin('c.task', 't')
             ->getQuery()
             ->getResult()
         ;
     }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?TaskChange
-    {
-        return $this->createQueryBuilder('t')
-            ->andWhere('t.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }

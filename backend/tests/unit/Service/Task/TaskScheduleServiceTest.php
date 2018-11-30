@@ -13,7 +13,7 @@ use Codeception\Test\Unit;
 class TaskScheduleServiceTest extends Unit
 {
     /**
-     * @var \App\Tests\UnitTester
+     * @var UnitTester
      */
     protected $tester;
 

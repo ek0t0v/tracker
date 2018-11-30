@@ -45,4 +45,19 @@ interface TaskChangeServiceInterface
      * @return Task
      */
     public function createUpdateStateChange(Task $task, \DateTime $forDate, string $state): Task;
+
+    /**
+     * @param array     $tasks
+     * @param \DateTime $start
+     *
+     * @return mixed
+     */
+    public function filterTransferredTasks(array $tasks, \DateTime $start);
+
+    /**
+     * @param \DateTime $start
+     *
+     * @return array
+     */
+    public function findTransferredTasks(\DateTime $start): array;
 }
