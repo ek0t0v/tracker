@@ -9,6 +9,7 @@ use App\Service\Task\TaskScheduleServiceInterface;
 use App\Service\Task\TaskTransferServiceInterface;
 use Codeception\Exception\ModuleException;
 use Codeception\Test\Unit;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Class TaskTransferServiceTest.
@@ -39,13 +40,33 @@ class TaskTransferServiceTest extends Unit
         $this->taskTransferService = $this->tester->getSymfonyService(TaskTransferServiceInterface::class);
     }
 
+    /**
+     * @throws \Exception
+     */
     public function testFilterTransferredTasks()
     {
-        $task = new Task();
-        $task->setName('Exercises');
-        $task->setStartDate(new \DateTime('2018-11-01'));
-        $task->setEndDate(new \DateTime('2018-12-01'));
-        $task->setSchedule([1, 1, 1, 0]);
+        try {
+            $task = $this->make(Task::class, [
+                'name' => 'Task',
+                'startDate' => new \DateTime('2018-11-01'),
+                'schedule' => [1, 1, 1, 0],
+                'changes' => new ArrayCollection(),
+            ]);
+
+            $transferToChange = $this->make(TaskChange::class, [
+                'action' => TaskChangeActionType::TRANSFER_TO,
+                'transferTo' => new \DateTime('2018-11-04'),
+                'forDate' => new \DateTime('2018-11-03'),
+            ]);
+
+            $transferFromChange = $this->make(TaskChange::class, [
+                'action' => TaskChangeActionType::TRANSFER_FROM,
+                'transferFrom' => new \DateTime('2018-11-03'),
+                'forDate' => new \DateTime('2018-11-04'),
+            ]);
+        } catch (\Exception $e) {
+            throw new \Exception('Failed to create mock objects.');
+        }
 
         $result = $this->taskScheduleService->filter([$task], new \DateTime('2018-11-01'));
         $result = $this->taskTransferService->filterTransferredTasks($result, new \DateTime('2018-11-01'));
@@ -55,21 +76,11 @@ class TaskTransferServiceTest extends Unit
         $result = $this->taskTransferService->filterTransferredTasks($result, new \DateTime('2018-11-04'));
         $this->assertCount(0, $result);
 
-        $transferToChange = new TaskChange();
-        $transferToChange->setAction(TaskChangeActionType::TRANSFER_TO);
-        $transferToChange->setTransferTo(new \DateTime('2018-11-04'));
-        $transferToChange->setForDate(new \DateTime('2018-11-03'));
-
         $task->addChange($transferToChange);
 
         $result = $this->taskScheduleService->filter([$task], new \DateTime('2018-11-03'));
         $result = $this->taskTransferService->filterTransferredTasks($result, new \DateTime('2018-11-03'));
         $this->assertCount(0, $result);
-
-        $transferFromChange = new TaskChange();
-        $transferFromChange->setAction(TaskChangeActionType::TRANSFER_FROM);
-        $transferFromChange->setTransferFrom(new \DateTime('2018-11-03'));
-        $transferFromChange->setForDate(new \DateTime('2018-11-04'));
 
         $task->removeChange($transferToChange);
         $task->addChange($transferFromChange);
