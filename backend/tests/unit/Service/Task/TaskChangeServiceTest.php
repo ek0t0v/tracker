@@ -33,71 +33,46 @@ class TaskChangeServiceTest extends Unit
         $this->taskChangeService = $this->tester->getSymfonyService(TaskChangeServiceInterface::class);
     }
 
+    /**
+     * @throws \Exception
+     */
     public function testGetLatestChanges()
     {
         $task = new Task();
         $task->setStartDate(new \DateTime('2018-11-01'));
         $task->setName('Test task');
 
-        $change1 = $this->getMockBuilder(TaskChange::class)
-            ->disableOriginalConstructor()
-            ->disableOriginalClone()
-            ->disableArgumentCloning()
-            ->disallowMockingUnknownTypes()
-            ->getMock();
-        $change1->method('getId')
-            ->willReturn(1);
-        $change1->method('getAction')
-            ->willReturn(TaskChangeActionType::RENAME);
-        $change1->method('getName')
-            ->willReturn('Test task (renamed 1)');
-        $change1->method('getForDate')
-            ->willReturn(new \DateTime('2018-11-01'));
+        try {
+            $change1 = $this->make(TaskChange::class, [
+                'id' => 1,
+                'action' => TaskChangeActionType::RENAME,
+                'name' => 'Test task (renamed 1)',
+                'forDate' => new \DateTime('2018-11-01'),
+            ]);
 
-        $change2 = $this->getMockBuilder(TaskChange::class)
-            ->disableOriginalConstructor()
-            ->disableOriginalClone()
-            ->disableArgumentCloning()
-            ->disallowMockingUnknownTypes()
-            ->getMock();
-        $change2->method('getId')
-            ->willReturn(2);
-        $change2->method('getAction')
-            ->willReturn(TaskChangeActionType::RENAME);
-        $change2->method('getName')
-            ->willReturn('Test task (renamed 2)');
-        $change2->method('getForDate')
-            ->willReturn(new \DateTime('2018-11-01'));
+            $change2 = $this->make(TaskChange::class, [
+                'id' => 2,
+                'action' => TaskChangeActionType::RENAME,
+                'name' => 'Test task (renamed 2)',
+                'forDate' => new \DateTime('2018-11-01'),
+            ]);
 
-        $change3 = $this->getMockBuilder(TaskChange::class)
-            ->disableOriginalConstructor()
-            ->disableOriginalClone()
-            ->disableArgumentCloning()
-            ->disallowMockingUnknownTypes()
-            ->getMock();
-        $change3->method('getId')
-            ->willReturn(3);
-        $change3->method('getAction')
-            ->willReturn(TaskChangeActionType::UPDATE_STATE);
-        $change3->method('getState')
-            ->willReturn(TaskChangeStateType::DONE);
-        $change3->method('getForDate')
-            ->willReturn(new \DateTime('2018-11-01'));
+            $change3 = $this->make(TaskChange::class, [
+                'id' => 3,
+                'action' => TaskChangeActionType::UPDATE_STATE,
+                'state' => TaskChangeStateType::DONE,
+                'forDate' => new \DateTime('2018-11-01'),
+            ]);
 
-        $change4 = $this->getMockBuilder(TaskChange::class)
-            ->disableOriginalConstructor()
-            ->disableOriginalClone()
-            ->disableArgumentCloning()
-            ->disallowMockingUnknownTypes()
-            ->getMock();
-        $change4->method('getId')
-            ->willReturn(3);
-        $change4->method('getAction')
-            ->willReturn(TaskChangeActionType::UPDATE_STATE);
-        $change4->method('getState')
-            ->willReturn(TaskChangeStateType::DONE);
-        $change4->method('getForDate')
-            ->willReturn(new \DateTime('2018-11-02'));
+            $change4 = $this->make(TaskChange::class, [
+                'id' => 4,
+                'action' => TaskChangeActionType::UPDATE_STATE,
+                'state' => TaskChangeStateType::DONE,
+                'forDate' => new \DateTime('2018-11-02'),
+            ]);
+        } catch (\Exception $e) {
+            throw new \Exception('Failed to create TaskChange mock objects.');
+        }
 
         $task->addChange($change1);
         $task->addChange($change2);
