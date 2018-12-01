@@ -9,8 +9,10 @@ use App\Request\Task\CreateTaskRequest;
 use App\Request\Task\GetTasksRequest;
 use App\Request\Task\TransferTaskRequest;
 use App\Service\Task\TaskServiceInterface;
+use Nelmio\ApiDocBundle\Annotation\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
+use Swagger\Annotations as SWG;
 
 /**
  * Class TaskController.
@@ -26,6 +28,23 @@ class TaskController extends ApiController
      * @return JsonResponse
      *
      * @Route(name="api_tasks_get_tasks", methods={"GET"})
+     * @Security(name="Bearer")
+     *
+     * @SWG\Response(
+     *     response=200,
+     *     description="Возвращает список задач."
+     * )
+     * @SWG\Parameter(
+     *     name="start",
+     *     in="query",
+     *     type="string",
+     *     required=true
+     * )
+     * @SWG\Parameter(
+     *     name="end",
+     *     in="query",
+     *     type="string"
+     * )
      */
     public function getTasks(GetTasksRequest $request, TaskServiceInterface $taskService): JsonResponse
     {
@@ -42,6 +61,21 @@ class TaskController extends ApiController
      * @return JsonResponse
      *
      * @Route(name="api_tasks_create_task", methods={"POST"})
+     * @Security(name="Bearer")
+     *
+     * @SWG\Response(
+     *     response=201,
+     *     description="Создает новую задачу."
+     * )
+     * @SWG\Parameter(
+     *     name="name",
+     *     in="body",
+     *     type="json",
+     *     required=true,
+     *     @SWG\Schema(
+     *         type="json"
+     *     )
+     * )
      */
     public function createTask(CreateTaskRequest $request): JsonResponse
     {

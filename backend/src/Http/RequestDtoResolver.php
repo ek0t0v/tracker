@@ -42,6 +42,10 @@ final class RequestDtoResolver implements ArgumentValueResolverInterface
      */
     public function supports(Request $request, ArgumentMetadata $argument)
     {
+        if (preg_match('/^\/api\/doc/', $request->getPathInfo())) {
+            return false;
+        }
+
         $reflection = new \ReflectionClass($argument->getType());
 
         return $reflection->implementsInterface(RequestDtoInterface::class);
