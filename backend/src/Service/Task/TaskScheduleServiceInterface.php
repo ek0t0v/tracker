@@ -13,7 +13,7 @@ interface TaskScheduleServiceInterface
      * @param Task[]    $tasks
      * @param \DateTime $start
      *
-     * @return array
+     * @return Task[]
      */
     public function filter(array $tasks, \DateTime $start): array;
 }

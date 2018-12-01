@@ -3,6 +3,7 @@
 namespace App\Service\Task;
 
 use App\Entity\Task;
+use App\Response\Task\TaskDto;
 use Doctrine\ORM\EntityManagerInterface;
 
 /**
@@ -58,6 +59,8 @@ class TaskChangeService implements TaskChangeServiceInterface
     }
 
     /**
+     * @todo Нужно ли, если можно в методе создания конечного DTO применять только последние изменения, которые уже содержатся в Task?
+     *
      * {@inheritdoc}
      */
     public function getLatestChanges(Task $task, \DateTime $start): array

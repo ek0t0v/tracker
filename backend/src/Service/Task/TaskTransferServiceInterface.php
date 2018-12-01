@@ -2,6 +2,8 @@
 
 namespace App\Service\Task;
 
+use App\Entity\Task;
+
 /**
  * Interface TaskTransferServiceInterface.
  */
@@ -10,7 +12,7 @@ interface TaskTransferServiceInterface
     /**
      * @param \DateTime $start
      *
-     * @return array
+     * @return Task[]
      */
     public function findTransferredTasks(\DateTime $start): array;
 
@@ -18,7 +20,7 @@ interface TaskTransferServiceInterface
      * @param array     $tasks
      * @param \DateTime $start
      *
-     * @return mixed
+     * @return Task[]
      */
-    public function filterTransferredTasks(array $tasks, \DateTime $start);
+    public function filterTransferredTasks(array $tasks, \DateTime $start): array;
 }

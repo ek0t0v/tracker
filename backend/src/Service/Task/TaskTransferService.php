@@ -29,7 +29,7 @@ class TaskTransferService implements TaskTransferServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function filterTransferredTasks(array $tasks, \DateTime $start)
+    public function filterTransferredTasks(array $tasks, \DateTime $start): array
     {
         $result = [];
 

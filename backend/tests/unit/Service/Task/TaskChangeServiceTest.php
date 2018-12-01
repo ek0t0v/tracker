@@ -49,14 +49,14 @@ class TaskChangeServiceTest extends Unit
             $renameChange1 = $this->make(TaskChange::class, [
                 'id' => 1,
                 'action' => TaskChangeActionType::RENAME,
-                'name' => 'Test task (renamed 1)',
+                'name' => 'Task (renamed 1)',
                 'forDate' => new \DateTime('2018-11-01'),
             ]);
 
             $renameChange2 = $this->make(TaskChange::class, [
                 'id' => 2,
                 'action' => TaskChangeActionType::RENAME,
-                'name' => 'Test task (renamed 2)',
+                'name' => 'Task (renamed 2)',
                 'forDate' => new \DateTime('2018-11-01'),
             ]);
 

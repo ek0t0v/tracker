@@ -38,26 +38,34 @@ class TaskService implements TaskServiceInterface
     private $taskTransferService;
 
     /**
+     * @var TaskDtoServiceInterface
+     */
+    private $taskDtoService;
+
+    /**
      * TaskService constructor.
      *
      * @param EntityManagerInterface       $em
      * @param TokenStorageInterface        $tokenStorage
      * @param TaskScheduleServiceInterface $taskScheduleService
-     * @param TaskChangeServiceInterface $taskChangeService
+     * @param TaskChangeServiceInterface   $taskChangeService
      * @param TaskTransferServiceInterface $taskTransferService
+     * @param TaskDtoServiceInterface      $taskDtoService
      */
     public function __construct(
         EntityManagerInterface $em,
         TokenStorageInterface $tokenStorage,
         TaskScheduleServiceInterface $taskScheduleService,
         TaskChangeServiceInterface $taskChangeService,
-        TaskTransferServiceInterface $taskTransferService
+        TaskTransferServiceInterface $taskTransferService,
+        TaskDtoServiceInterface $taskDtoService
     ) {
         $this->em = $em;
         $this->tokenStorage = $tokenStorage;
         $this->taskScheduleService = $taskScheduleService;
         $this->taskChangeService = $taskChangeService;
         $this->taskTransferService = $taskTransferService;
+        $this->taskDtoService = $taskDtoService;
     }
 
     /**
@@ -74,9 +82,7 @@ class TaskService implements TaskServiceInterface
         $result = [];
 
         foreach ($tasks as $task) {
-            // применить изменения и создать DTO
-
-            $result[] = new TaskDto($task->getId(), $task->getName(), 'in_progress', 0);
+            $result[] = $this->taskDtoService->create($task, $this->taskChangeService->getLatestChanges($task, $start));
         }
 
         return $result;

@@ -40,12 +40,12 @@ class TaskDto
     /**
      * TaskDto constructor.
      *
-     * @param int    $id
-     * @param string $name
-     * @param string $state
-     * @param int    $position
+     * @param int      $id
+     * @param string   $name
+     * @param string   $state
+     * @param int|null $position
      */
-    public function __construct(int $id, string $name, string $state, int $position)
+    public function __construct(int $id, string $name, string $state, int $position = null)
     {
         $this->id = $id;
         $this->name = $name;

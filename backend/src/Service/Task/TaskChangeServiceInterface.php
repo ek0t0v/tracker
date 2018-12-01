@@ -3,6 +3,8 @@
 namespace App\Service\Task;
 
 use App\Entity\Task;
+use App\Entity\TaskChange;
+use App\Response\Task\TaskDto;
 
 /**
  * Interface TaskChangeServiceInterface.
@@ -52,7 +54,7 @@ interface TaskChangeServiceInterface
      * @param Task      $task
      * @param \DateTime $start
      *
-     * @return array
+     * @return TaskChange[]
      */
     public function getLatestChanges(Task $task, \DateTime $start): array;
 }
