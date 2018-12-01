@@ -9,6 +9,7 @@ use App\Entity\TaskChange;
 use App\Service\Task\TaskChangeServiceInterface;
 use Codeception\Exception\ModuleException;
 use Codeception\Test\Unit;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Class TaskChangeServiceTest.
@@ -38,11 +39,13 @@ class TaskChangeServiceTest extends Unit
      */
     public function testGetLatestChanges()
     {
-        $task = new Task();
-        $task->setStartDate(new \DateTime('2018-11-01'));
-        $task->setName('Test task');
-
         try {
+            $task = $this->make(Task::class, [
+                'name' => 'Task',
+                'startDate' => new \DateTime('2018-11-01'),
+                'changes' => new ArrayCollection(),
+            ]);
+
             $change1 = $this->make(TaskChange::class, [
                 'id' => 1,
                 'action' => TaskChangeActionType::RENAME,
@@ -71,7 +74,7 @@ class TaskChangeServiceTest extends Unit
                 'forDate' => new \DateTime('2018-11-02'),
             ]);
         } catch (\Exception $e) {
-            throw new \Exception('Failed to create TaskChange mock objects.');
+            throw new \Exception('Failed to create mock objects.');
         }
 
         $task->addChange($change1);
@@ -82,11 +85,12 @@ class TaskChangeServiceTest extends Unit
         $latestChanges = $this->taskChangeService->getLatestChanges($task, new \DateTime('2018-11-01'));
 
         $this->assertCount(2, $latestChanges);
+        $this->assertEquals($change2, $latestChanges[0]);
+        $this->assertEquals($change3, $latestChanges[1]);
 
-        $this->assertEquals('Test task (renamed 2)', $latestChanges[0]->getName());
-        $this->assertEquals(new \DateTime('2018-11-01'), $latestChanges[0]->getForDate());
+        $latestChanges = $this->taskChangeService->getLatestChanges($task, new \DateTime('2018-11-02'));
 
-        $this->assertEquals(TaskChangeStateType::DONE, $latestChanges[1]->getState());
-        $this->assertEquals(new \DateTime('2018-11-01'), $latestChanges[1]->getForDate());
+        $this->assertCount(1, $latestChanges);
+        $this->assertEquals($change4, $latestChanges[0]);
     }
 }
