@@ -82,7 +82,8 @@ class TaskService implements TaskServiceInterface
         $result = [];
 
         foreach ($tasks as $task) {
-            $result[] = $this->taskDtoService->create($task, $this->taskChangeService->getLatestChanges($task, $start));
+            $latestChanges = $this->taskChangeService->getLatestChanges($task, $start);
+            $result[] = $this->taskDtoService->create($task, $latestChanges);
         }
 
         return $result;

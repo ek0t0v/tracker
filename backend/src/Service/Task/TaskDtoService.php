@@ -3,6 +3,7 @@
 namespace App\Service\Task;
 
 use App\Doctrine\DBAL\Type\TaskChangeActionType;
+use App\Doctrine\DBAL\Type\TaskChangeStateType;
 use App\Entity\Task;
 use App\Response\Task\TaskDto;
 
@@ -31,27 +32,31 @@ class TaskDtoService implements TaskDtoServiceInterface
      */
     public function create(Task $task, array $changes): TaskDto
     {
-        $name = $task->getName();
-        $state = 'in_progress';
-        $position = null;
+        $dto = new TaskDto();
+        $dto->id = $task->getId();
+        $dto->name = $task->getName();
+        $dto->start = $task->getStartDate();
+        $dto->end = $task->getEndDate();
+        $dto->schedule = $task->getSchedule();
+        $dto->state = TaskChangeStateType::IN_PROGRESS;
 
         foreach ($changes as $change) {
             switch ($change->getAction()) {
                 case TaskChangeActionType::RENAME:
-                    $name = $change->getName();
+                    $dto->name = $change->getName();
 
                     break;
                 case TaskChangeActionType::UPDATE_STATE:
-                    $state = $change->getState();
+                    $dto->state = $change->getState();
 
                     break;
                 case TaskChangeActionType::UPDATE_POSITION:
-                    $position = $change->getPosition();
+                    $dto->position = $change->getPosition();
 
                     break;
             }
         }
 
-        return new TaskDto($task->getId(), $name, $state, $position);
+        return $dto;
     }
 }

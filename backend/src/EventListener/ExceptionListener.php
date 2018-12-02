@@ -30,9 +30,7 @@ class ExceptionListener
             }
 
             $response = $this->buildResponse(
-                0,
                 'Validation error.',
-                Response::HTTP_UNPROCESSABLE_ENTITY,
                 $result
             );
         }
@@ -62,24 +60,15 @@ class ExceptionListener
     }
 
     /**
-     * @param int    $code
      * @param string $message
-     * @param int    $status
      * @param array  $violations
      *
      * @return JsonResponse
      */
-    private function buildResponse(
-        int $code = 0,
-        string $message = '',
-        int $status = Response::HTTP_BAD_REQUEST,
-        array $violations = []
-    ): JsonResponse {
+    private function buildResponse(string $message = '', array $violations = []): JsonResponse {
         return new JsonResponse([
-            'code' => $code,
             'message' => $message,
             'violations' => $violations,
-            'status' => $status,
         ]);
     }
 }

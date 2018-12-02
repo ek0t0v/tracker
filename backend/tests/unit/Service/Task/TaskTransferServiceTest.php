@@ -91,9 +91,4 @@ class TaskTransferServiceTest extends Unit
         $result = array_merge($result, $transferredTasks);
         $this->assertCount(1, $result);
     }
-
-    public function testFindTransferredTasks()
-    {
-        $this->assertTrue(false, 'Need to implement!');
-    }
 }

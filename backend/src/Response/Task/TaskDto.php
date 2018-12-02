@@ -31,25 +31,30 @@ class TaskDto
     public $state;
 
     /**
-     * @var int
+     * @var \DateTime
      *
      * @Groups({"api"})
      */
-    public $position;
+    public $start;
 
     /**
-     * TaskDto constructor.
+     * @var \DateTime|null
      *
-     * @param int      $id
-     * @param string   $name
-     * @param string   $state
-     * @param int|null $position
+     * @Groups({"api"})
      */
-    public function __construct(int $id, string $name, string $state, int $position = null)
-    {
-        $this->id = $id;
-        $this->name = $name;
-        $this->state = $state;
-        $this->position = $position;
-    }
+    public $end = null;
+
+    /**
+     * @var array|null
+     *
+     * @Groups({"api"})
+     */
+    public $schedule = null;
+
+    /**
+     * @var int|null
+     *
+     * @Groups({"api"})
+     */
+    public $position = null;
 }
