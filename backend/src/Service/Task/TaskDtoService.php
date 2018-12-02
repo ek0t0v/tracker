@@ -30,7 +30,7 @@ class TaskDtoService implements TaskDtoServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function create(Task $task, array $changes): TaskDto
+    public function create(Task $task, array $changes = []): TaskDto
     {
         $dto = new TaskDto();
         $dto->id = $task->getId();

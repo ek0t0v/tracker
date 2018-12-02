@@ -16,5 +16,5 @@ interface TaskDtoServiceInterface
      *
      * @return TaskDto
      */
-    public function create(Task $task, array $changes): TaskDto;
+    public function create(Task $task, array $changes = []): TaskDto;
 }

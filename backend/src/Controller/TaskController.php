@@ -10,6 +10,7 @@ use App\Request\Task\GetTasksRequest;
 use App\Request\Task\TransferTaskRequest;
 use App\Service\Task\TaskServiceInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -37,15 +38,26 @@ class TaskController extends ApiController
     }
 
     /**
-     * @param CreateTaskRequest $request
+     * @param CreateTaskRequest    $request
+     * @param TaskServiceInterface $taskService
      *
      * @return JsonResponse
      *
      * @Route(name="api_tasks_create_task", methods={"POST"})
      */
-    public function createTask(CreateTaskRequest $request): JsonResponse
+    public function createTask(CreateTaskRequest $request, TaskServiceInterface $taskService): JsonResponse
     {
-        return $this->apiResponse();
+        $start = new \DateTime($request->start);
+        $end = !is_null($request->end) ? new \DateTime($request->end) : null;
+
+        $task = $taskService->create(
+            $request->name,
+            $start,
+            $end,
+            $request->schedule
+        );
+
+        return $this->apiResponse($task, ['api'], Response::HTTP_CREATED);
     }
 
     /**

@@ -94,6 +94,13 @@ class TaskService implements TaskServiceInterface
      */
     public function create(string $name, \DateTime $startDate, \DateTime $endDate = null, array $schedule = null): TaskDto
     {
+        $task = new Task();
+        $task->setName($name);
+        $task->setStartDate($startDate);
+        $task->setEndDate($endDate);
+        $task->setSchedule($schedule);
+
+        return $this->taskDtoService->create($task);
     }
 
     /**

@@ -193,4 +193,40 @@ class TaskCest
             ],
         ]);
     }
+
+    /**
+     * @param ApiTester $I
+     */
+    public function createTaskTest(ApiTester $I)
+    {
+        $I->sendPOST('/tasks', [
+            'name' => 'Another task',
+            'start' => '2018-11-01',
+        ]);
+        $I->seeResponseCodeIsSuccessful();
+        $I->seeResponseCodeIs(HttpCode::CREATED);
+        $I->seeResponseIsJson();
+
+        $responseAsArray = json_decode($I->grabResponse(), true);
+
+        $I->assertEquals('Another task', $responseAsArray['name']);
+        $I->assertEquals('2018-11-01T00:00:00+00:00', $responseAsArray['start']);
+
+        $I->sendPOST('/tasks', [
+            'name' => 'Another task',
+            'start' => '2018-11-01',
+            'end' => '2018-12-01',
+            'schedule' => [1, 1, 0],
+        ]);
+        $I->seeResponseCodeIsSuccessful();
+        $I->seeResponseCodeIs(HttpCode::CREATED);
+        $I->seeResponseIsJson();
+
+        $responseAsArray = json_decode($I->grabResponse(), true);
+
+        $I->assertEquals('Another task', $responseAsArray['name']);
+        $I->assertEquals('2018-11-01T00:00:00+00:00', $responseAsArray['start']);
+        $I->assertEquals('2018-12-01T00:00:00+00:00', $responseAsArray['end']);
+        $I->assertEquals([1, 1, 0], $responseAsArray['schedule']);
+    }
 }

@@ -19,7 +19,7 @@ class GetTasksRequest implements RequestDtoInterface
     public $start;
 
     /**
-     * @var \DateTime
+     * @var \DateTime|null
      *
      * @Assert\Date
      */
