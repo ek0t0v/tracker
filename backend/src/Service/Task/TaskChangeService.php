@@ -29,14 +29,6 @@ class TaskChangeService implements TaskChangeServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function createNameChange(Task $task, \DateTime $forDate, string $name): Task
-    {
-        return new Task();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function createTransferChanges(Task $task, \DateTime $forDate, \DateTime $transferFrom, \DateTime $transferTo): Task
     {
         return new Task();

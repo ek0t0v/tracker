@@ -9,18 +9,3 @@ App\Entity\TaskChange:
         action: 'transfer_from'
         transferFrom: <dateTimeBetween(2018-11-03, 2018-11-03)>
         forDate: <dateTimeBetween(2018-11-04, 2018-11-04)>
-    rename_exercises_task_1:
-        task: '@task_exercises'
-        action: 'rename'
-        name: 'Exercises (renamed 0)'
-        forDate: <dateTimeBetween(2018-11-03, 2018-11-03)>
-    rename_exercises_task_2:
-        task: '@task_exercises'
-        action: 'rename'
-        name: 'Exercises (renamed 1)'
-        forDate: <dateTimeBetween(2018-11-04, 2018-11-04)>
-    rename_exercises_task_3:
-        task: '@task_exercises'
-        action: 'rename'
-        name: 'Exercises (renamed 2)'
-        forDate: <dateTimeBetween(2018-11-04, 2018-11-04)>

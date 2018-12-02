@@ -12,16 +12,7 @@ use App\Response\Task\TaskDto;
 interface TaskChangeServiceInterface
 {
     /**
-     * @param Task      $task
-     * @param string    $name
-     * @param \DateTime $forDate
-     *
-     * @return Task
-     */
-    public function createNameChange(Task $task, \DateTime $forDate, string $name): Task;
-
-    /**
-     * @todo Не забыть про перенос изменений типа rename, update_position и т.д.
+     * @todo Не забыть про перенос изменений типа update_position и т.д.
      *
      * @param Task      $task
      * @param \DateTime $forDate

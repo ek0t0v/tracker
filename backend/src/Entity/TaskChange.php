@@ -42,13 +42,6 @@ class TaskChange
     /**
      * @var string
      *
-     * @ORM\Column(name="name", type="text", nullable=true)
-     */
-    private $name;
-
-    /**
-     * @var string
-     *
      * @ORM\Column(name="state", type="task_change_state", nullable=true)
      */
     private $state;
@@ -114,26 +107,6 @@ class TaskChange
     public function setAction(string $action): self
     {
         $this->action = $action;
-
-        return $this;
-    }
-
-    /**
-     * @return null|string
-     */
-    public function getName(): ?string
-    {
-        return $this->name;
-    }
-
-    /**
-     * @param null|string $name
-     *
-     * @return TaskChange
-     */
-    public function setName(?string $name): self
-    {
-        $this->name = $name;
 
         return $this;
     }

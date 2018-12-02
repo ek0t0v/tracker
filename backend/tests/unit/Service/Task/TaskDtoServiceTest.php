@@ -46,12 +46,6 @@ class TaskDtoServiceTest extends Unit
                 'changes' => new ArrayCollection(),
             ]);
 
-            $renameChange = $this->make(TaskChange::class, [
-                'action' => TaskChangeActionType::RENAME,
-                'name' => 'Task (renamed)',
-                'forDate' => new \DateTime('2018-11-01'),
-            ]);
-
             $markTaskAsDoneChange = $this->make(TaskChange::class, [
                 'action' => TaskChangeActionType::UPDATE_STATE,
                 'state' => 'done',
@@ -72,11 +66,6 @@ class TaskDtoServiceTest extends Unit
         } catch (\Exception $e) {
             throw new \Exception('Failed to create mock objects.');
         }
-
-        $dto = $this->taskDtoService->create($task, [$renameChange]);
-        $this->assertEquals('Task (renamed)', $dto->name);
-        $this->assertEquals('in_progress', $dto->state);
-        $this->assertNull($dto->position);
 
         $dto = $this->taskDtoService->create($task, [$markTaskAsDoneChange]);
         $this->assertEquals('Task', $dto->name);

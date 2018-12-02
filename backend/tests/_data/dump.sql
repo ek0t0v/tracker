@@ -80,14 +80,13 @@ CREATE TABLE public.task_changes (
     id integer NOT NULL,
     task_id integer,
     action character varying(255) NOT NULL,
-    name text,
     state character varying(255),
     "position" integer,
     transfer_from date,
     transfer_to date,
     for_date timestamp(0) without time zone NOT NULL,
     created_at timestamp(0) without time zone NOT NULL,
-    CONSTRAINT task_changes_action_check CHECK (((action)::text = ANY ((ARRAY['rename'::character varying, 'update_state'::character varying, 'update_position'::character varying, 'transfer_from'::character varying, 'transfer_to'::character varying])::text[]))),
+    CONSTRAINT task_changes_action_check CHECK (((action)::text = ANY ((ARRAY['update_state'::character varying, 'update_position'::character varying, 'transfer_from'::character varying, 'transfer_to'::character varying])::text[]))),
     CONSTRAINT task_changes_state_check CHECK (((state)::text = ANY ((ARRAY['in_progress'::character varying, 'done'::character varying, 'cancelled'::character varying])::text[])))
 );
 
@@ -216,6 +215,7 @@ ALTER TABLE public.users_id_seq OWNER TO symfony;
 COPY public.migration_versions (version) FROM stdin;
 20181129043710
 20181129101337
+20181202042103
 \.
 
 
@@ -231,12 +231,9 @@ COPY public.refresh_tokens (id, refresh_token, username, valid) FROM stdin;
 -- Data for Name: task_changes; Type: TABLE DATA; Schema: public; Owner: symfony
 --
 
-COPY public.task_changes (id, task_id, action, name, state, "position", transfer_from, transfer_to, for_date, created_at) FROM stdin;
-1	1	transfer_to	\N	\N	\N	\N	2018-11-04	2018-11-03 00:00:00	2018-11-30 15:48:35
-2	1	transfer_from	\N	\N	\N	2018-11-03	\N	2018-11-04 00:00:00	2018-11-30 15:48:35
-3	1	rename	Exercises (renamed 0)	\N	\N	\N	\N	2018-11-03 00:00:00	2018-11-30 15:48:35
-4	1	rename	Exercises (renamed 1)	\N	\N	\N	\N	2018-11-04 00:00:00	2018-11-30 15:48:35
-5	1	rename	Exercises (renamed 2)	\N	\N	\N	\N	2018-11-04 00:00:00	2018-11-30 15:48:35
+COPY public.task_changes (id, task_id, action, state, "position", transfer_from, transfer_to, for_date, created_at) FROM stdin;
+1	1	transfer_to	\N	\N	\N	2018-11-04	2018-11-03 00:00:00	2018-12-02 04:34:31
+2	1	transfer_from	\N	\N	2018-11-03	\N	2018-11-04 00:00:00	2018-12-02 04:34:31
 \.
 
 
@@ -253,11 +250,11 @@ COPY public.task_timings (id, task_id, started_at, ended_at) FROM stdin;
 --
 
 COPY public.tasks (id, user_id, name, start_date, end_date, schedule, updated_at, created_at) FROM stdin;
-1	1	Exercises	2018-11-01	2018-12-01	a:4:{i:0;i:1;i:1;i:1;i:2;i:1;i:3;i:0;}	2018-11-30 15:48:35	2018-11-30 15:48:35
-2	1	Work	2018-10-29	\N	a:7:{i:0;i:1;i:1;i:1;i:2;i:1;i:3;i:1;i:4;i:1;i:5;i:0;i:6;i:0;}	2018-11-30 15:48:35	2018-11-30 15:48:35
-3	1	Reading	2018-11-19	\N	a:1:{i:0;i:1;}	2018-11-30 15:48:35	2018-11-30 15:48:35
-4	1	Single task 1	2018-11-07	\N	N;	2018-11-30 15:48:35	2018-11-30 15:48:35
-5	1	Single task 2	2018-12-01	\N	N;	2018-11-30 15:48:35	2018-11-30 15:48:35
+1	1	Exercises	2018-11-01	2018-12-01	a:4:{i:0;i:1;i:1;i:1;i:2;i:1;i:3;i:0;}	2018-12-02 04:34:31	2018-12-02 04:34:31
+2	1	Work	2018-10-29	\N	a:7:{i:0;i:1;i:1;i:1;i:2;i:1;i:3;i:1;i:4;i:1;i:5;i:0;i:6;i:0;}	2018-12-02 04:34:31	2018-12-02 04:34:31
+3	1	Reading	2018-11-19	\N	a:1:{i:0;i:1;}	2018-12-02 04:34:31	2018-12-02 04:34:31
+4	1	Single task 1	2018-11-07	\N	N;	2018-12-02 04:34:31	2018-12-02 04:34:31
+5	1	Single task 2	2018-12-01	\N	N;	2018-12-02 04:34:31	2018-12-02 04:34:31
 \.
 
 
@@ -266,8 +263,8 @@ COPY public.tasks (id, user_id, name, start_date, end_date, schedule, updated_at
 --
 
 COPY public.users (id, email, email_canonical, username, password, roles, enabled, last_login, password_requested_at, created_at) FROM stdin;
-1	test_user_1@mail.ru	test_user_1@mail.ru	test_user_1	$2y$13$gbe0HVwxbxhLYB9fnKB9uug1wr0COn1mACSeowVEslz/fcTCTOfXG	[]	t	\N	\N	2018-11-30 15:48:34
-2	test_user_2@mail.ru	test_user_2@mail.ru	test_user_2	$2y$13$Gz8TmgF48f7apoIcFiftqe8S.zyoWcp52mXqfLkE0SlkwQfzuYxmO	[]	t	\N	\N	2018-11-30 15:48:35
+1	test_user_1@mail.ru	test_user_1@mail.ru	test_user_1	$2y$13$P1EFwLNeXUFStjmrAqopM.zdf.vELly2CQg1m0p2OKd14xd06ipae	[]	t	\N	\N	2018-12-02 04:34:30
+2	test_user_2@mail.ru	test_user_2@mail.ru	test_user_2	$2y$13$.8qHE3XyWkM7Xr7wCa4hLec9HCx.qoRc.nYr1haD14VzVLt548hZa	[]	t	\N	\N	2018-12-02 04:34:31
 \.
 
 
@@ -282,7 +279,7 @@ SELECT pg_catalog.setval('public.refresh_tokens_id_seq', 1, false);
 -- Name: task_changes_id_seq; Type: SEQUENCE SET; Schema: public; Owner: symfony
 --
 
-SELECT pg_catalog.setval('public.task_changes_id_seq', 5, true);
+SELECT pg_catalog.setval('public.task_changes_id_seq', 2, true);
 
 
 --

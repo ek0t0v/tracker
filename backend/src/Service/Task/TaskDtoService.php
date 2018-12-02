@@ -42,10 +42,6 @@ class TaskDtoService implements TaskDtoServiceInterface
 
         foreach ($changes as $change) {
             switch ($change->getAction()) {
-                case TaskChangeActionType::RENAME:
-                    $dto->name = $change->getName();
-
-                    break;
                 case TaskChangeActionType::UPDATE_STATE:
                     $dto->state = $change->getState();
 

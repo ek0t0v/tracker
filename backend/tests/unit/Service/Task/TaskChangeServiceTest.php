@@ -46,20 +46,6 @@ class TaskChangeServiceTest extends Unit
                 'changes' => new ArrayCollection(),
             ]);
 
-            $renameChange1 = $this->make(TaskChange::class, [
-                'id' => 1,
-                'action' => TaskChangeActionType::RENAME,
-                'name' => 'Task (renamed 1)',
-                'forDate' => new \DateTime('2018-11-01'),
-            ]);
-
-            $renameChange2 = $this->make(TaskChange::class, [
-                'id' => 2,
-                'action' => TaskChangeActionType::RENAME,
-                'name' => 'Task (renamed 2)',
-                'forDate' => new \DateTime('2018-11-01'),
-            ]);
-
             $updateStateChange1 = $this->make(TaskChange::class, [
                 'id' => 3,
                 'action' => TaskChangeActionType::UPDATE_STATE,
@@ -77,16 +63,13 @@ class TaskChangeServiceTest extends Unit
             throw new \Exception('Failed to create mock objects.');
         }
 
-        $task->addChange($renameChange1);
-        $task->addChange($renameChange2);
         $task->addChange($updateStateChange1);
         $task->addChange($updateStateChange2);
 
         $latestChanges = $this->taskChangeService->getLatestChanges($task, new \DateTime('2018-11-01'));
 
-        $this->assertCount(2, $latestChanges);
-        $this->assertEquals($renameChange2, $latestChanges[0]);
-        $this->assertEquals($updateStateChange1, $latestChanges[1]);
+        $this->assertCount(1, $latestChanges);
+        $this->assertEquals($updateStateChange1, $latestChanges[0]);
 
         $latestChanges = $this->taskChangeService->getLatestChanges($task, new \DateTime('2018-11-02'));
 
