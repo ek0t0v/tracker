@@ -9,3 +9,7 @@ services:
         class: App\Validator\UserUniqueEmailValidator
         tags:
             - { name: validator.constraint_validator, alias: user_unique_email }
+    task_schedule:
+        class: App\Validator\TaskScheduleValidator
+        tags:
+            - { name: validator.constraint_validator, alias: task_schedule }

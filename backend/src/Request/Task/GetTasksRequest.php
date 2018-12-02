@@ -13,16 +13,15 @@ class GetTasksRequest implements RequestDtoInterface
     /**
      * @var \DateTime
      *
-     * @Assert\NotNull()
-     * @Assert\NotBlank()
-     * @Assert\Date()
+     * @Assert\NotNull
+     * @Assert\Date
      */
     public $start;
 
     /**
      * @var \DateTime
      *
-     * @Assert\Date()
+     * @Assert\Date
      */
     public $end;
 }

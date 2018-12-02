@@ -5,22 +5,22 @@ namespace App\Validator\Constraints;
 use Symfony\Component\Validator\Constraint;
 
 /**
- * Class UserUniqueEmail.
+ * Class TaskSchedule.
  *
  * @Annotation
  */
-class UserUniqueEmail extends Constraint
+class TaskSchedule extends Constraint
 {
     /**
      * @var string
      */
-    public $message = 'A user with this email address already exists.';
+    public $message = 'Invalid schedule.';
 
     /**
      * @return string
      */
     public function validatedBy(): string
     {
-        return 'user_unique_email';
+        return 'task_schedule';
     }
 }

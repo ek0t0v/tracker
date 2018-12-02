@@ -31,7 +31,6 @@ class TaskCest
         $I->seeResponseContainsJson([
             'start' => [
                 'This value should not be null.',
-                'This value should not be blank.',
             ],
         ]);
 
@@ -43,12 +42,6 @@ class TaskCest
                 'This value is not a valid date.',
             ],
         ]);
-
-        // Нужно ли? Если упадет другой тест, проверяющий результат - упадет
-        // и этот, что может привести к путанице.
-        $I->sendGET('/tasks?start=2018-11-27');
-        $I->seeResponseCodeIsSuccessful();
-        $I->seeResponseCodeIs(HttpCode::OK);
     }
 
     /**
@@ -60,28 +53,10 @@ class TaskCest
         $I->seeResponseCodeIsClientError();
         $I->seeResponseCodeIs(HttpCode::UNPROCESSABLE_ENTITY);
         $I->seeResponseContainsJson([
-            'start' => [
-                'This value should not be null.',
-                'This value should not be blank.',
-            ],
             'end' => [
                 'This value is not a valid date.',
             ],
         ]);
-
-        $I->sendGET('/tasks?end=2018-12-12');
-        $I->seeResponseCodeIsClientError();
-        $I->seeResponseCodeIs(HttpCode::UNPROCESSABLE_ENTITY);
-        $I->seeResponseContainsJson([
-            'start' => [
-                'This value should not be null.',
-                'This value should not be blank.',
-            ],
-        ]);
-
-        $I->sendGET('/tasks?start=2018-11-27&end=2018-12-12');
-        $I->seeResponseCodeIsSuccessful();
-        $I->seeResponseCodeIs(HttpCode::OK);
     }
 
     /**
@@ -114,28 +89,108 @@ class TaskCest
     /**
      * @param ApiTester $I
      */
-    public function createTaskTest(ApiTester $I)
+    public function createTaskNameValidationTest(ApiTester $I)
     {
+        $I->sendPOST('/tasks');
+        $I->seeResponseCodeIsClientError();
+        $I->seeResponseCodeIs(HttpCode::UNPROCESSABLE_ENTITY);
+        $I->seeResponseContainsJson([
+            'name' => [
+                'This value should not be null.',
+            ],
+        ]);
+
+        $I->sendPOST('/tasks', [
+            'name' => false,
+        ]);
+        $I->seeResponseCodeIsClientError();
+        $I->seeResponseCodeIs(HttpCode::UNPROCESSABLE_ENTITY);
+        $I->seeResponseContainsJson([
+            'name' => [
+                'This value should be of type string.',
+            ],
+        ]);
     }
 
     /**
      * @param ApiTester $I
      */
-    public function transferTaskTest(ApiTester $I)
+    public function createTaskStartValidationTest(ApiTester $I)
     {
+        $I->sendPOST('/tasks');
+        $I->seeResponseCodeIsClientError();
+        $I->seeResponseCodeIs(HttpCode::UNPROCESSABLE_ENTITY);
+        $I->seeResponseContainsJson([
+            'start' => [
+                'This value should not be null.',
+            ],
+        ]);
+
+        $I->sendPOST('/tasks', [
+            'start' => false,
+        ]);
+        $I->seeResponseCodeIsClientError();
+        $I->seeResponseCodeIs(HttpCode::UNPROCESSABLE_ENTITY);
+        $I->seeResponseContainsJson([
+            'start' => [
+                'This value is not a valid date.',
+            ],
+        ]);
     }
 
     /**
      * @param ApiTester $I
      */
-    public function changeTaskStateTest(ApiTester $I)
+    public function createTaskEndValidationTest(ApiTester $I)
     {
+        $I->sendPOST('/tasks', [
+            'end' => false,
+        ]);
+        $I->seeResponseCodeIsClientError();
+        $I->seeResponseCodeIs(HttpCode::UNPROCESSABLE_ENTITY);
+        $I->seeResponseContainsJson([
+            'end' => [
+                'This value is not a valid date.',
+            ],
+        ]);
     }
 
     /**
      * @param ApiTester $I
      */
-    public function changeTaskPositionTest(ApiTester $I)
+    public function createTaskScheduleValidationTest(ApiTester $I)
     {
+        $I->sendPOST('/tasks', [
+            'schedule' => false,
+        ]);
+        $I->seeResponseCodeIsClientError();
+        $I->seeResponseCodeIs(HttpCode::UNPROCESSABLE_ENTITY);
+        $I->seeResponseContainsJson([
+            'schedule' => [
+                'This value should be of type array.',
+            ],
+        ]);
+
+        $I->sendPOST('/tasks', [
+            'schedule' => [],
+        ]);
+        $I->seeResponseCodeIsClientError();
+        $I->seeResponseCodeIs(HttpCode::UNPROCESSABLE_ENTITY);
+        $I->seeResponseContainsJson([
+            'schedule' => [
+                'Invalid schedule.',
+            ],
+        ]);
+
+        $I->sendPOST('/tasks', [
+            'schedule' => [0, 0, 0, 0],
+        ]);
+        $I->seeResponseCodeIsClientError();
+        $I->seeResponseCodeIs(HttpCode::UNPROCESSABLE_ENTITY);
+        $I->seeResponseContainsJson([
+            'schedule' => [
+                'Invalid schedule.',
+            ],
+        ]);
     }
 }
