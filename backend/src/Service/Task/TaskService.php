@@ -95,15 +95,22 @@ class TaskService implements TaskServiceInterface
     public function create(string $name, \DateTime $startDate, \DateTime $endDate = null, array $schedule = null): TaskDto
     {
         $task = new Task();
+        $task->setUser($this->tokenStorage->getToken()->getUser());
         $task->setName($name);
         $task->setStartDate($startDate);
         $task->setEndDate($endDate);
         $task->setSchedule($schedule);
 
+        $this->em->persist($task);
+
+        $this->em->flush();
+
         return $this->taskDtoService->create($task);
     }
 
     /**
+     * @todo Может быть update?
+     *
      * {@inheritdoc}
      */
     public function rename(Task $task, string $name): TaskDto
