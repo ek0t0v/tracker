@@ -23,6 +23,7 @@ class UserCest
     public function createUserEmailValidationTest(ApiTester $I)
     {
         $I->sendPOST('/users');
+
         $I->seeResponseCodeIsClientError();
         $I->seeResponseCodeIs(HttpCode::UNPROCESSABLE_ENTITY);
         $I->seeResponseIsJson();
@@ -36,6 +37,7 @@ class UserCest
         $I->sendPOST('/users', [
             'email' => 'test@mail',
         ]);
+
         $I->seeResponseCodeIsClientError();
         $I->seeResponseCodeIs(HttpCode::UNPROCESSABLE_ENTITY);
         $I->seeResponseIsJson();
@@ -48,6 +50,7 @@ class UserCest
         $I->sendPOST('/users', [
             'email' => 'test_user_1@mail.ru',
         ]);
+
         $I->seeResponseCodeIsClientError();
         $I->seeResponseCodeIs(HttpCode::UNPROCESSABLE_ENTITY);
         $I->seeResponseIsJson();
@@ -67,6 +70,7 @@ class UserCest
             'email' => 'test2@mail.ru',
             'password' => 'aa',
         ]);
+
         $I->seeResponseCodeIsClientError();
         $I->seeResponseCodeIs(HttpCode::UNPROCESSABLE_ENTITY);
         $I->seeResponseIsJson();
@@ -86,6 +90,7 @@ class UserCest
             'email' => 'test2@mail.ru',
             'password' => 'passw0rd',
         ]);
+
         $I->seeResponseCodeIs(HttpCode::CREATED);
     }
 }

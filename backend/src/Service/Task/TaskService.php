@@ -73,6 +73,9 @@ class TaskService
 
         $result = [];
 
+        /**
+         * @var Task
+         */
         foreach ($tasks as $task) {
             if ($this->taskScheduleService->isTaskScheduled($task, $start)) {
                 $result[] = $this->taskDtoService->create($task, $start);

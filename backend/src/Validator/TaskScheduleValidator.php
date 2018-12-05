@@ -18,7 +18,7 @@ class TaskScheduleValidator extends ConstraintValidator
     {
         // В CreateTaskRequest есть проверка schedule на тип - должно быть массивом,
         // однако срабатывает и TaskSchedule проверка.
-        // @todo Придумать как поправить assert'ы.
+        // @todo Придумать как поправить assert'ы, убрать is_array отсюда.
         if (!is_array($value)) {
             return;
         }
