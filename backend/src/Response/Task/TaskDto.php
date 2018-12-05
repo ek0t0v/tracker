@@ -45,6 +45,13 @@ class TaskDto
     public $end = null;
 
     /**
+     * @var \DateTime
+     *
+     * @Groups({"api"})
+     */
+    public $forDate;
+
+    /**
      * @var array|null
      *
      * @Groups({"api"})

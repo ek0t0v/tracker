@@ -3,13 +3,12 @@
 namespace App\Service\Task;
 
 use App\Entity\Task;
-use App\Response\Task\TaskDto;
 use Doctrine\ORM\EntityManagerInterface;
 
 /**
  * Class TaskChangeService.
  */
-class TaskChangeService implements TaskChangeServiceInterface
+class TaskChangeService
 {
     /**
      * @var EntityManagerInterface
@@ -27,57 +26,40 @@ class TaskChangeService implements TaskChangeServiceInterface
     }
 
     /**
-     * {@inheritdoc}
-     */
-    public function createTransferChanges(Task $task, \DateTime $forDate, \DateTime $transferFrom, \DateTime $transferTo): Task
-    {
-        return new Task();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function createUpdatePositionChange(Task $task, \DateTime $forDate, int $position): Task
-    {
-        return new Task();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function createUpdateStateChange(Task $task, \DateTime $forDate, string $state): Task
-    {
-        return new Task();
-    }
-
-    /**
-     * @todo Нужно ли, если можно в методе создания конечного DTO применять только последние изменения, которые уже содержатся в Task?
+     * @todo Не забыть про перенос изменений типа position и т.д.
      *
-     * {@inheritdoc}
+     * @param Task      $task
+     * @param \DateTime $forDate
+     * @param \DateTime $transferTo
+     *
+     * @return Task
      */
-    public function getLatestChanges(Task $task, \DateTime $start): array
+    public function transfer(Task $task, \DateTime $forDate, \DateTime $transferTo): Task
     {
-        $changesHash = [];
+        return new Task();
+    }
 
-        foreach ($task->getChanges() as $change) {
-            if ($change->getForDate() != $start) {
-                continue;
-            }
+    /**
+     * @param Task      $task
+     * @param \DateTime $forDate
+     * @param int       $position
+     *
+     * @return Task
+     */
+    public function updatePosition(Task $task, \DateTime $forDate, int $position): Task
+    {
+        return new Task();
+    }
 
-            $newerChange = array_key_exists($change->getAction(), $changesHash)
-                && $change->getId() > $changesHash[$change->getAction()]->getId();
-
-            if (!array_key_exists($change->getAction(), $changesHash) || $newerChange) {
-                $changesHash[$change->getAction()] = $change;
-            }
-        }
-
-        $changes = [];
-
-        foreach ($changesHash as $element) {
-            $changes[] = $element;
-        }
-
-        return $changes;
+    /**
+     * @param Task      $task
+     * @param \DateTime $forDate
+     * @param string    $state
+     *
+     * @return Task
+     */
+    public function updateState(Task $task, \DateTime $forDate, string $state): Task
+    {
+        return new Task();
     }
 }

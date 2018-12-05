@@ -79,14 +79,9 @@ ALTER TABLE public.refresh_tokens_id_seq OWNER TO symfony;
 CREATE TABLE public.task_changes (
     id integer NOT NULL,
     task_id integer,
-    action character varying(255) NOT NULL,
     state character varying(255),
     "position" integer,
-    transfer_from date,
-    transfer_to date,
-    for_date timestamp(0) without time zone NOT NULL,
-    created_at timestamp(0) without time zone NOT NULL,
-    CONSTRAINT task_changes_action_check CHECK (((action)::text = ANY ((ARRAY['update_state'::character varying, 'update_position'::character varying, 'transfer_from'::character varying, 'transfer_to'::character varying])::text[]))),
+    for_date date NOT NULL,
     CONSTRAINT task_changes_state_check CHECK (((state)::text = ANY ((ARRAY['in_progress'::character varying, 'done'::character varying, 'cancelled'::character varying])::text[])))
 );
 
@@ -134,6 +129,34 @@ CREATE SEQUENCE public.task_timings_id_seq
 
 
 ALTER TABLE public.task_timings_id_seq OWNER TO symfony;
+
+--
+-- Name: task_transfers; Type: TABLE; Schema: public; Owner: symfony
+--
+
+CREATE TABLE public.task_transfers (
+    id integer NOT NULL,
+    task_id integer,
+    transfer_to date NOT NULL,
+    for_date date NOT NULL
+);
+
+
+ALTER TABLE public.task_transfers OWNER TO symfony;
+
+--
+-- Name: task_transfers_id_seq; Type: SEQUENCE; Schema: public; Owner: symfony
+--
+
+CREATE SEQUENCE public.task_transfers_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.task_transfers_id_seq OWNER TO symfony;
 
 --
 -- Name: tasks; Type: TABLE; Schema: public; Owner: symfony
@@ -216,6 +239,10 @@ COPY public.migration_versions (version) FROM stdin;
 20181129043710
 20181129101337
 20181202042103
+20181203042752
+20181205090802
+20181205134513
+20181205135429
 \.
 
 
@@ -231,9 +258,7 @@ COPY public.refresh_tokens (id, refresh_token, username, valid) FROM stdin;
 -- Data for Name: task_changes; Type: TABLE DATA; Schema: public; Owner: symfony
 --
 
-COPY public.task_changes (id, task_id, action, state, "position", transfer_from, transfer_to, for_date, created_at) FROM stdin;
-1	1	transfer_to	\N	\N	\N	2018-11-04	2018-11-03 00:00:00	2018-12-02 04:34:31
-2	1	transfer_from	\N	\N	2018-11-03	\N	2018-11-04 00:00:00	2018-12-02 04:34:31
+COPY public.task_changes (id, task_id, state, "position", for_date) FROM stdin;
 \.
 
 
@@ -246,15 +271,29 @@ COPY public.task_timings (id, task_id, started_at, ended_at) FROM stdin;
 
 
 --
+-- Data for Name: task_transfers; Type: TABLE DATA; Schema: public; Owner: symfony
+--
+
+COPY public.task_transfers (id, task_id, transfer_to, for_date) FROM stdin;
+1	1	2018-11-04	2018-11-03
+2	1	2018-11-08	2018-11-06
+3	1	2018-11-09	2018-11-06
+4	3	2018-11-23	2018-11-22
+5	4	2018-11-10	2018-11-07
+6	4	2018-11-08	2018-11-07
+\.
+
+
+--
 -- Data for Name: tasks; Type: TABLE DATA; Schema: public; Owner: symfony
 --
 
 COPY public.tasks (id, user_id, name, start_date, end_date, schedule, updated_at, created_at) FROM stdin;
-1	1	Exercises	2018-11-01	2018-12-01	a:4:{i:0;i:1;i:1;i:1;i:2;i:1;i:3;i:0;}	2018-12-02 04:34:31	2018-12-02 04:34:31
-2	1	Work	2018-10-29	\N	a:7:{i:0;i:1;i:1;i:1;i:2;i:1;i:3;i:1;i:4;i:1;i:5;i:0;i:6;i:0;}	2018-12-02 04:34:31	2018-12-02 04:34:31
-3	1	Reading	2018-11-19	\N	a:1:{i:0;i:1;}	2018-12-02 04:34:31	2018-12-02 04:34:31
-4	1	Single task 1	2018-11-07	\N	N;	2018-12-02 04:34:31	2018-12-02 04:34:31
-5	1	Single task 2	2018-12-01	\N	N;	2018-12-02 04:34:31	2018-12-02 04:34:31
+1	1	Exercises	2018-11-01	2018-12-01	a:4:{i:0;i:1;i:1;i:1;i:2;i:1;i:3;i:0;}	2018-12-05 13:56:21	2018-12-05 13:56:21
+2	1	Work	2018-10-29	\N	a:7:{i:0;i:1;i:1;i:1;i:2;i:1;i:3;i:1;i:4;i:1;i:5;i:0;i:6;i:0;}	2018-12-05 13:56:21	2018-12-05 13:56:21
+3	1	Reading	2018-11-19	\N	a:1:{i:0;i:1;}	2018-12-05 13:56:21	2018-12-05 13:56:21
+4	1	Single task 1	2018-11-07	\N	N;	2018-12-05 13:56:21	2018-12-05 13:56:21
+5	1	Single task 2	2018-12-01	\N	N;	2018-12-05 13:56:21	2018-12-05 13:56:21
 \.
 
 
@@ -263,8 +302,8 @@ COPY public.tasks (id, user_id, name, start_date, end_date, schedule, updated_at
 --
 
 COPY public.users (id, email, email_canonical, username, password, roles, enabled, last_login, password_requested_at, created_at) FROM stdin;
-1	test_user_1@mail.ru	test_user_1@mail.ru	test_user_1	$2y$13$P1EFwLNeXUFStjmrAqopM.zdf.vELly2CQg1m0p2OKd14xd06ipae	[]	t	\N	\N	2018-12-02 04:34:30
-2	test_user_2@mail.ru	test_user_2@mail.ru	test_user_2	$2y$13$.8qHE3XyWkM7Xr7wCa4hLec9HCx.qoRc.nYr1haD14VzVLt548hZa	[]	t	\N	\N	2018-12-02 04:34:31
+1	test_user_1@mail.ru	test_user_1@mail.ru	test_user_1	$2y$13$UpBNKzJSrYpWI/DRfiTrlOvJ3TUt3m4rzFS3HLxKQ26RrkIX6hXaC	[]	t	\N	\N	2018-12-05 13:56:20
+2	test_user_2@mail.ru	test_user_2@mail.ru	test_user_2	$2y$13$b3UpGhMCvYkC4L9zAQZT5uYPD1aIzIiYVXGoEJf8KcThKcW/HUeC2	[]	t	\N	\N	2018-12-05 13:56:21
 \.
 
 
@@ -279,7 +318,7 @@ SELECT pg_catalog.setval('public.refresh_tokens_id_seq', 1, false);
 -- Name: task_changes_id_seq; Type: SEQUENCE SET; Schema: public; Owner: symfony
 --
 
-SELECT pg_catalog.setval('public.task_changes_id_seq', 2, true);
+SELECT pg_catalog.setval('public.task_changes_id_seq', 1, false);
 
 
 --
@@ -287,6 +326,13 @@ SELECT pg_catalog.setval('public.task_changes_id_seq', 2, true);
 --
 
 SELECT pg_catalog.setval('public.task_timings_id_seq', 1, false);
+
+
+--
+-- Name: task_transfers_id_seq; Type: SEQUENCE SET; Schema: public; Owner: symfony
+--
+
+SELECT pg_catalog.setval('public.task_transfers_id_seq', 6, true);
 
 
 --
@@ -336,6 +382,14 @@ ALTER TABLE ONLY public.task_timings
 
 
 --
+-- Name: task_transfers task_transfers_pkey; Type: CONSTRAINT; Schema: public; Owner: symfony
+--
+
+ALTER TABLE ONLY public.task_transfers
+    ADD CONSTRAINT task_transfers_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: tasks tasks_pkey; Type: CONSTRAINT; Schema: public; Owner: symfony
 --
 
@@ -370,6 +424,13 @@ CREATE INDEX idx_3fc192d78db60186 ON public.task_changes USING btree (task_id);
 --
 
 CREATE INDEX idx_50586597a76ed395 ON public.tasks USING btree (user_id);
+
+
+--
+-- Name: idx_ff00f4498db60186; Type: INDEX; Schema: public; Owner: symfony
+--
+
+CREATE INDEX idx_ff00f4498db60186 ON public.task_transfers USING btree (task_id);
 
 
 --
@@ -415,6 +476,14 @@ ALTER TABLE ONLY public.task_changes
 
 ALTER TABLE ONLY public.tasks
     ADD CONSTRAINT fk_50586597a76ed395 FOREIGN KEY (user_id) REFERENCES public.users(id);
+
+
+--
+-- Name: task_transfers fk_ff00f4498db60186; Type: FK CONSTRAINT; Schema: public; Owner: symfony
+--
+
+ALTER TABLE ONLY public.task_transfers
+    ADD CONSTRAINT fk_ff00f4498db60186 FOREIGN KEY (task_id) REFERENCES public.tasks(id);
 
 
 --

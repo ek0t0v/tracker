@@ -10,7 +10,7 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 /**
  * Class TaskService.
  */
-class TaskService implements TaskServiceInterface
+class TaskService
 {
     /**
      * @var EntityManagerInterface
@@ -23,74 +23,103 @@ class TaskService implements TaskServiceInterface
     private $tokenStorage;
 
     /**
-     * @var TaskScheduleServiceInterface
+     * @var TaskScheduleService
      */
     private $taskScheduleService;
 
     /**
-     * @var TaskChangeServiceInterface
+     * @var TaskChangeService
      */
     private $taskChangeService;
 
     /**
-     * @var TaskTransferServiceInterface
-     */
-    private $taskTransferService;
-
-    /**
-     * @var TaskDtoServiceInterface
+     * @var TaskDtoService
      */
     private $taskDtoService;
 
     /**
      * TaskService constructor.
      *
-     * @param EntityManagerInterface       $em
-     * @param TokenStorageInterface        $tokenStorage
-     * @param TaskScheduleServiceInterface $taskScheduleService
-     * @param TaskChangeServiceInterface   $taskChangeService
-     * @param TaskTransferServiceInterface $taskTransferService
-     * @param TaskDtoServiceInterface      $taskDtoService
+     * @param EntityManagerInterface $em
+     * @param TokenStorageInterface  $tokenStorage
+     * @param TaskScheduleService    $taskScheduleService
+     * @param TaskChangeService      $taskChangeService
+     * @param TaskDtoService         $taskDtoService
      */
     public function __construct(
         EntityManagerInterface $em,
         TokenStorageInterface $tokenStorage,
-        TaskScheduleServiceInterface $taskScheduleService,
-        TaskChangeServiceInterface $taskChangeService,
-        TaskTransferServiceInterface $taskTransferService,
-        TaskDtoServiceInterface $taskDtoService
+        TaskScheduleService $taskScheduleService,
+        TaskChangeService $taskChangeService,
+        TaskDtoService $taskDtoService
     ) {
         $this->em = $em;
         $this->tokenStorage = $tokenStorage;
         $this->taskScheduleService = $taskScheduleService;
         $this->taskChangeService = $taskChangeService;
-        $this->taskTransferService = $taskTransferService;
         $this->taskDtoService = $taskDtoService;
     }
 
     /**
-     * {@inheritdoc}
+     * @param \DateTime      $start
+     * @param \DateTime|null $end
+     *
+     * @return TaskDto[]
      */
     public function get(\DateTime $start, \DateTime $end = null): array
     {
-        $tasks = $this->em->getRepository(Task::class)->findByDate($start);
-        $transferredTasks = $this->taskTransferService->findTransferredTasks($start);
-        $tasks = $this->taskScheduleService->filter($tasks, $start);
-        $tasks = $this->taskTransferService->filterTransferredTasks($tasks, $start);
-        $tasks = array_merge($tasks, $transferredTasks);
+        $user = $this->tokenStorage->getToken()->getUser();
+        $tasks = $this->em->getRepository(Task::class)->findByDate($start, $user);
 
         $result = [];
 
         foreach ($tasks as $task) {
-            $latestChanges = $this->taskChangeService->getLatestChanges($task, $start);
-            $result[] = $this->taskDtoService->create($task, $latestChanges);
+            if ($this->taskScheduleService->isTaskScheduled($task, $start)) {
+                $result[] = $this->taskDtoService->create($task, $start);
+            }
+
+            $transfersHash = [];
+
+            // Группирует переносы, превращает цепочки переносов в один перенос.
+            foreach ($task->getTransfers() as $transfer) {
+                $transfersHash[$transfer->getForDate()->format('Y-m-d')] = $transfer->getTransferTo();
+            }
+
+            foreach ($transfersHash as $forDate => $to) {
+                // Задача за сегодняшний день перенесена и не вернулась потом на сегодня - убираем задачу.
+                if (new \DateTime($forDate) == $start && $to != $start) {
+                    unset($result[count($result) - 1]);
+
+                    continue;
+                }
+
+                // Задача перенесена на сегодня откуда-нибудь (но не с сегодняшнего дня) - добавляем задачу.
+                if ($to == $start) {
+                    $result[] = $this->taskDtoService->create($task, new \DateTime($forDate));
+                }
+            }
         }
 
         return $result;
     }
 
     /**
-     * {@inheritdoc}
+     * @param \DateTime $start
+     *
+     * @return Task[]
+     */
+    public function getOverdueTasks(\DateTime $start): array
+    {
+        return [];
+    }
+
+    /**
+     * @param string         $name
+     * @param \DateTime      $startDate
+     * @param \DateTime|null $endDate
+     * @param array|null     $schedule
+     *
+     * @return TaskDto
      */
     public function create(string $name, \DateTime $startDate, \DateTime $endDate = null, array $schedule = null): TaskDto
     {
@@ -106,14 +135,5 @@ class TaskService implements TaskServiceInterface
         $this->em->flush();
 
         return $this->taskDtoService->create($task);
-    }
-
-    /**
-     * @todo Может быть update?
-     *
-     * {@inheritdoc}
-     */
-    public function rename(Task $task, string $name): TaskDto
-    {
     }
 }

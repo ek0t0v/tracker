@@ -2,7 +2,6 @@
 
 namespace App\Repository;
 
-use App\Doctrine\DBAL\Type\TaskChangeActionType;
 use App\Entity\TaskChange;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
@@ -23,24 +22,5 @@ class TaskChangeRepository extends ServiceEntityRepository
     public function __construct(RegistryInterface $registry)
     {
         parent::__construct($registry, TaskChange::class);
-    }
-
-    /**
-     * @param \DateTime $start
-     *
-     * @return \Doctrine\ORM\QueryBuilder
-     */
-    public function findTransferredFromWithTasks(\DateTime $start)
-    {
-        return $this->createQueryBuilder('c')
-            ->addSelect('t')
-            ->andWhere('c.forDate = :start')
-            ->andWhere('c.action = :action')
-            ->setParameter('start', $start)
-            ->setParameter('action', TaskChangeActionType::TRANSFER_FROM)
-            ->leftJoin('c.task', 't')
-            ->getQuery()
-            ->getResult()
-        ;
     }
 }

@@ -9,15 +9,14 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table(name="task_changes")
  * @ORM\Entity(repositoryClass="App\Repository\TaskChangeRepository")
- * @ORM\EntityListeners({"App\Doctrine\EventListener\TaskChangeListener"})
  */
 class TaskChange
 {
     /**
      * @var int
      *
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
+     * @ORM\Id
+     * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
     private $id;
@@ -29,15 +28,6 @@ class TaskChange
      * @ORM\JoinColumn(name="task_id", referencedColumnName="id")
      */
     private $task;
-
-    /**
-     * @see TaskChangeActionType
-     *
-     * @var string
-     *
-     * @ORM\Column(name="action", type="task_change_action")
-     */
-    private $action;
 
     /**
      * @var string
@@ -56,32 +46,9 @@ class TaskChange
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="transfer_from", type="date", nullable=true)
-     */
-    private $transferFrom;
-
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="transfer_to", type="date", nullable=true)
-     */
-    private $transferTo;
-
-    /**
-     * За какой день изменение.
-     *
-     * @var \DateTime
-     *
-     * @ORM\Column(name="for_date", type="datetime")
+     * @ORM\Column(name="for_date", type="date")
      */
     private $forDate;
-
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="created_at", type="datetime")
-     */
-    private $createdAt;
 
     /**
      * @return int|null
@@ -92,21 +59,21 @@ class TaskChange
     }
 
     /**
-     * @return null|string
+     * @return Task|null
      */
-    public function getAction(): ?string
+    public function getTask(): ?Task
     {
-        return $this->action;
+        return $this->task;
     }
 
     /**
-     * @param string $action
+     * @param Task|null $task
      *
      * @return TaskChange
      */
-    public function setAction(string $action): self
+    public function setTask(?Task $task): self
     {
-        $this->action = $action;
+        $this->task = $task;
 
         return $this;
     }
@@ -154,46 +121,6 @@ class TaskChange
     /**
      * @return \DateTimeInterface|null
      */
-    public function getTransferFrom(): ?\DateTimeInterface
-    {
-        return $this->transferFrom;
-    }
-
-    /**
-     * @param \DateTimeInterface|null $transferFrom
-     *
-     * @return TaskChange
-     */
-    public function setTransferFrom(?\DateTimeInterface $transferFrom): self
-    {
-        $this->transferFrom = $transferFrom;
-
-        return $this;
-    }
-
-    /**
-     * @return \DateTimeInterface|null
-     */
-    public function getTransferTo(): ?\DateTimeInterface
-    {
-        return $this->transferTo;
-    }
-
-    /**
-     * @param \DateTimeInterface|null $transferTo
-     *
-     * @return TaskChange
-     */
-    public function setTransferTo(?\DateTimeInterface $transferTo): self
-    {
-        $this->transferTo = $transferTo;
-
-        return $this;
-    }
-
-    /**
-     * @return \DateTimeInterface|null
-     */
     public function getForDate(): ?\DateTimeInterface
     {
         return $this->forDate;
@@ -207,46 +134,6 @@ class TaskChange
     public function setForDate(\DateTimeInterface $forDate): self
     {
         $this->forDate = $forDate;
-
-        return $this;
-    }
-
-    /**
-     * @return \DateTimeInterface|null
-     */
-    public function getCreatedAt(): ?\DateTimeInterface
-    {
-        return $this->createdAt;
-    }
-
-    /**
-     * @param \DateTimeInterface $createdAt
-     *
-     * @return TaskChange
-     */
-    public function setCreatedAt(\DateTimeInterface $createdAt): self
-    {
-        $this->createdAt = $createdAt;
-
-        return $this;
-    }
-
-    /**
-     * @return Task|null
-     */
-    public function getTask(): ?Task
-    {
-        return $this->task;
-    }
-
-    /**
-     * @param Task|null $task
-     *
-     * @return TaskChange
-     */
-    public function setTask(?Task $task): self
-    {
-        $this->task = $task;
 
         return $this;
     }

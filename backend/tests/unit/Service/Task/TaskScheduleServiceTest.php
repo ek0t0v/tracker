@@ -3,7 +3,7 @@
 namespace App\Tests;
 
 use App\Entity\Task;
-use App\Service\Task\TaskScheduleServiceInterface;
+use App\Service\Task\TaskScheduleService;
 use Codeception\Exception\ModuleException;
 use Codeception\Test\Unit;
 
@@ -18,7 +18,7 @@ class TaskScheduleServiceTest extends Unit
     protected $tester;
 
     /**
-     * @var TaskScheduleServiceInterface
+     * @var TaskScheduleService
      */
     private $taskScheduleService;
 
@@ -27,18 +27,18 @@ class TaskScheduleServiceTest extends Unit
      */
     protected function _before()
     {
-        $this->taskScheduleService = $this->tester->getSymfonyService(TaskScheduleServiceInterface::class);
+        $this->taskScheduleService = $this->tester->getSymfonyService(TaskScheduleService::class);
     }
 
     /**
      * @param \DateTime $start
-     * @param int       $expectedTasksCountAfterFilter
+     * @param bool      $expected
      *
      * @throws \Exception
      *
      * @dataProvider workTaskDataProvider
      */
-    public function testFilterWithWorkTask(\DateTime $start, int $expectedTasksCountAfterFilter)
+    public function testFilterWithWorkTask(\DateTime $start, bool $expected)
     {
         try {
             $task = $this->make(Task::class, [
@@ -50,19 +50,19 @@ class TaskScheduleServiceTest extends Unit
             throw new \Exception('Failed to create mock objects.');
         }
 
-        $result = $this->taskScheduleService->filter([$task], $start);
-        $this->assertCount($expectedTasksCountAfterFilter, $result);
+        $isTaskScheduled = $this->taskScheduleService->isTaskScheduled($task, $start);
+        $this->assertEquals($expected, $isTaskScheduled);
     }
 
     /**
      * @param \DateTime $start
-     * @param int       $expectedTasksCountAfterFilter
+     * @param bool      $expected
      *
      * @throws \Exception
      *
      * @dataProvider exercisesTaskDataProvider
      */
-    public function testFilterWithExercisesTask(\DateTime $start, int $expectedTasksCountAfterFilter)
+    public function testFilterWithExercisesTask(\DateTime $start, bool $expected)
     {
         try {
             $task = $this->make(Task::class, [
@@ -75,19 +75,19 @@ class TaskScheduleServiceTest extends Unit
             throw new \Exception('Failed to create mock objects.');
         }
 
-        $result = $this->taskScheduleService->filter([$task], $start);
-        $this->assertCount($expectedTasksCountAfterFilter, $result);
+        $isTaskScheduled = $this->taskScheduleService->isTaskScheduled($task, $start);
+        $this->assertEquals($expected, $isTaskScheduled);
     }
 
     /**
      * @param \DateTime $start
-     * @param int       $expectedTasksCountAfterFilter
+     * @param bool      $expected
      *
      * @throws \Exception
      *
      * @dataProvider readingTaskDataProvider
      */
-    public function testFilterWithReadingTask(\DateTime $start, int $expectedTasksCountAfterFilter)
+    public function testFilterWithReadingTask(\DateTime $start, bool $expected)
     {
         try {
             $task = $this->make(Task::class, [
@@ -99,19 +99,19 @@ class TaskScheduleServiceTest extends Unit
             throw new \Exception('Failed to create mock objects.');
         }
 
-        $result = $this->taskScheduleService->filter([$task], $start);
-        $this->assertCount($expectedTasksCountAfterFilter, $result);
+        $isTaskScheduled = $this->taskScheduleService->isTaskScheduled($task, $start);
+        $this->assertEquals($expected, $isTaskScheduled);
     }
 
     /**
      * @param \DateTime $start
-     * @param int       $expectedTasksCountAfterFilter
+     * @param bool      $expected
      *
      * @throws \Exception
      *
      * @dataProvider singleTaskDataProvider
      */
-    public function testFilterWithSingleTask(\DateTime $start, int $expectedTasksCountAfterFilter)
+    public function testFilterWithSingleTask(\DateTime $start, bool $expected)
     {
         try {
             $task = $this->make(Task::class, [
@@ -122,8 +122,8 @@ class TaskScheduleServiceTest extends Unit
             throw new \Exception('Failed to create mock objects.');
         }
 
-        $result = $this->taskScheduleService->filter([$task], $start);
-        $this->assertCount($expectedTasksCountAfterFilter, $result);
+        $isTaskScheduled = $this->taskScheduleService->isTaskScheduled($task, $start);
+        $this->assertEquals($expected, $isTaskScheduled);
     }
 
     /**
@@ -132,19 +132,19 @@ class TaskScheduleServiceTest extends Unit
     public function workTaskDataProvider(): array
     {
         return [
-            '2018-10-18' => [new \DateTime('2018-10-18'), 0],
-            '2018-11-03' => [new \DateTime('2018-11-03'), 0],
-            '2018-11-04' => [new \DateTime('2018-11-04'), 0],
-            '2018-11-10' => [new \DateTime('2018-11-10'), 0],
-            '2019-03-17' => [new \DateTime('2019-03-17'), 0],
-            '2018-10-29' => [new \DateTime('2018-10-29'), 1],
-            '2018-10-30' => [new \DateTime('2018-10-30'), 1],
-            '2018-10-31' => [new \DateTime('2018-10-31'), 1],
-            '2018-11-01' => [new \DateTime('2018-11-01'), 1],
-            '2018-11-02' => [new \DateTime('2018-11-02'), 1],
-            '2018-11-05' => [new \DateTime('2018-11-05'), 1],
-            '2018-11-15' => [new \DateTime('2018-11-15'), 1],
-            '2019-03-15' => [new \DateTime('2019-03-15'), 1],
+            '2018-10-18' => [new \DateTime('2018-10-18'), false],
+            '2018-11-03' => [new \DateTime('2018-11-03'), false],
+            '2018-11-04' => [new \DateTime('2018-11-04'), false],
+            '2018-11-10' => [new \DateTime('2018-11-10'), false],
+            '2019-03-17' => [new \DateTime('2019-03-17'), false],
+            '2018-10-29' => [new \DateTime('2018-10-29'), true],
+            '2018-10-30' => [new \DateTime('2018-10-30'), true],
+            '2018-10-31' => [new \DateTime('2018-10-31'), true],
+            '2018-11-01' => [new \DateTime('2018-11-01'), true],
+            '2018-11-02' => [new \DateTime('2018-11-02'), true],
+            '2018-11-05' => [new \DateTime('2018-11-05'), true],
+            '2018-11-15' => [new \DateTime('2018-11-15'), true],
+            '2019-03-15' => [new \DateTime('2019-03-15'), true],
         ];
     }
 
@@ -154,18 +154,18 @@ class TaskScheduleServiceTest extends Unit
     public function exercisesTaskDataProvider(): array
     {
         return [
-            '2018-10-04' => [new \DateTime('2018-10-04'), 0],
-            '2018-11-04' => [new \DateTime('2018-11-04'), 0],
-            '2018-11-20' => [new \DateTime('2018-11-20'), 0],
-            '2018-12-02' => [new \DateTime('2018-12-02'), 0],
-            '2018-12-03' => [new \DateTime('2018-12-03'), 0],
-            '2019-12-03' => [new \DateTime('2019-12-03'), 0],
-            '2018-11-01' => [new \DateTime('2018-11-01'), 1],
-            '2018-11-02' => [new \DateTime('2018-11-02'), 1],
-            '2018-11-03' => [new \DateTime('2018-11-03'), 1],
-            '2018-11-05' => [new \DateTime('2018-11-05'), 1],
-            '2018-11-21' => [new \DateTime('2018-11-21'), 1],
-            '2018-12-01' => [new \DateTime('2018-12-01'), 1],
+            '2018-10-04' => [new \DateTime('2018-10-04'), false],
+            '2018-11-04' => [new \DateTime('2018-11-04'), false],
+            '2018-11-20' => [new \DateTime('2018-11-20'), false],
+            '2018-12-02' => [new \DateTime('2018-12-02'), false],
+            '2018-12-03' => [new \DateTime('2018-12-03'), false],
+            '2019-12-03' => [new \DateTime('2019-12-03'), false],
+            '2018-11-01' => [new \DateTime('2018-11-01'), true],
+            '2018-11-02' => [new \DateTime('2018-11-02'), true],
+            '2018-11-03' => [new \DateTime('2018-11-03'), true],
+            '2018-11-05' => [new \DateTime('2018-11-05'), true],
+            '2018-11-21' => [new \DateTime('2018-11-21'), true],
+            '2018-12-01' => [new \DateTime('2018-12-01'), true],
         ];
     }
 
@@ -175,12 +175,12 @@ class TaskScheduleServiceTest extends Unit
     public function readingTaskDataProvider(): array
     {
         return [
-            '2018-11-18' => [new \DateTime('2018-11-18'), 0],
-            '2018-11-19' => [new \DateTime('2018-11-19'), 1],
-            '2018-11-20' => [new \DateTime('2018-11-20'), 1],
-            '2018-12-01' => [new \DateTime('2018-12-01'), 1],
-            '2019-02-19' => [new \DateTime('2019-02-19'), 1],
-            '2020-01-20' => [new \DateTime('2020-01-20'), 1],
+            '2018-11-18' => [new \DateTime('2018-11-18'), false],
+            '2018-11-19' => [new \DateTime('2018-11-19'), true],
+            '2018-11-20' => [new \DateTime('2018-11-20'), true],
+            '2018-12-01' => [new \DateTime('2018-12-01'), true],
+            '2019-02-19' => [new \DateTime('2019-02-19'), true],
+            '2020-01-20' => [new \DateTime('2020-01-20'), true],
         ];
     }
 
@@ -190,11 +190,11 @@ class TaskScheduleServiceTest extends Unit
     public function singleTaskDataProvider(): array
     {
         return [
-            '2018-11-05' => [new \DateTime('2018-11-05'), 0],
-            '2018-11-08' => [new \DateTime('2018-11-08'), 0],
-            '2018-12-01' => [new \DateTime('2018-12-01'), 0],
-            '2019-05-06' => [new \DateTime('2019-05-06'), 0],
-            '2018-11-07' => [new \DateTime('2018-11-07'), 1],
+            '2018-11-05' => [new \DateTime('2018-11-05'), false],
+            '2018-11-08' => [new \DateTime('2018-11-08'), false],
+            '2018-12-01' => [new \DateTime('2018-12-01'), false],
+            '2019-05-06' => [new \DateTime('2019-05-06'), false],
+            '2018-11-07' => [new \DateTime('2018-11-07'), true],
         ];
     }
 }

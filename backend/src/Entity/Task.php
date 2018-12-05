@@ -18,8 +18,8 @@ class Task
     /**
      * @var int
      *
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
+     * @ORM\Id
+     * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
     private $id;
@@ -72,6 +72,13 @@ class Task
     private $changes;
 
     /**
+     * @var TaskTransfer[]
+     *
+     * @ORM\OneToMany(targetEntity="TaskTransfer", mappedBy="task")
+     */
+    private $transfers;
+
+    /**
      * @var TaskTiming[]
      *
      * @ORM\OneToMany(targetEntity="TaskTiming", mappedBy="task")
@@ -99,6 +106,7 @@ class Task
     {
         $this->changes = new ArrayCollection();
         $this->timings = new ArrayCollection();
+        $this->transfers = new ArrayCollection();
     }
 
     /**
@@ -284,6 +292,47 @@ class Task
             // set the owning side to null (unless already changed)
             if ($change->getTask() === $this) {
                 $change->setTask(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|TaskTransfer[]
+     */
+    public function getTransfers(): Collection
+    {
+        return $this->transfers;
+    }
+
+    /**
+     * @param TaskTransfer $transfer
+     *
+     * @return Task
+     */
+    public function addTransfer(TaskTransfer $transfer): self
+    {
+        if (!$this->transfers->contains($transfer)) {
+            $this->transfers[] = $transfer;
+            $transfer->setTask($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param TaskTransfer $transfer
+     *
+     * @return Task
+     */
+    public function removeTransfer(TaskTransfer $transfer): self
+    {
+        if ($this->transfers->contains($transfer)) {
+            $this->transfers->removeElement($transfer);
+            // set the owning side to null (unless already changed)
+            if ($transfer->getTask() === $this) {
+                $transfer->setTask(null);
             }
         }
 

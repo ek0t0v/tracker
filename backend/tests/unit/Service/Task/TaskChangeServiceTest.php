@@ -2,14 +2,9 @@
 
 namespace App\Tests;
 
-use App\Doctrine\DBAL\Type\TaskChangeActionType;
-use App\Doctrine\DBAL\Type\TaskChangeStateType;
-use App\Entity\Task;
-use App\Entity\TaskChange;
-use App\Service\Task\TaskChangeServiceInterface;
+use App\Service\Task\TaskChangeService;
 use Codeception\Exception\ModuleException;
 use Codeception\Test\Unit;
-use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Class TaskChangeServiceTest.
@@ -22,7 +17,7 @@ class TaskChangeServiceTest extends Unit
     protected $tester;
 
     /**
-     * @var TaskChangeServiceInterface
+     * @var TaskChangeService
      */
     private $taskChangeService;
 
@@ -31,49 +26,6 @@ class TaskChangeServiceTest extends Unit
      */
     protected function _before()
     {
-        $this->taskChangeService = $this->tester->getSymfonyService(TaskChangeServiceInterface::class);
-    }
-
-    /**
-     * @throws \Exception
-     */
-    public function testGetLatestChanges()
-    {
-        try {
-            $task = $this->make(Task::class, [
-                'name' => 'Task',
-                'startDate' => new \DateTime('2018-11-01'),
-                'changes' => new ArrayCollection(),
-            ]);
-
-            $updateStateChange1 = $this->make(TaskChange::class, [
-                'id' => 3,
-                'action' => TaskChangeActionType::UPDATE_STATE,
-                'state' => TaskChangeStateType::DONE,
-                'forDate' => new \DateTime('2018-11-01'),
-            ]);
-
-            $updateStateChange2 = $this->make(TaskChange::class, [
-                'id' => 4,
-                'action' => TaskChangeActionType::UPDATE_STATE,
-                'state' => TaskChangeStateType::DONE,
-                'forDate' => new \DateTime('2018-11-02'),
-            ]);
-        } catch (\Exception $e) {
-            throw new \Exception('Failed to create mock objects.');
-        }
-
-        $task->addChange($updateStateChange1);
-        $task->addChange($updateStateChange2);
-
-        $latestChanges = $this->taskChangeService->getLatestChanges($task, new \DateTime('2018-11-01'));
-
-        $this->assertCount(1, $latestChanges);
-        $this->assertEquals($updateStateChange1, $latestChanges[0]);
-
-        $latestChanges = $this->taskChangeService->getLatestChanges($task, new \DateTime('2018-11-02'));
-
-        $this->assertCount(1, $latestChanges);
-        $this->assertEquals($updateStateChange2, $latestChanges[0]);
+        $this->taskChangeService = $this->tester->getSymfonyService(TaskChangeService::class);
     }
 }

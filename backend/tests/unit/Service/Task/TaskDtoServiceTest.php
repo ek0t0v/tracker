@@ -2,10 +2,9 @@
 
 namespace App\Tests;
 
-use App\Doctrine\DBAL\Type\TaskChangeActionType;
 use App\Entity\Task;
 use App\Entity\TaskChange;
-use App\Service\Task\TaskDtoServiceInterface;
+use App\Service\Task\TaskDtoService;
 use Codeception\Exception\ModuleException;
 use Codeception\Test\Unit;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -21,7 +20,7 @@ class TaskDtoServiceTest extends Unit
     protected $tester;
 
     /**
-     * @var TaskDtoServiceInterface
+     * @var TaskDtoService
      */
     private $taskDtoService;
 
@@ -30,7 +29,7 @@ class TaskDtoServiceTest extends Unit
      */
     protected function _before()
     {
-        $this->taskDtoService = $this->tester->getSymfonyService(TaskDtoServiceInterface::class);
+        $this->taskDtoService = $this->tester->getSymfonyService(TaskDtoService::class);
     }
 
     /**
@@ -47,19 +46,16 @@ class TaskDtoServiceTest extends Unit
             ]);
 
             $markTaskAsDoneChange = $this->make(TaskChange::class, [
-                'action' => TaskChangeActionType::UPDATE_STATE,
                 'state' => 'done',
                 'forDate' => new \DateTime('2018-11-01'),
             ]);
 
             $markTaskAsCancelledChange = $this->make(TaskChange::class, [
-                'action' => TaskChangeActionType::UPDATE_STATE,
                 'state' => 'cancelled',
                 'forDate' => new \DateTime('2018-11-01'),
             ]);
 
             $updatePositionChange = $this->make(TaskChange::class, [
-                'action' => TaskChangeActionType::UPDATE_POSITION,
                 'position' => 1,
                 'forDate' => new \DateTime('2018-11-01'),
             ]);
@@ -67,19 +63,21 @@ class TaskDtoServiceTest extends Unit
             throw new \Exception('Failed to create mock objects.');
         }
 
-        $dto = $this->taskDtoService->create($task, [$markTaskAsDoneChange]);
-        $this->assertEquals('Task', $dto->name);
+        $task->addChange($markTaskAsDoneChange);
+
+        $dto = $this->taskDtoService->create($task, new \DateTime('2018-11-01'));
         $this->assertEquals('done', $dto->state);
-        $this->assertNull($dto->position);
 
-        $dto = $this->taskDtoService->create($task, [$markTaskAsCancelledChange]);
-        $this->assertEquals('Task', $dto->name);
+        $task->removeChange($markTaskAsDoneChange);
+        $task->addChange($markTaskAsCancelledChange);
+
+        $dto = $this->taskDtoService->create($task, new \DateTime('2018-11-01'));
         $this->assertEquals('cancelled', $dto->state);
-        $this->assertNull($dto->position);
 
-        $dto = $this->taskDtoService->create($task, [$updatePositionChange]);
-        $this->assertEquals('Task', $dto->name);
-        $this->assertEquals('in_progress', $dto->state);
+        $task->removeChange($markTaskAsCancelledChange);
+        $task->addChange($updatePositionChange);
+
+        $dto = $this->taskDtoService->create($task, new \DateTime('2018-11-01'));
         $this->assertEquals(1, $dto->position);
     }
 }

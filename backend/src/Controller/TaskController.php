@@ -8,7 +8,7 @@ use App\Request\Task\ChangeTaskStateRequest;
 use App\Request\Task\CreateTaskRequest;
 use App\Request\Task\GetTasksRequest;
 use App\Request\Task\TransferTaskRequest;
-use App\Service\Task\TaskServiceInterface;
+use App\Service\Task\TaskService;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -21,14 +21,14 @@ use Symfony\Component\Routing\Annotation\Route;
 class TaskController extends ApiController
 {
     /**
-     * @param GetTasksRequest      $request
-     * @param TaskServiceInterface $taskService
+     * @param GetTasksRequest $request
+     * @param TaskService     $taskService
      *
      * @return JsonResponse
      *
      * @Route(name="api_tasks_get_tasks", methods={"GET"})
      */
-    public function getTasks(GetTasksRequest $request, TaskServiceInterface $taskService): JsonResponse
+    public function getTasks(GetTasksRequest $request, TaskService $taskService): JsonResponse
     {
         $endDate = !is_null($request->end) ? new \DateTime($request->end) : null;
 
@@ -38,14 +38,14 @@ class TaskController extends ApiController
     }
 
     /**
-     * @param CreateTaskRequest    $request
-     * @param TaskServiceInterface $taskService
+     * @param CreateTaskRequest $request
+     * @param TaskService       $taskService
      *
      * @return JsonResponse
      *
      * @Route(name="api_tasks_create_task", methods={"POST"})
      */
-    public function createTask(CreateTaskRequest $request, TaskServiceInterface $taskService): JsonResponse
+    public function createTask(CreateTaskRequest $request, TaskService $taskService): JsonResponse
     {
         $start = new \DateTime($request->start);
         $end = !is_null($request->end) ? new \DateTime($request->end) : null;
