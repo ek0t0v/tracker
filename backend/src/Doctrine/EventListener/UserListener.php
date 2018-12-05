@@ -37,7 +37,7 @@ final class UserListener
     /**
      * @param User $user
      *
-     * @ORM\PrePersist()
+     * @ORM\PrePersist
      */
     public function prePersist(User $user)
     {

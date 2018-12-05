@@ -13,7 +13,7 @@ final class TaskListener
     /**
      * @param Task $task
      *
-     * @ORM\PrePersist()
+     * @ORM\PrePersist
      */
     public function prePersist(Task $task)
     {
@@ -26,7 +26,7 @@ final class TaskListener
      *
      * @param Task $task
      *
-     * @ORM\PreUpdate()
+     * @ORM\PreUpdate
      */
     public function preUpdate(Task $task)
     {

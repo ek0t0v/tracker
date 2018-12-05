@@ -65,7 +65,8 @@ class ExceptionListener
      *
      * @return JsonResponse
      */
-    private function buildResponse(string $message = '', array $violations = []): JsonResponse {
+    private function buildResponse(string $message = '', array $violations = []): JsonResponse
+    {
         return new JsonResponse([
             'message' => $message,
             'violations' => $violations,

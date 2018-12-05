@@ -14,18 +14,18 @@ class UserRegisterRequest implements RequestDtoInterface
     /**
      * @var string
      *
-     * @Assert\NotNull()
-     * @Assert\NotBlank()
-     * @Assert\Email()
-     * @UserUniqueEmail()
+     * @Assert\NotNull
+     * @Assert\NotBlank
+     * @Assert\Email
+     * @UserUniqueEmail
      */
     public $email;
 
     /**
      * @var string
      *
-     * @Assert\NotNull()
-     * @Assert\NotBlank()
+     * @Assert\NotNull
+     * @Assert\NotBlank
      * @Assert\Length(
      *     min=6
      * )

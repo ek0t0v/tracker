@@ -74,7 +74,7 @@ class TaskService
         $result = [];
 
         /**
-         * @var Task
+         * @var Task $task
          */
         foreach ($tasks as $task) {
             if ($this->taskScheduleService->isTaskScheduled($task, $start)) {
