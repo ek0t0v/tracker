@@ -40,7 +40,7 @@ class TaskRepository extends ServiceEntityRepository
             ->andWhere('task.user = :user')
             ->andWhere('task.startDate <= :start')
             ->andWhere('task.endDate IS NULL OR task.endDate > :start')
-            ->leftJoin('task.changes', 'change', Join::WITH, 'change.forDate = :start')
+            ->leftJoin('task.changes', 'change')
             ->leftJoin('task.transfers', 'transfer', Join::WITH, 'transfer.task = task')
             ->orderBy('task.id', 'desc')
             ->addOrderBy('transfer.id', 'asc')

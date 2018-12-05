@@ -100,7 +100,7 @@ class TaskService
             }
         }
 
-        return $result;
+        return array_values($result);
     }
 
     /**
