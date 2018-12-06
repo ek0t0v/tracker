@@ -61,15 +61,14 @@ class TaskService
     }
 
     /**
-     * @param \DateTime      $start
-     * @param \DateTime|null $end
+     * @param \DateTime $date
      *
      * @return TaskDto[]
      */
-    public function get(\DateTime $start, \DateTime $end = null): array
+    public function getTasksByDate(\DateTime $date): array
     {
         $user = $this->tokenStorage->getToken()->getUser();
-        $tasks = $this->em->getRepository(Task::class)->findByDate($start, $user);
+        $tasks = $this->em->getRepository(Task::class)->findByDate($date, $user);
 
         $result = [];
 
@@ -77,8 +76,8 @@ class TaskService
          * @var Task $task
          */
         foreach ($tasks as $task) {
-            if ($this->taskScheduleService->isTaskScheduled($task, $start)) {
-                $result[] = $this->taskDtoService->create($task, $start);
+            if ($this->taskScheduleService->isTaskScheduled($task, $date)) {
+                $result[] = $this->taskDtoService->create($task, $date);
             }
 
             $transfersHash = [];
@@ -90,14 +89,14 @@ class TaskService
 
             foreach ($transfersHash as $forDate => $to) {
                 // Задача за сегодняшний день перенесена и не вернулась потом на сегодня - убираем задачу.
-                if (new \DateTime($forDate) == $start && $to != $start) {
+                if (new \DateTime($forDate) == $date && $to != $date) {
                     unset($result[count($result) - 1]);
 
                     continue;
                 }
 
                 // Задача перенесена на сегодня откуда-нибудь (но не с сегодняшнего дня) - добавляем задачу.
-                if ($to == $start) {
+                if ($to == $date) {
                     $result[] = $this->taskDtoService->create($task, new \DateTime($forDate));
                 }
             }
@@ -108,10 +107,19 @@ class TaskService
 
     /**
      * @param \DateTime $start
+     * @param \DateTime $end
      *
-     * @return Task[]
+     * @return TaskDto[]
      */
-    public function getOverdueTasks(\DateTime $start): array
+    public function getTasksByDateRange(\DateTime $start, \DateTime $end): array
+    {
+        return [];
+    }
+
+    /**
+     * @return TaskDto[]
+     */
+    public function getOverdueTasks(): array
     {
         return [];
     }

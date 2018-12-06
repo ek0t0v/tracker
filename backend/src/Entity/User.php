@@ -257,19 +257,19 @@ class User implements UserInterface, JWTUserInterface
     }
 
     /**
-     * @return \DateTimeInterface|null
+     * @return \DateTime|null
      */
-    public function getLastLogin(): ?\DateTimeInterface
+    public function getLastLogin(): ?\DateTime
     {
         return $this->lastLogin;
     }
 
     /**
-     * @param \DateTimeInterface|null $lastLogin
+     * @param \DateTime|null $lastLogin
      *
      * @return User
      */
-    public function setLastLogin(?\DateTimeInterface $lastLogin): self
+    public function setLastLogin(?\DateTime $lastLogin): self
     {
         $this->lastLogin = $lastLogin;
 
@@ -277,19 +277,19 @@ class User implements UserInterface, JWTUserInterface
     }
 
     /**
-     * @return \DateTimeInterface|null
+     * @return \DateTime|null
      */
-    public function getPasswordRequestedAt(): ?\DateTimeInterface
+    public function getPasswordRequestedAt(): ?\DateTime
     {
         return $this->passwordRequestedAt;
     }
 
     /**
-     * @param \DateTimeInterface|null $passwordRequestedAt
+     * @param \DateTime|null $passwordRequestedAt
      *
      * @return User
      */
-    public function setPasswordRequestedAt(?\DateTimeInterface $passwordRequestedAt): self
+    public function setPasswordRequestedAt(?\DateTime $passwordRequestedAt): self
     {
         $this->passwordRequestedAt = $passwordRequestedAt;
 
@@ -297,19 +297,19 @@ class User implements UserInterface, JWTUserInterface
     }
 
     /**
-     * @return \DateTimeInterface|null
+     * @return \DateTime|null
      */
-    public function getCreatedAt(): ?\DateTimeInterface
+    public function getCreatedAt(): ?\DateTime
     {
         return $this->createdAt;
     }
 
     /**
-     * @param \DateTimeInterface $createdAt
+     * @param \DateTime $createdAt
      *
      * @return User
      */
-    public function setCreatedAt(\DateTimeInterface $createdAt): self
+    public function setCreatedAt(\DateTime $createdAt): self
     {
         $this->createdAt = $createdAt;
 

@@ -70,19 +70,19 @@ class TaskTiming
     }
 
     /**
-     * @return \DateTimeInterface|null
+     * @return \DateTime|null
      */
-    public function getStartedAt(): ?\DateTimeInterface
+    public function getStartedAt(): ?\DateTime
     {
         return $this->startedAt;
     }
 
     /**
-     * @param \DateTimeInterface $startedAt
+     * @param \DateTime $startedAt
      *
      * @return TaskTiming
      */
-    public function setStartedAt(\DateTimeInterface $startedAt): self
+    public function setStartedAt(\DateTime $startedAt): self
     {
         $this->startedAt = $startedAt;
 
@@ -90,19 +90,19 @@ class TaskTiming
     }
 
     /**
-     * @return \DateTimeInterface|null
+     * @return \DateTime|null
      */
-    public function getEndedAt(): ?\DateTimeInterface
+    public function getEndedAt(): ?\DateTime
     {
         return $this->endedAt;
     }
 
     /**
-     * @param \DateTimeInterface $endedAt
+     * @param \DateTime $endedAt
      *
      * @return TaskTiming
      */
-    public function setEndedAt(\DateTimeInterface $endedAt): self
+    public function setEndedAt(\DateTime $endedAt): self
     {
         $this->endedAt = $endedAt;
 

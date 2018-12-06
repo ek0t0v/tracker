@@ -30,10 +30,12 @@ class TaskController extends ApiController
      */
     public function getTasks(GetTasksRequest $request, TaskService $taskService): JsonResponse
     {
-        $endDate = !is_null($request->end) ? new \DateTime($request->end) : null;
+        $tasks = is_null($request->end)
+            ? $taskService->getTasksByDate(new \DateTime($request->start))
+            : $taskService->getTasksByDateRange(new \DateTime($request->start), new \DateTime($request->end));
 
         return $this->apiResponse([
-            'items' => $taskService->get(new \DateTime($request->start), $endDate),
+            'items' => $tasks,
         ]);
     }
 

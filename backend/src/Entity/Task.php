@@ -138,19 +138,19 @@ class Task
     }
 
     /**
-     * @return \DateTimeInterface|null
+     * @return \DateTime|null
      */
-    public function getStartDate(): ?\DateTimeInterface
+    public function getStartDate(): ?\DateTime
     {
         return $this->startDate;
     }
 
     /**
-     * @param \DateTimeInterface $startDate
+     * @param \DateTime $startDate
      *
      * @return Task
      */
-    public function setStartDate(\DateTimeInterface $startDate): self
+    public function setStartDate(\DateTime $startDate): self
     {
         $this->startDate = $startDate;
 
@@ -158,19 +158,19 @@ class Task
     }
 
     /**
-     * @return \DateTimeInterface|null
+     * @return \DateTime|null
      */
-    public function getEndDate(): ?\DateTimeInterface
+    public function getEndDate(): ?\DateTime
     {
         return $this->endDate;
     }
 
     /**
-     * @param \DateTimeInterface|null $endDate
+     * @param \DateTime|null $endDate
      *
      * @return Task
      */
-    public function setEndDate(?\DateTimeInterface $endDate): self
+    public function setEndDate(?\DateTime $endDate): self
     {
         $this->endDate = $endDate;
 
@@ -198,19 +198,19 @@ class Task
     }
 
     /**
-     * @return \DateTimeInterface|null
+     * @return \DateTime|null
      */
-    public function getUpdatedAt(): ?\DateTimeInterface
+    public function getUpdatedAt(): ?\DateTime
     {
         return $this->updatedAt;
     }
 
     /**
-     * @param \DateTimeInterface $updatedAt
+     * @param \DateTime $updatedAt
      *
      * @return Task
      */
-    public function setUpdatedAt(\DateTimeInterface $updatedAt): self
+    public function setUpdatedAt(\DateTime $updatedAt): self
     {
         $this->updatedAt = $updatedAt;
 
@@ -218,19 +218,19 @@ class Task
     }
 
     /**
-     * @return \DateTimeInterface|null
+     * @return \DateTime|null
      */
-    public function getCreatedAt(): ?\DateTimeInterface
+    public function getCreatedAt(): ?\DateTime
     {
         return $this->createdAt;
     }
 
     /**
-     * @param \DateTimeInterface $createdAt
+     * @param \DateTime $createdAt
      *
      * @return Task
      */
-    public function setCreatedAt(\DateTimeInterface $createdAt): self
+    public function setCreatedAt(\DateTime $createdAt): self
     {
         $this->createdAt = $createdAt;
 

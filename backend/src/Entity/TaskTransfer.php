@@ -52,19 +52,19 @@ class TaskTransfer
     }
 
     /**
-     * @return \DateTimeInterface|null
+     * @return \DateTime|null
      */
-    public function getTransferTo(): ?\DateTimeInterface
+    public function getTransferTo(): ?\DateTime
     {
         return $this->transferTo;
     }
 
     /**
-     * @param \DateTimeInterface $transferTo
+     * @param \DateTime $transferTo
      *
      * @return TaskTransfer
      */
-    public function setTransferTo(\DateTimeInterface $transferTo): self
+    public function setTransferTo(\DateTime $transferTo): self
     {
         $this->transferTo = $transferTo;
 
@@ -72,19 +72,19 @@ class TaskTransfer
     }
 
     /**
-     * @return \DateTimeInterface|null
+     * @return \DateTime|null
      */
-    public function getForDate(): ?\DateTimeInterface
+    public function getForDate(): ?\DateTime
     {
         return $this->forDate;
     }
 
     /**
-     * @param \DateTimeInterface $forDate
+     * @param \DateTime $forDate
      *
      * @return TaskTransfer
      */
-    public function setForDate(\DateTimeInterface $forDate): self
+    public function setForDate(\DateTime $forDate): self
     {
         $this->forDate = $forDate;
 

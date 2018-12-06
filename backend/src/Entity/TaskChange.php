@@ -119,19 +119,19 @@ class TaskChange
     }
 
     /**
-     * @return \DateTimeInterface|null
+     * @return \DateTime|null
      */
-    public function getForDate(): ?\DateTimeInterface
+    public function getForDate(): ?\DateTime
     {
         return $this->forDate;
     }
 
     /**
-     * @param \DateTimeInterface $forDate
+     * @param \DateTime $forDate
      *
      * @return TaskChange
      */
-    public function setForDate(\DateTimeInterface $forDate): self
+    public function setForDate(\DateTime $forDate): self
     {
         $this->forDate = $forDate;
 
