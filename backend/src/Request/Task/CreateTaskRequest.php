@@ -3,6 +3,7 @@
 namespace App\Request\Task;
 
 use App\Http\RequestDtoInterface;
+use App\Validator\Constraints\NotBlankIfNotNull;
 use App\Validator\Constraints\TaskSchedule;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -23,6 +24,7 @@ class CreateTaskRequest implements RequestDtoInterface
      * @var \DateTime
      *
      * @Assert\NotNull
+     * @Assert\NotBlank
      * @Assert\Date
      */
     public $start;
@@ -30,6 +32,7 @@ class CreateTaskRequest implements RequestDtoInterface
     /**
      * @var \DateTime|null
      *
+     * @NotBlankIfNotNull
      * @Assert\Date
      */
     public $end;

@@ -13,3 +13,7 @@ services:
         class: App\Validator\TaskScheduleValidator
         tags:
             - { name: validator.constraint_validator, alias: task_schedule }
+    not_blank_if_not_null:
+        class: App\Validator\NotBlankIfNotNullValidator
+        tags:
+            - { name: validator.constraint_validator, alias: not_blank_if_not_null }

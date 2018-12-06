@@ -36,6 +36,16 @@ class TaskCest
             ],
         ]);
 
+        $I->sendGET('/tasks?start=');
+
+        $I->seeResponseCodeIsClientError();
+        $I->seeResponseCodeIs(HttpCode::UNPROCESSABLE_ENTITY);
+        $I->seeResponseContainsJson([
+            'start' => [
+                'This value should not be blank.',
+            ],
+        ]);
+
         $I->sendGET('/tasks?start=invalid_date');
 
         $I->seeResponseCodeIsClientError();
@@ -52,6 +62,16 @@ class TaskCest
      */
     public function getTasksEndDateValidationTest(ApiTester $I)
     {
+        $I->sendGET('/tasks?end=');
+
+        $I->seeResponseCodeIsClientError();
+        $I->seeResponseCodeIs(HttpCode::UNPROCESSABLE_ENTITY);
+        $I->seeResponseContainsJson([
+            'end' => [
+                'This value should not be blank.',
+            ],
+        ]);
+
         $I->sendGET('/tasks?end=invalid_date');
 
         $I->seeResponseCodeIsClientError();
@@ -135,6 +155,18 @@ class TaskCest
         ]);
 
         $I->sendPOST('/tasks', [
+            'start' => '',
+        ]);
+
+        $I->seeResponseCodeIsClientError();
+        $I->seeResponseCodeIs(HttpCode::UNPROCESSABLE_ENTITY);
+        $I->seeResponseContainsJson([
+            'start' => [
+                'This value should not be blank.',
+            ],
+        ]);
+
+        $I->sendPOST('/tasks', [
             'start' => false,
         ]);
 
@@ -152,6 +184,18 @@ class TaskCest
      */
     public function createTaskEndValidationTest(ApiTester $I)
     {
+        $I->sendPOST('/tasks', [
+            'end' => '',
+        ]);
+
+        $I->seeResponseCodeIsClientError();
+        $I->seeResponseCodeIs(HttpCode::UNPROCESSABLE_ENTITY);
+        $I->seeResponseContainsJson([
+            'start' => [
+                'This value should not be blank.',
+            ],
+        ]);
+
         $I->sendPOST('/tasks', [
             'end' => false,
         ]);
@@ -243,6 +287,86 @@ class TaskCest
         $I->assertEquals('2018-11-01T00:00:00+00:00', $responseAsArray['start']);
         $I->assertEquals('2018-12-01T00:00:00+00:00', $responseAsArray['end']);
         $I->assertEquals([1, 1, 0], $responseAsArray['schedule']);
+    }
+
+    /**
+     * @param ApiTester $I
+     */
+    public function transferTaskForDateValidationTest(ApiTester $I)
+    {
+        $I->sendPOST('/tasks/1/transfer');
+
+        $I->seeResponseCodeIsClientError();
+        $I->seeResponseCodeIs(HttpCode::UNPROCESSABLE_ENTITY);
+        $I->seeResponseContainsJson([
+            'forDate' => [
+                'This value should not be null.',
+            ],
+        ]);
+
+        $I->sendPOST('/tasks/1/transfer', [
+            'forDate' => '',
+        ]);
+
+        $I->seeResponseCodeIsClientError();
+        $I->seeResponseCodeIs(HttpCode::UNPROCESSABLE_ENTITY);
+        $I->seeResponseContainsJson([
+            'forDate' => [
+                'This value should not be blank.',
+            ],
+        ]);
+
+        $I->sendPOST('/tasks/1/transfer', [
+            'forDate' => 'invalid date',
+        ]);
+
+        $I->seeResponseCodeIsClientError();
+        $I->seeResponseCodeIs(HttpCode::UNPROCESSABLE_ENTITY);
+        $I->seeResponseContainsJson([
+            'forDate' => [
+                'This value is not a valid date.',
+            ],
+        ]);
+    }
+
+    /**
+     * @param ApiTester $I
+     */
+    public function transferTaskToValidationTest(ApiTester $I)
+    {
+        $I->sendPOST('/tasks/1/transfer');
+
+        $I->seeResponseCodeIsClientError();
+        $I->seeResponseCodeIs(HttpCode::UNPROCESSABLE_ENTITY);
+        $I->seeResponseContainsJson([
+            'to' => [
+                'This value should not be null.',
+            ],
+        ]);
+
+        $I->sendPOST('/tasks/1/transfer', [
+            'to' => '',
+        ]);
+
+        $I->seeResponseCodeIsClientError();
+        $I->seeResponseCodeIs(HttpCode::UNPROCESSABLE_ENTITY);
+        $I->seeResponseContainsJson([
+            'forDate' => [
+                'This value should not be blank.',
+            ],
+        ]);
+
+        $I->sendPOST('/tasks/1/transfer', [
+            'to' => 'invalid date',
+        ]);
+
+        $I->seeResponseCodeIsClientError();
+        $I->seeResponseCodeIs(HttpCode::UNPROCESSABLE_ENTITY);
+        $I->seeResponseContainsJson([
+            'to' => [
+                'This value is not a valid date.',
+            ],
+        ]);
     }
 
     /**
