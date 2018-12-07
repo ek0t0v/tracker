@@ -12,15 +12,13 @@ use App\Response\Task\TaskDto;
 class TaskDtoService
 {
     /**
-     * @param Task           $task
-     * @param \DateTime|null $forDate
+     * @param Task      $task
+     * @param \DateTime $forDate
      *
      * @return TaskDto
      */
-    public function create(Task $task, \DateTime $forDate = null): TaskDto
+    public function create(Task $task, \DateTime $forDate): TaskDto
     {
-        $forDate = !is_null($forDate) ? $forDate : $task->getStartDate();
-
         $dto = new TaskDto();
         $dto->id = $task->getId();
         $dto->name = $task->getName();

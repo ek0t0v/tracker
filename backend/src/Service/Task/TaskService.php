@@ -70,7 +70,14 @@ class TaskService
         $user = $this->tokenStorage->getToken()->getUser();
         $tasks = $this->em->getRepository(Task::class)->findByStartDate($date, $user);
 
-        return $this->getActualTasksAsDtoByDate($tasks, $date);
+        $resultsForDate = $this->getActualTasksByDate($tasks, $date);
+        $dto = [];
+
+        foreach ($resultsForDate as $result) {
+            $dto[] = $this->taskDtoService->create($result['task'], $result['forDate']);
+        }
+
+        return $dto;
     }
 
     /**
@@ -92,17 +99,15 @@ class TaskService
         $oneDayInterval = new \DateInterval('P1D');
         $period = new \DatePeriod($start, $oneDayInterval, $end);
 
-        $result = [];
+        $dto = [];
 
         foreach ($period as $date) {
-            $resultsForDate = $this->getActualTasksAsDtoByDate($tasks, $date);
-
-            foreach ($resultsForDate as $dto) {
-                $result[] = $dto;
+            foreach ($this->getActualTasksByDate($tasks, $date) as $result) {
+                $dto[] = $this->taskDtoService->create($result['task'], $result['forDate']);
             }
         }
 
-        return $result;
+        return $dto;
     }
 
     /**
@@ -134,18 +139,16 @@ class TaskService
 
         $this->em->flush();
 
-        return $this->taskDtoService->create($task);
+        return $this->taskDtoService->create($task, $startDate);
     }
 
     /**
-     * @todo Метод выполняет 2 задачи: вычисляет актуальные задачи и превращает их в DTO. Нужно разделить.
-     *
      * @param array     $tasks
      * @param \DateTime $date
      *
-     * @return TaskDto[]
+     * @return array
      */
-    private function getActualTasksAsDtoByDate(array $tasks, \DateTime $date): array
+    private function getActualTasksByDate(array $tasks, \DateTime $date): array
     {
         $result = [];
 
@@ -154,7 +157,10 @@ class TaskService
          */
         foreach ($tasks as $task) {
             if ($this->taskScheduleService->isTaskScheduled($task, $date)) {
-                $result[] = $this->taskDtoService->create($task, $date);
+                $result[] = [
+                    'task' => $task,
+                    'forDate' => $date,
+                ];
             }
 
             $transfersHash = [];
@@ -174,11 +180,14 @@ class TaskService
 
                 // Задача перенесена на сегодня откуда-нибудь (но не с сегодняшнего дня) - добавляем задачу.
                 if ($to == $date) {
-                    $result[] = $this->taskDtoService->create($task, new \DateTime($forDate));
+                    $result[] = [
+                        'task' => $task,
+                        'forDate' => new \DateTime($forDate),
+                    ];
                 }
             }
         }
 
-        return array_values($result);
+        return $result;
     }
 }
