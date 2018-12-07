@@ -28,7 +28,6 @@ class TaskController extends ApiController
      *
      * @return JsonResponse
      *
-     *
      * @Route(name="api_tasks_get_tasks", methods={"GET"})
      */
     public function getTasks(GetTasksRequest $request, TaskService $taskService): JsonResponse
