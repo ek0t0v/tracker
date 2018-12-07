@@ -61,8 +61,6 @@ class TaskService
     }
 
     /**
-     * @todo Добавить уникальный индекс в таблицу task_changes для полей task_id + for_date
-     *
      * @param \DateTime $date
      *
      * @return TaskDto[]
@@ -70,8 +68,83 @@ class TaskService
     public function getTasksByDate(\DateTime $date): array
     {
         $user = $this->tokenStorage->getToken()->getUser();
-        $tasks = $this->em->getRepository(Task::class)->findByDate($date, $user);
+        $tasks = $this->em->getRepository(Task::class)->findByStartDate($date, $user);
 
+        return $this->getActualTasksAsDtoByDate($tasks, $date);
+    }
+
+    /**
+     * @param \DateTime $start
+     * @param \DateTime $end
+     *
+     * @throws \Exception
+     *
+     * @return TaskDto[]
+     */
+    public function getTasksByDateRange(\DateTime $start, \DateTime $end): array
+    {
+        $user = $this->tokenStorage->getToken()->getUser();
+        $tasks = $this->em->getRepository(Task::class)->findByStartDate($start, $user);
+
+        // Увеличивает end на 1 секунду, чтобы период включал в себя последний день.
+        $end->setTime(0, 0, 1);
+
+        $oneDayInterval = new \DateInterval('P1D');
+        $period = new \DatePeriod($start, $oneDayInterval, $end);
+
+        $result = [];
+
+        foreach ($period as $date) {
+            $resultsForDate = $this->getActualTasksAsDtoByDate($tasks, $date);
+
+            foreach ($resultsForDate as $dto) {
+                $result[] = $dto;
+            }
+        }
+
+        return $result;
+    }
+
+    /**
+     * @return TaskDto[]
+     */
+    public function getOverdueTasks(): array
+    {
+        return [];
+    }
+
+    /**
+     * @param string         $name
+     * @param \DateTime      $startDate
+     * @param \DateTime|null $endDate
+     * @param array|null     $schedule
+     *
+     * @return TaskDto
+     */
+    public function create(string $name, \DateTime $startDate, \DateTime $endDate = null, array $schedule = null): TaskDto
+    {
+        $task = new Task();
+        $task->setUser($this->tokenStorage->getToken()->getUser());
+        $task->setName($name);
+        $task->setStartDate($startDate);
+        $task->setEndDate($endDate);
+        $task->setSchedule($schedule);
+
+        $this->em->persist($task);
+
+        $this->em->flush();
+
+        return $this->taskDtoService->create($task);
+    }
+
+    /**
+     * @param array     $tasks
+     * @param \DateTime $date
+     *
+     * @return TaskDto[]
+     */
+    private function getActualTasksAsDtoByDate(array $tasks, \DateTime $date): array
+    {
         $result = [];
 
         /**
@@ -105,51 +178,5 @@ class TaskService
         }
 
         return array_values($result);
-    }
-
-    /**
-     * @param \DateTime $start
-     * @param \DateTime $end
-     *
-     * @return TaskDto[]
-     */
-    public function getTasksByDateRange(\DateTime $start, \DateTime $end): array
-    {
-        $user = $this->tokenStorage->getToken()->getUser();
-        $tasks = $this->em->getRepository(Task::class)->findByDateRange($start, $end, $user);
-
-        return [];
-    }
-
-    /**
-     * @return TaskDto[]
-     */
-    public function getOverdueTasks(): array
-    {
-        return [];
-    }
-
-    /**
-     * @param string         $name
-     * @param \DateTime      $startDate
-     * @param \DateTime|null $endDate
-     * @param array|null     $schedule
-     *
-     * @return TaskDto
-     */
-    public function create(string $name, \DateTime $startDate, \DateTime $endDate = null, array $schedule = null): TaskDto
-    {
-        $task = new Task();
-        $task->setUser($this->tokenStorage->getToken()->getUser());
-        $task->setName($name);
-        $task->setStartDate($startDate);
-        $task->setEndDate($endDate);
-        $task->setSchedule($schedule);
-
-        $this->em->persist($task);
-
-        $this->em->flush();
-
-        return $this->taskDtoService->create($task);
     }
 }

@@ -32,7 +32,7 @@ class TaskRepository extends ServiceEntityRepository
      *
      * @return mixed
      */
-    public function findByDate(\DateTime $start, User $user)
+    public function findByStartDate(\DateTime $start, User $user)
     {
         return $this->createQueryBuilder('task')
             ->addSelect('change')

@@ -26,7 +26,7 @@ class TaskScheduleService
             return $date == $task->getStartDate();
         }
 
-        $daysDiff = (int) date_diff($date, $task->getStartDate())->format('%a');
+        $daysDiff = $date->diff($task->getStartDate())->days;
         $scheduleArraySize = count($task->getSchedule());
 
         if (0 === $daysDiff) {
