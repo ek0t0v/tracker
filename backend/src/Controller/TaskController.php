@@ -24,7 +24,10 @@ class TaskController extends ApiController
      * @param GetTasksRequest $request
      * @param TaskService     $taskService
      *
+     * @throws \Exception
+     *
      * @return JsonResponse
+     *
      *
      * @Route(name="api_tasks_get_tasks", methods={"GET"})
      */

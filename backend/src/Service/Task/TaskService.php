@@ -86,7 +86,7 @@ class TaskService
         $user = $this->tokenStorage->getToken()->getUser();
         $tasks = $this->em->getRepository(Task::class)->findByStartDate($start, $user);
 
-        // Увеличивает end на 1 секунду, чтобы период включал в себя последний день.
+        // Увеличивает на 1 секунду, чтобы период включал в себя последний день.
         $end->setTime(0, 0, 1);
 
         $oneDayInterval = new \DateInterval('P1D');
@@ -138,6 +138,8 @@ class TaskService
     }
 
     /**
+     * @todo Метод выполняет 2 задачи: вычисляет актуальные задачи и превращает их в DTO. Нужно разделить.
+     *
      * @param array     $tasks
      * @param \DateTime $date
      *
