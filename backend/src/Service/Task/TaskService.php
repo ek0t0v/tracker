@@ -61,6 +61,8 @@ class TaskService
     }
 
     /**
+     * @todo Добавить уникальный индекс в таблицу task_changes для полей task_id + for_date
+     *
      * @param \DateTime $date
      *
      * @return TaskDto[]
@@ -113,6 +115,9 @@ class TaskService
      */
     public function getTasksByDateRange(\DateTime $start, \DateTime $end): array
     {
+        $user = $this->tokenStorage->getToken()->getUser();
+        $tasks = $this->em->getRepository(Task::class)->findByDateRange($start, $end, $user);
+
         return [];
     }
 

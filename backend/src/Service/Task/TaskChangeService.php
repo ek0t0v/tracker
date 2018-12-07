@@ -26,20 +26,6 @@ class TaskChangeService
     }
 
     /**
-     * @todo Не забыть про перенос изменений типа position и т.д.
-     *
-     * @param Task      $task
-     * @param \DateTime $forDate
-     * @param \DateTime $transferTo
-     *
-     * @return Task
-     */
-    public function transfer(Task $task, \DateTime $forDate, \DateTime $transferTo): Task
-    {
-        return new Task();
-    }
-
-    /**
      * @param Task      $task
      * @param \DateTime $forDate
      * @param int       $position

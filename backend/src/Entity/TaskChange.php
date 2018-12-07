@@ -3,11 +3,15 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * Class TaskChange.
  *
- * @ORM\Table(name="task_changes")
+ * @ORM\Table(name="task_changes", uniqueConstraints={
+ *     @ORM\UniqueConstraint(columns={"task_id", "for_date"})
+ * })
+ * @UniqueEntity(fields={"task", "forDate"})
  * @ORM\Entity(repositoryClass="App\Repository\TaskChangeRepository")
  */
 class TaskChange

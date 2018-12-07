@@ -17,7 +17,7 @@ class TaskScheduleService
      */
     public function isTaskScheduled(Task $task, \DateTime $date): bool
     {
-        // Отсекает неподходящие по дате задачи (вдруг из репозитория получим неправильный набор задач?).
+        // Отсекает неподходящие по дате задачи.
         if ($task->getStartDate() > $date || (!is_null($task->getEndDate()) && $task->getEndDate() < $date)) {
             return false;
         }

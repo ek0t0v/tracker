@@ -243,6 +243,7 @@ COPY public.migration_versions (version) FROM stdin;
 20181205090802
 20181205134513
 20181205135429
+20181207034325
 \.
 
 
@@ -278,9 +279,10 @@ COPY public.task_transfers (id, task_id, transfer_to, for_date) FROM stdin;
 1	1	2018-11-04	2018-11-03
 2	1	2018-11-08	2018-11-06
 3	1	2018-11-09	2018-11-06
-4	3	2018-11-23	2018-11-22
-5	4	2018-11-10	2018-11-07
-6	4	2018-11-08	2018-11-07
+4	1	2018-12-07	2018-11-29
+5	3	2018-11-23	2018-11-22
+6	4	2018-11-10	2018-11-07
+7	4	2018-11-08	2018-11-07
 \.
 
 
@@ -289,11 +291,11 @@ COPY public.task_transfers (id, task_id, transfer_to, for_date) FROM stdin;
 --
 
 COPY public.tasks (id, user_id, name, start_date, end_date, schedule, updated_at, created_at) FROM stdin;
-1	1	Exercises	2018-11-01	2018-12-01	a:4:{i:0;i:1;i:1;i:1;i:2;i:1;i:3;i:0;}	2018-12-05 13:56:21	2018-12-05 13:56:21
-2	1	Work	2018-10-29	\N	a:7:{i:0;i:1;i:1;i:1;i:2;i:1;i:3;i:1;i:4;i:1;i:5;i:0;i:6;i:0;}	2018-12-05 13:56:21	2018-12-05 13:56:21
-3	1	Reading	2018-11-19	\N	a:1:{i:0;i:1;}	2018-12-05 13:56:21	2018-12-05 13:56:21
-4	1	Single task 1	2018-11-07	\N	N;	2018-12-05 13:56:21	2018-12-05 13:56:21
-5	1	Single task 2	2018-12-01	\N	N;	2018-12-05 13:56:21	2018-12-05 13:56:21
+1	1	Exercises	2018-11-01	2018-12-01	a:4:{i:0;i:1;i:1;i:1;i:2;i:1;i:3;i:0;}	2018-12-07 03:58:11	2018-12-07 03:58:11
+2	1	Work	2018-10-29	\N	a:7:{i:0;i:1;i:1;i:1;i:2;i:1;i:3;i:1;i:4;i:1;i:5;i:0;i:6;i:0;}	2018-12-07 03:58:11	2018-12-07 03:58:11
+3	1	Reading	2018-11-19	\N	a:1:{i:0;i:1;}	2018-12-07 03:58:11	2018-12-07 03:58:11
+4	1	Single task 1	2018-11-07	\N	N;	2018-12-07 03:58:11	2018-12-07 03:58:11
+5	1	Single task 2	2018-12-01	\N	N;	2018-12-07 03:58:11	2018-12-07 03:58:11
 \.
 
 
@@ -302,8 +304,8 @@ COPY public.tasks (id, user_id, name, start_date, end_date, schedule, updated_at
 --
 
 COPY public.users (id, email, email_canonical, username, password, roles, enabled, last_login, password_requested_at, created_at) FROM stdin;
-1	test_user_1@mail.ru	test_user_1@mail.ru	test_user_1	$2y$13$UpBNKzJSrYpWI/DRfiTrlOvJ3TUt3m4rzFS3HLxKQ26RrkIX6hXaC	[]	t	\N	\N	2018-12-05 13:56:20
-2	test_user_2@mail.ru	test_user_2@mail.ru	test_user_2	$2y$13$b3UpGhMCvYkC4L9zAQZT5uYPD1aIzIiYVXGoEJf8KcThKcW/HUeC2	[]	t	\N	\N	2018-12-05 13:56:21
+1	test_user_1@mail.ru	test_user_1@mail.ru	test_user_1	$2y$13$QxjOdk3bv/gjqw7FhagLXOmoqcx/RPoPDZ99dRw/UDd0Z0ZqjDl46	[]	t	\N	\N	2018-12-07 03:58:10
+2	test_user_2@mail.ru	test_user_2@mail.ru	test_user_2	$2y$13$0IQWHlx5hVgMw5g8cFLrkuaFai1hrA/CEjSlI4Iep0KJrYavxvDO.	[]	t	\N	\N	2018-12-07 03:58:11
 \.
 
 
@@ -332,7 +334,7 @@ SELECT pg_catalog.setval('public.task_timings_id_seq', 1, false);
 -- Name: task_transfers_id_seq; Type: SEQUENCE SET; Schema: public; Owner: symfony
 --
 
-SELECT pg_catalog.setval('public.task_transfers_id_seq', 6, true);
+SELECT pg_catalog.setval('public.task_transfers_id_seq', 7, true);
 
 
 --
@@ -445,6 +447,13 @@ CREATE UNIQUE INDEX uniq_1483a5e9a0d96fbf ON public.users USING btree (email_can
 --
 
 CREATE UNIQUE INDEX uniq_1483a5e9e7927c74 ON public.users USING btree (email);
+
+
+--
+-- Name: uniq_3fc192d78db60186792b56ef; Type: INDEX; Schema: public; Owner: symfony
+--
+
+CREATE UNIQUE INDEX uniq_3fc192d78db60186792b56ef ON public.task_changes USING btree (task_id, for_date);
 
 
 --

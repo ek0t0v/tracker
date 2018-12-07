@@ -587,6 +587,43 @@ class TaskCest
                     ],
                 ],
             ],
+            '2018-12-07' => [
+                'date' => '2018-12-07',
+                'response' => [
+                    'items' => [
+                        [
+                            'id' => 3,
+                            'name' => 'Reading',
+                            'state' => 'in_progress',
+                            'start' => '2018-11-19T00:00:00+00:00',
+                            'end' => null,
+                            'forDate' => '2018-12-07T00:00:00+00:00',
+                            'schedule' => [1],
+                            'position' => null,
+                        ],
+                        [
+                            'id' => 2,
+                            'name' => 'Work',
+                            'state' => 'in_progress',
+                            'start' => '2018-10-29T00:00:00+00:00',
+                            'end' => null,
+                            'forDate' => '2018-12-07T00:00:00+00:00',
+                            'schedule' => [1, 1, 1, 1, 1, 0, 0],
+                            'position' => null,
+                        ],
+                        [
+                            'id' => 1,
+                            'name' => 'Exercises',
+                            'state' => 'in_progress',
+                            'start' => '2018-11-01T00:00:00+00:00',
+                            'end' => '2018-12-01T00:00:00+00:00',
+                            'forDate' => '2018-11-29T00:00:00+00:00',
+                            'schedule' => [1, 1, 1, 0],
+                            'position' => null,
+                        ],
+                    ],
+                ],
+            ],
         ];
     }
 }

@@ -39,7 +39,31 @@ class TaskRepository extends ServiceEntityRepository
             ->addSelect('transfer')
             ->andWhere('task.user = :user')
             ->andWhere('task.startDate <= :start')
-            ->andWhere('task.endDate IS NULL OR task.endDate > :start')
+            ->leftJoin('task.changes', 'change')
+            ->leftJoin('task.transfers', 'transfer', Join::WITH, 'transfer.task = task')
+            ->orderBy('task.id', 'desc')
+            ->addOrderBy('transfer.id', 'asc')
+            ->setParameter('user', $user)
+            ->setParameter('start', $start)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    /**
+     * @param \DateTime $start
+     * @param \DateTime $end
+     * @param User      $user
+     *
+     * @return mixed
+     */
+    public function findByDateRange(\DateTime $start, \DateTime $end, User $user)
+    {
+        return $this->createQueryBuilder('task')
+            ->addSelect('change')
+            ->addSelect('transfer')
+            ->andWhere('task.user = :user')
+            ->andWhere('task.startDate <= :start')
             ->leftJoin('task.changes', 'change')
             ->leftJoin('task.transfers', 'transfer', Join::WITH, 'transfer.task = task')
             ->orderBy('task.id', 'desc')
