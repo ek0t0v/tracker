@@ -79,7 +79,7 @@ ALTER TABLE public.refresh_tokens_id_seq OWNER TO symfony;
 CREATE TABLE public.task_changes (
     id integer NOT NULL,
     task_id integer,
-    state character varying(255),
+    state character varying(255) DEFAULT NULL::character varying,
     "position" integer,
     for_date date NOT NULL,
     CONSTRAINT task_changes_state_check CHECK (((state)::text = ANY ((ARRAY['in_progress'::character varying, 'done'::character varying, 'cancelled'::character varying])::text[])))
@@ -87,6 +87,13 @@ CREATE TABLE public.task_changes (
 
 
 ALTER TABLE public.task_changes OWNER TO symfony;
+
+--
+-- Name: COLUMN task_changes.state; Type: COMMENT; Schema: public; Owner: symfony
+--
+
+COMMENT ON COLUMN public.task_changes.state IS '(DC2Type:task_change_state)';
+
 
 --
 -- Name: task_changes_id_seq; Type: SEQUENCE; Schema: public; Owner: symfony
@@ -236,14 +243,7 @@ ALTER TABLE public.users_id_seq OWNER TO symfony;
 --
 
 COPY public.migration_versions (version) FROM stdin;
-20181129043710
-20181129101337
-20181202042103
-20181203042752
-20181205090802
-20181205134513
-20181205135429
-20181207034325
+20181207055216
 \.
 
 
@@ -291,11 +291,11 @@ COPY public.task_transfers (id, task_id, transfer_to, for_date) FROM stdin;
 --
 
 COPY public.tasks (id, user_id, name, start_date, end_date, schedule, updated_at, created_at) FROM stdin;
-1	1	Exercises	2018-11-01	2018-12-01	a:4:{i:0;i:1;i:1;i:1;i:2;i:1;i:3;i:0;}	2018-12-07 03:58:11	2018-12-07 03:58:11
-2	1	Work	2018-10-29	\N	a:7:{i:0;i:1;i:1;i:1;i:2;i:1;i:3;i:1;i:4;i:1;i:5;i:0;i:6;i:0;}	2018-12-07 03:58:11	2018-12-07 03:58:11
-3	1	Reading	2018-11-19	\N	a:1:{i:0;i:1;}	2018-12-07 03:58:11	2018-12-07 03:58:11
-4	1	Single task 1	2018-11-07	\N	N;	2018-12-07 03:58:11	2018-12-07 03:58:11
-5	1	Single task 2	2018-12-01	\N	N;	2018-12-07 03:58:11	2018-12-07 03:58:11
+1	1	Exercises	2018-11-01	2018-12-01	a:4:{i:0;i:1;i:1;i:1;i:2;i:1;i:3;i:0;}	2018-12-07 05:53:11	2018-12-07 05:53:11
+2	1	Work	2018-10-29	\N	a:7:{i:0;i:1;i:1;i:1;i:2;i:1;i:3;i:1;i:4;i:1;i:5;i:0;i:6;i:0;}	2018-12-07 05:53:11	2018-12-07 05:53:11
+3	1	Reading	2018-11-19	\N	a:1:{i:0;i:1;}	2018-12-07 05:53:11	2018-12-07 05:53:11
+4	1	Single task 1	2018-11-07	\N	N;	2018-12-07 05:53:11	2018-12-07 05:53:11
+5	1	Single task 2	2018-12-01	\N	N;	2018-12-07 05:53:11	2018-12-07 05:53:11
 \.
 
 
@@ -304,8 +304,8 @@ COPY public.tasks (id, user_id, name, start_date, end_date, schedule, updated_at
 --
 
 COPY public.users (id, email, email_canonical, username, password, roles, enabled, last_login, password_requested_at, created_at) FROM stdin;
-1	test_user_1@mail.ru	test_user_1@mail.ru	test_user_1	$2y$13$QxjOdk3bv/gjqw7FhagLXOmoqcx/RPoPDZ99dRw/UDd0Z0ZqjDl46	[]	t	\N	\N	2018-12-07 03:58:10
-2	test_user_2@mail.ru	test_user_2@mail.ru	test_user_2	$2y$13$0IQWHlx5hVgMw5g8cFLrkuaFai1hrA/CEjSlI4Iep0KJrYavxvDO.	[]	t	\N	\N	2018-12-07 03:58:11
+1	test_user_1@mail.ru	test_user_1@mail.ru	test_user_1	$2y$13$q0uDILUY.qUV7yPT51DlTe.UAOSBu9k.1JhpW8Gfbb5.CO01Io3/6	[]	t	\N	\N	2018-12-07 05:53:10
+2	test_user_2@mail.ru	test_user_2@mail.ru	test_user_2	$2y$13$M6Bon0z2por.jX5WbBzV..zAwekqDDmmqlqnkHF7vwixWm2MNtM66	[]	t	\N	\N	2018-12-07 05:53:11
 \.
 
 
