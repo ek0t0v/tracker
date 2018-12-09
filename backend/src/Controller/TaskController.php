@@ -9,6 +9,7 @@ use App\Request\Task\CreateTaskRequest;
 use App\Request\Task\GetTasksRequest;
 use App\Request\Task\TransferTaskRequest;
 use App\Service\Task\TaskService;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -67,6 +68,7 @@ class TaskController extends ApiController
      * @return JsonResponse
      *
      * @Route("/{id}/transfer", name="api_tasks_transfer_task", methods={"POST"})
+     * @ParamConverter("task", class="App\Entity\Task", converter="task_by_user")
      */
     public function transferTask(Task $task, TransferTaskRequest $request, TaskService $taskService): JsonResponse
     {
@@ -82,6 +84,7 @@ class TaskController extends ApiController
      * @return JsonResponse
      *
      * @Route("/{id}/state", name="api_tasks_update_task_state", methods={"POST"})
+     * @ParamConverter("task", class="App\Entity\Task", converter="task_by_user")
      */
     public function updateTaskState(Task $task, UpdateTaskStateRequest $request): JsonResponse
     {
@@ -95,6 +98,7 @@ class TaskController extends ApiController
      * @return JsonResponse
      *
      * @Route("/{id}/position", name="api_tasks_update_task_position", methods={"POST"})
+     * @ParamConverter("task", class="App\Entity\Task", converter="task_by_user")
      */
     public function updateTaskPosition(Task $task, UpdateTaskPositionRequest $request): JsonResponse
     {
