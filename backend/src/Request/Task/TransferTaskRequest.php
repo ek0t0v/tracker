@@ -25,6 +25,10 @@ class TransferTaskRequest implements RequestDtoInterface
      * @Assert\NotNull
      * @Assert\NotBlank
      * @Assert\Date
+     * @Assert\NotEqualTo(
+     *     propertyPath="forDate",
+     *     message="This value should not be equal to forDate."
+     * )
      */
     public $to;
 }

@@ -6,9 +6,9 @@ use App\Http\RequestDtoInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Class ChangeTaskStateRequest.
+ * Class UpdateTaskPositionRequest.
  */
-class ChangeTaskStateRequest implements RequestDtoInterface
+class UpdateTaskPositionRequest implements RequestDtoInterface
 {
     /**
      * @var \DateTime
@@ -20,10 +20,10 @@ class ChangeTaskStateRequest implements RequestDtoInterface
     public $forDate;
 
     /**
-     * @var string
+     * @var int
      *
      * @Assert\NotNull
      * @Assert\NotBlank
      */
-    public $state;
+    public $position;
 }

@@ -5,9 +5,9 @@ namespace App\Tests;
 use Codeception\Util\HttpCode;
 
 /**
- * Class UserCest.
+ * Class CreateUserCest.
  */
-class UserCest
+class CreateUserCest
 {
     /**
      * @param ApiTester $I

@@ -3,8 +3,8 @@
 namespace App\Controller;
 
 use App\Entity\Task;
-use App\Request\Task\ChangeTaskPositionRequest;
-use App\Request\Task\ChangeTaskStateRequest;
+use App\Request\Task\UpdateTaskPositionRequest;
+use App\Request\Task\UpdateTaskStateRequest;
 use App\Request\Task\CreateTaskRequest;
 use App\Request\Task\GetTasksRequest;
 use App\Request\Task\TransferTaskRequest;
@@ -54,7 +54,7 @@ class TaskController extends ApiController
         $start = new \DateTime($request->start);
         $end = !is_null($request->end) ? new \DateTime($request->end) : null;
 
-        $task = $taskService->create($request->name, $start, $end, $request->schedule);
+        $task = $taskService->createTask($request->name, $start, $end, $request->schedule);
 
         return $this->apiResponse($task, ['api'], Response::HTTP_CREATED);
     }
@@ -70,33 +70,33 @@ class TaskController extends ApiController
      */
     public function transferTask(Task $task, TransferTaskRequest $request, TaskService $taskService): JsonResponse
     {
-        $taskService->transfer($task, $request->forDate, $request->to);
+        $task = $taskService->transferTask($task, new \DateTime($request->forDate), new \DateTime($request->to));
 
-        return $this->apiResponse();
+        return $this->apiResponse($task, ['api']);
     }
 
     /**
      * @param Task                   $task
-     * @param ChangeTaskStateRequest $request
+     * @param UpdateTaskStateRequest $request
      *
      * @return JsonResponse
      *
-     * @Route("/{id}/state", name="api_tasks_change_task_state", methods={"POST"})
+     * @Route("/{id}/state", name="api_tasks_update_task_state", methods={"POST"})
      */
-    public function changeTaskState(Task $task, ChangeTaskStateRequest $request): JsonResponse
+    public function updateTaskState(Task $task, UpdateTaskStateRequest $request): JsonResponse
     {
         return $this->apiResponse();
     }
 
     /**
      * @param Task                      $task
-     * @param ChangeTaskPositionRequest $request
+     * @param UpdateTaskPositionRequest $request
      *
      * @return JsonResponse
      *
-     * @Route("/{id}/position", name="api_tasks_change_task_position", methods={"POST"})
+     * @Route("/{id}/position", name="api_tasks_update_task_position", methods={"POST"})
      */
-    public function changeTaskPosition(Task $task, ChangeTaskPositionRequest $request): JsonResponse
+    public function updateTaskPosition(Task $task, UpdateTaskPositionRequest $request): JsonResponse
     {
         return $this->apiResponse();
     }

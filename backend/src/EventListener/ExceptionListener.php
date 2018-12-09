@@ -36,7 +36,7 @@ class ExceptionListener
         }
 
         if ($exception instanceof ApiJsonException) {
-            $response = $this->buildResponse(0, 'Invalid json.');
+            $response = $this->buildResponse('Invalid json.');
         }
 
         if ($response) {

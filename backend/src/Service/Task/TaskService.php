@@ -5,6 +5,8 @@ namespace App\Service\Task;
 use App\Entity\Task;
 use App\Entity\TaskTransfer;
 use App\Repository\TaskRepository;
+use App\Request\Task\UpdateTaskPositionRequest;
+use App\Request\Task\UpdateTaskStateRequest;
 use App\Response\Task\TaskDto;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
@@ -30,11 +32,6 @@ class TaskService
     private $taskScheduleService;
 
     /**
-     * @var TaskChangeService
-     */
-    private $taskChangeService;
-
-    /**
      * @var TaskDtoService
      */
     private $taskDtoService;
@@ -45,20 +42,17 @@ class TaskService
      * @param EntityManagerInterface $em
      * @param TokenStorageInterface  $tokenStorage
      * @param TaskScheduleService    $taskScheduleService
-     * @param TaskChangeService      $taskChangeService
      * @param TaskDtoService         $taskDtoService
      */
     public function __construct(
         EntityManagerInterface $em,
         TokenStorageInterface $tokenStorage,
         TaskScheduleService $taskScheduleService,
-        TaskChangeService $taskChangeService,
         TaskDtoService $taskDtoService
     ) {
         $this->em = $em;
         $this->tokenStorage = $tokenStorage;
         $this->taskScheduleService = $taskScheduleService;
-        $this->taskChangeService = $taskChangeService;
         $this->taskDtoService = $taskDtoService;
     }
 
@@ -134,7 +128,7 @@ class TaskService
      *
      * @return TaskDto
      */
-    public function create(string $name, \DateTime $startDate, \DateTime $endDate = null, array $schedule = null): TaskDto
+    public function createTask(string $name, \DateTime $startDate, \DateTime $endDate = null, array $schedule = null): TaskDto
     {
         $task = new Task();
         $task->setUser($this->tokenStorage->getToken()->getUser());
@@ -157,7 +151,7 @@ class TaskService
      *
      * @return TaskDto
      */
-    public function transfer(Task $task, \DateTime $forDate, \DateTime $to): TaskDto
+    public function transferTask(Task $task, \DateTime $forDate, \DateTime $to): TaskDto
     {
         $transfer = new TaskTransfer();
         $transfer->setTask($task);
@@ -168,7 +162,27 @@ class TaskService
 
         $this->em->flush();
 
-        return $this->taskDtoService->create($task, $to);
+        return $this->taskDtoService->create($task, $task->getStartDate());
+    }
+
+    /**
+     * @param Task                   $task
+     * @param UpdateTaskStateRequest $request
+     *
+     * @return TaskDto
+     */
+    public function updateTaskState(Task $task, UpdateTaskStateRequest $request): TaskDto
+    {
+    }
+
+    /**
+     * @param Task                      $task
+     * @param UpdateTaskPositionRequest $request
+     *
+     * @return TaskDto
+     */
+    public function updateTaskPosition(Task $task, UpdateTaskPositionRequest $request): TaskDto
+    {
     }
 
     /**
