@@ -10,7 +10,6 @@
 - `docker-compose up -d --build`
 - `docker-compose run composer install`
 - `docker-compose exec php php bin/console d:m:m` roll migrations
-- `docker-compose exec php php bin/console d:s:u --force` create a refresh tokens table
 - `docker-compose exec php php bin/console h:f:l` roll fixtures
 
 #### Generate the SSH keys
