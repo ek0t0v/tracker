@@ -3,6 +3,7 @@
 namespace App\Service\Task;
 
 use App\Entity\Task;
+use App\Repository\TaskRepository;
 use App\Response\Task\TaskDto;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
@@ -67,8 +68,11 @@ class TaskService
      */
     public function getTasksByDate(\DateTime $date): array
     {
-        $user = $this->tokenStorage->getToken()->getUser();
-        $tasks = $this->em->getRepository(Task::class)->findByStartDate($date, $user);
+        /**
+         * @var TaskRepository
+         */
+        $repository = $this->em->getRepository(Task::class);
+        $tasks = $repository->findByStartDate($date, $this->tokenStorage->getToken()->getUser());
 
         $resultsForDate = $this->getActualTasksByDate($tasks, $date);
         $dto = [];
@@ -90,8 +94,11 @@ class TaskService
      */
     public function getTasksByDateRange(\DateTime $start, \DateTime $end): array
     {
-        $user = $this->tokenStorage->getToken()->getUser();
-        $tasks = $this->em->getRepository(Task::class)->findByStartDate($start, $user);
+        /**
+         * @var TaskRepository
+         */
+        $repository = $this->em->getRepository(Task::class);
+        $tasks = $repository->findByStartDate($start, $this->tokenStorage->getToken()->getUser());
 
         // Увеличивает на 1 секунду, чтобы период включал в себя последний день.
         $end->setTime(0, 0, 1);

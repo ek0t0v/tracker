@@ -34,3 +34,7 @@ Pass phrase can be taken from `backend/.env` or set your own pass phrase, do not
 
 - `docker-compose exec postgres pg_dump -U symfony symfony > ./backend/tests/_data/dump.sql`
 - `docker-compose exec php php vendor/bin/codecept run api`
+
+## PHPStan
+
+- `docker-compose exec php php vendor/bin/phpstan analyze -l 4 src`

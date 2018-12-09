@@ -73,11 +73,11 @@ final class RequestDtoResolver implements ArgumentValueResolverInterface
     }
 
     /**
-     * @param $string
+     * @param string $string
      *
      * @return bool
      */
-    private function isJson($string): bool
+    private function isJson(string $string): bool
     {
         json_decode($string);
 

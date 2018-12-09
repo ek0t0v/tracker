@@ -64,7 +64,7 @@ class TaskByUserParamConverter implements ParamConverterInterface
      */
     public function supports(ParamConverter $configuration)
     {
-        if (Task::class !== $configuration->getClass() || is_null($this->registry) || !count($this->registry->getManagers())) {
+        if (Task::class !== $configuration->getClass() || !count($this->registry->getManagers())) {
             return false;
         }
 

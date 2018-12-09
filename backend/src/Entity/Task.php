@@ -47,8 +47,6 @@ class Task
     private $startDate;
 
     /**
-     * Удаления как такового не будет - чтобы удалить задачу, нужно установить endDate.
-     *
      * @var \DateTime
      *
      * @ORM\Column(name="end_date", type="date", nullable=true)
@@ -56,8 +54,6 @@ class Task
     private $endDate;
 
     /**
-     * Если расписания нет - то задача одноразовая.
-     *
      * @var int[]|null
      *
      * @ORM\Column(name="schedule", type="array", nullable=true)
@@ -65,21 +61,21 @@ class Task
     private $schedule;
 
     /**
-     * @var TaskChange[]
+     * @var ArrayCollection|TaskChange[]
      *
      * @ORM\OneToMany(targetEntity="TaskChange", mappedBy="task")
      */
     private $changes;
 
     /**
-     * @var TaskTransfer[]
+     * @var ArrayCollection|TaskTransfer[]
      *
      * @ORM\OneToMany(targetEntity="TaskTransfer", mappedBy="task")
      */
     private $transfers;
 
     /**
-     * @var TaskTiming[]
+     * @var ArrayCollection|TaskTiming[]
      *
      * @ORM\OneToMany(targetEntity="TaskTiming", mappedBy="task")
      */

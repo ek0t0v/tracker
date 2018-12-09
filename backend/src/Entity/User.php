@@ -93,11 +93,11 @@ class User implements UserInterface, JWTUserInterface
     /**
      * User constructor.
      *
-     * @param       $username
-     * @param array $roles
-     * @param       $email
+     * @param string $username
+     * @param array  $roles
+     * @param string $email
      */
-    public function __construct($username, array $roles, $email)
+    public function __construct(string $username, array $roles, string $email)
     {
         $this->username = $username;
         $this->roles = $roles;

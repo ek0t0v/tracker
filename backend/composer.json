@@ -26,6 +26,7 @@
     "require-dev": {
         "codeception/codeception": "^2.5",
         "hautelook/alice-bundle": "^2.3",
+        "phpstan/phpstan": "^0.10.6",
         "sensiolabs/security-checker": "^5.0",
         "symfony/dotenv": "*",
         "symfony/maker-bundle": "^1.8",
