@@ -62,13 +62,16 @@ class TaskController extends ApiController
     /**
      * @param Task                $task
      * @param TransferTaskRequest $request
+     * @param TaskService         $taskService
      *
      * @return JsonResponse
      *
      * @Route("/{id}/transfer", name="api_tasks_transfer_task", methods={"POST"})
      */
-    public function transferTask(Task $task, TransferTaskRequest $request): JsonResponse
+    public function transferTask(Task $task, TransferTaskRequest $request, TaskService $taskService): JsonResponse
     {
+        $taskService->transfer($task, $request->forDate, $request->to);
+
         return $this->apiResponse();
     }
 

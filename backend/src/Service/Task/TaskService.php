@@ -3,6 +3,7 @@
 namespace App\Service\Task;
 
 use App\Entity\Task;
+use App\Entity\TaskTransfer;
 use App\Repository\TaskRepository;
 use App\Response\Task\TaskDto;
 use Doctrine\ORM\EntityManagerInterface;
@@ -147,6 +148,27 @@ class TaskService
         $this->em->flush();
 
         return $this->taskDtoService->create($task, $startDate);
+    }
+
+    /**
+     * @param Task      $task
+     * @param \DateTime $forDate
+     * @param \DateTime $to
+     *
+     * @return TaskDto
+     */
+    public function transfer(Task $task, \DateTime $forDate, \DateTime $to): TaskDto
+    {
+        $transfer = new TaskTransfer();
+        $transfer->setTask($task);
+        $transfer->setForDate($forDate);
+        $transfer->setTransferTo($to);
+
+        $this->em->persist($transfer);
+
+        $this->em->flush();
+
+        return $this->taskDtoService->create($task, $to);
     }
 
     /**
