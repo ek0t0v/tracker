@@ -17,3 +17,7 @@ services:
         class: App\Validator\NotBlankIfNotNullValidator
         tags:
             - { name: validator.constraint_validator, alias: not_blank_if_not_null }
+    not_past:
+        class: App\Validator\NotPastValidator
+        tags:
+            - { name: validator.constraint_validator, alias: not_past }

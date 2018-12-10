@@ -3,6 +3,7 @@
 namespace App\Request\Task;
 
 use App\Http\RequestDtoInterface;
+use App\Validator\Constraints\NotPast;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -25,10 +26,7 @@ class TransferTaskRequest implements RequestDtoInterface
      * @Assert\NotNull
      * @Assert\NotBlank
      * @Assert\Date
-     * @Assert\NotEqualTo(
-     *     propertyPath="forDate",
-     *     message="This value should not be equal to forDate."
-     * )
+     * @NotPast
      */
     public $to;
 }
