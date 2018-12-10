@@ -51,10 +51,8 @@ class ExceptionListener
                 break;
         }
 
-        if ($response) {
-            $response->setStatusCode($this->getStatusCode($exception));
-            $event->setResponse($response);
-        }
+        $response->setStatusCode($this->getStatusCode($exception));
+        $event->setResponse($response);
     }
 
     /**
@@ -72,16 +70,21 @@ class ExceptionListener
     }
 
     /**
-     * @param string $message
-     * @param array  $violations
+     * @param string     $message
+     * @param array|null $violations
      *
      * @return JsonResponse
      */
-    private function buildResponse(string $message = '', array $violations = []): JsonResponse
+    private function buildResponse(string $message = '', $violations = null): JsonResponse
     {
-        return new JsonResponse([
+        $responseArray = [
             'message' => $message,
-            'violations' => $violations,
-        ]);
+        ];
+
+        if (!is_null($violations)) {
+            $responseArray['violations'] = $violations;
+        }
+
+        return new JsonResponse($responseArray);
     }
 }
