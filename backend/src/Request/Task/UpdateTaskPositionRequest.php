@@ -11,6 +11,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 class UpdateTaskPositionRequest implements RequestDtoInterface
 {
     /**
+     * @todo Проверка на существование задачи в этот день - если задачи нет, не можем менять позицию в тот день.
+     *
      * @var \DateTime
      *
      * @Assert\NotNull
@@ -24,6 +26,8 @@ class UpdateTaskPositionRequest implements RequestDtoInterface
      *
      * @Assert\NotNull
      * @Assert\NotBlank
+     * @Assert\Type("integer")
+     * @Assert\GreaterThanOrEqual(0)
      */
     public $position;
 }
