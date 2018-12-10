@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * Class ExceptionListener.
@@ -22,21 +23,32 @@ class ExceptionListener
         $exception = $event->getException();
         $response = null;
 
-        if ($exception instanceof ApiValidationException) {
-            $result = [];
+        switch (true) {
+            case $exception instanceof ApiValidationException:
+                $result = [];
 
-            foreach ($exception->getViolations() as $violation) {
-                $result[$violation->getPropertyPath()][] = $violation->getMessage();
-            }
+                foreach ($exception->getViolations() as $violation) {
+                    $result[$violation->getPropertyPath()][] = $violation->getMessage();
+                }
 
-            $response = $this->buildResponse(
-                'Validation error.',
-                $result
-            );
-        }
+                $response = $this->buildResponse(
+                    'Validation error.',
+                    $result
+                );
 
-        if ($exception instanceof ApiJsonException) {
-            $response = $this->buildResponse('Invalid json.');
+                break;
+            case $exception instanceof ApiJsonException:
+                $response = $this->buildResponse('Invalid json.');
+
+                break;
+            case $exception instanceof NotFoundHttpException:
+                $response = $this->buildResponse('Not found.');
+
+                break;
+            default:
+                $response = $this->buildResponse('Something went wrong.');
+
+                break;
         }
 
         if ($response) {
