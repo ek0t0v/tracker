@@ -17,15 +17,6 @@ class TransferTaskRequest implements RequestDtoInterface
      * @Assert\NotNull
      * @Assert\NotBlank
      * @Assert\Date
-     */
-    public $forDate;
-
-    /**
-     * @var \DateTime
-     *
-     * @Assert\NotNull
-     * @Assert\NotBlank
-     * @Assert\Date
      * @NotPast
      */
     public $to;

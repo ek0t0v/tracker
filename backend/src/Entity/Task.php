@@ -194,6 +194,35 @@ class Task
     }
 
     /**
+     * @param \DateTime $date
+     *
+     * @return bool
+     */
+    public function isScheduled(\DateTime $date): bool
+    {
+        if ($this->getStartDate() > $date || (!is_null($this->getEndDate()) && $this->getEndDate() < $date)) {
+            return false;
+        }
+
+        if (is_null($this->getSchedule())) {
+            return $date == $this->getStartDate();
+        }
+
+        $daysDiff = $date->diff($this->getStartDate())->days;
+        $scheduleArraySize = count($this->getSchedule());
+
+        if (0 === $daysDiff) {
+            $i = 0;
+        } elseif ($daysDiff < $scheduleArraySize) {
+            $i = $daysDiff;
+        } else {
+            $i = $daysDiff % $scheduleArraySize;
+        }
+
+        return 1 === $this->getSchedule()[$i];
+    }
+
+    /**
      * @return \DateTime|null
      */
     public function getUpdatedAt(): ?\DateTime

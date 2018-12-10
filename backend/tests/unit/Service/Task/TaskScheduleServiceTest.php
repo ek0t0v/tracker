@@ -3,8 +3,6 @@
 namespace App\Tests;
 
 use App\Entity\Task;
-use App\Service\Task\TaskScheduleService;
-use Codeception\Exception\ModuleException;
 use Codeception\Test\Unit;
 
 /**
@@ -16,19 +14,6 @@ class TaskScheduleServiceTest extends Unit
      * @var UnitTester
      */
     protected $tester;
-
-    /**
-     * @var TaskScheduleService
-     */
-    private $taskScheduleService;
-
-    /**
-     * @throws ModuleException
-     */
-    protected function _before()
-    {
-        $this->taskScheduleService = $this->tester->getSymfonyService(TaskScheduleService::class);
-    }
 
     /**
      * @param \DateTime $start
@@ -50,8 +35,7 @@ class TaskScheduleServiceTest extends Unit
             throw new \Exception('Failed to create mock objects.');
         }
 
-        $isTaskScheduled = $this->taskScheduleService->isTaskScheduled($task, $start);
-        $this->assertEquals($expected, $isTaskScheduled);
+        $this->assertEquals($expected, $task->isScheduled($start));
     }
 
     /**
@@ -75,8 +59,7 @@ class TaskScheduleServiceTest extends Unit
             throw new \Exception('Failed to create mock objects.');
         }
 
-        $isTaskScheduled = $this->taskScheduleService->isTaskScheduled($task, $start);
-        $this->assertEquals($expected, $isTaskScheduled);
+        $this->assertEquals($expected, $task->isScheduled($start));
     }
 
     /**
@@ -99,8 +82,7 @@ class TaskScheduleServiceTest extends Unit
             throw new \Exception('Failed to create mock objects.');
         }
 
-        $isTaskScheduled = $this->taskScheduleService->isTaskScheduled($task, $start);
-        $this->assertEquals($expected, $isTaskScheduled);
+        $this->assertEquals($expected, $task->isScheduled($start));
     }
 
     /**
@@ -114,6 +96,9 @@ class TaskScheduleServiceTest extends Unit
     public function testFilterWithSingleTask(\DateTime $start, bool $expected)
     {
         try {
+            /**
+             * @var Task $task
+             */
             $task = $this->make(Task::class, [
                 'name' => 'Single task',
                 'startDate' => new \DateTime('2018-11-07'),
@@ -122,8 +107,7 @@ class TaskScheduleServiceTest extends Unit
             throw new \Exception('Failed to create mock objects.');
         }
 
-        $isTaskScheduled = $this->taskScheduleService->isTaskScheduled($task, $start);
-        $this->assertEquals($expected, $isTaskScheduled);
+        $this->assertEquals($expected, $task->isScheduled($start));
     }
 
     /**

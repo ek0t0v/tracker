@@ -11,9 +11,9 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 /**
- * Class TaskByUserParamConverter.
+ * Class ScheduledTaskByUserParamConverter.
  */
-class TaskByUserParamConverter implements ParamConverterInterface
+class ScheduledTaskByUserParamConverter implements ParamConverterInterface
 {
     /**
      * @var ManagerRegistry
@@ -42,8 +42,12 @@ class TaskByUserParamConverter implements ParamConverterInterface
      */
     public function apply(Request $request, ParamConverter $configuration)
     {
-        if (is_null($request->attributes->get('id'))) {
+        if (is_null($request->attributes->get('id')) || is_null($request->attributes->get('forDate'))) {
             throw new \InvalidArgumentException('Route attribute is missing.');
+        }
+
+        if (\DateTime::createFromFormat('Y-m-d', $request->attributes->get('forDate')) === false) {
+            throw new \InvalidArgumentException('forDate route attribute is invalid.');
         }
 
         $em = $this->registry->getManagerForClass($configuration->getClass());
@@ -52,7 +56,9 @@ class TaskByUserParamConverter implements ParamConverterInterface
             'user' => $this->tokenStorage->getToken()->getUser(),
         ]);
 
-        if (is_null($task) || !($task instanceof Task)) {
+        $forDate = new \DateTime($request->attributes->get('forDate'));
+
+        if (is_null($task) || !($task instanceof Task) || !$task->isScheduled($forDate)) {
             throw new NotFoundHttpException(sprintf('%s object not found.', $configuration->getClass()));
         }
 

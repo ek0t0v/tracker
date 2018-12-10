@@ -16,6 +16,10 @@ class NotPastValidator extends ConstraintValidator
      */
     public function validate($value, Constraint $constraint)
     {
+        if (false === \DateTime::createFromFormat('Y-m-d', $value)) {
+            return;
+        }
+
         if (new \DateTime('midnight') > new \DateTime($value)) {
             $this->context->buildViolation($constraint->message)->addViolation();
         }

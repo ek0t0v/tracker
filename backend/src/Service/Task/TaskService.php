@@ -27,11 +27,6 @@ class TaskService
     private $tokenStorage;
 
     /**
-     * @var TaskScheduleService
-     */
-    private $taskScheduleService;
-
-    /**
      * @var TaskDtoService
      */
     private $taskDtoService;
@@ -41,18 +36,15 @@ class TaskService
      *
      * @param EntityManagerInterface $em
      * @param TokenStorageInterface  $tokenStorage
-     * @param TaskScheduleService    $taskScheduleService
      * @param TaskDtoService         $taskDtoService
      */
     public function __construct(
         EntityManagerInterface $em,
         TokenStorageInterface $tokenStorage,
-        TaskScheduleService $taskScheduleService,
         TaskDtoService $taskDtoService
     ) {
         $this->em = $em;
         $this->tokenStorage = $tokenStorage;
-        $this->taskScheduleService = $taskScheduleService;
         $this->taskDtoService = $taskDtoService;
     }
 
@@ -199,7 +191,7 @@ class TaskService
          * @var Task $task
          */
         foreach ($tasks as $task) {
-            if ($this->taskScheduleService->isTaskScheduled($task, $date)) {
+            if ($task->isScheduled($date)) {
                 $result[] = [
                     'task' => $task,
                     'forDate' => $date,

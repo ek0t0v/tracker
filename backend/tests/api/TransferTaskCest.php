@@ -21,74 +21,75 @@ class TransferTaskCest
         $I->amBearerAuthenticated($I->getAccessToken('test_user_1@mail.ru', 'passw0rd'));
     }
 
-    /**
-     * @param ApiTester $I
-     */
-    public function transferTaskForDateValidationTest(ApiTester $I)
-    {
-        $I->sendPOST('/tasks/1/transfer');
-
-        $I->seeResponseCodeIsClientError();
-        $I->seeResponseCodeIs(HttpCode::UNPROCESSABLE_ENTITY);
-        $I->seeResponseContainsJson([
-            'forDate' => [
-                'This value should not be null.',
-            ],
-        ]);
-
-        $I->sendPOST('/tasks/1/transfer', [
-            'forDate' => '',
-        ]);
-
-        $I->seeResponseCodeIsClientError();
-        $I->seeResponseCodeIs(HttpCode::UNPROCESSABLE_ENTITY);
-        $I->seeResponseContainsJson([
-            'forDate' => [
-                'This value should not be blank.',
-            ],
-        ]);
-
-        $I->sendPOST('/tasks/1/transfer', [
-            'forDate' => 'invalid date',
-        ]);
-
-        $I->seeResponseCodeIsClientError();
-        $I->seeResponseCodeIs(HttpCode::UNPROCESSABLE_ENTITY);
-        $I->seeResponseContainsJson([
-            'forDate' => [
-                'This value is not a valid date.',
-            ],
-        ]);
-    }
+    ///**
+    // * @param ApiTester $I
+    // */
+    //public function transferTaskForDateValidationTest(ApiTester $I)
+    //{
+    //    $I->sendPOST('/tasks/1/transfer');
+    //
+    //    $I->seeResponseCodeIsClientError();
+    //    $I->seeResponseCodeIs(HttpCode::UNPROCESSABLE_ENTITY);
+    //    $I->seeResponseContainsJson([
+    //        'forDate' => [
+    //            'This value should not be null.',
+    //        ],
+    //    ]);
+    //
+    //    $I->sendPOST('/tasks/1/transfer', [
+    //        'forDate' => '',
+    //    ]);
+    //
+    //    $I->seeResponseCodeIsClientError();
+    //    $I->seeResponseCodeIs(HttpCode::UNPROCESSABLE_ENTITY);
+    //    $I->seeResponseContainsJson([
+    //        'forDate' => [
+    //            'This value should not be blank.',
+    //        ],
+    //    ]);
+    //
+    //    $I->sendPOST('/tasks/1/transfer', [
+    //        'forDate' => 'invalid date',
+    //    ]);
+    //
+    //    $I->seeResponseCodeIsClientError();
+    //    $I->seeResponseCodeIs(HttpCode::UNPROCESSABLE_ENTITY);
+    //    $I->seeResponseContainsJson([
+    //        'forDate' => [
+    //            'This value is not a valid date.',
+    //        ],
+    //    ]);
+    //}
 
     /**
      * @param ApiTester $I
      */
     public function transferTaskToValidationTest(ApiTester $I)
     {
-        $I->sendPOST('/tasks/1/transfer');
+        $I->sendPOST('/tasks/1/2018-11-01/transfer');
 
         $I->seeResponseCodeIsClientError();
         $I->seeResponseCodeIs(HttpCode::UNPROCESSABLE_ENTITY);
         $I->seeResponseContainsJson([
             'to' => [
                 'This value should not be null.',
+                'This value should not be blank.',
             ],
         ]);
 
-        $I->sendPOST('/tasks/1/transfer', [
+        $I->sendPOST('/tasks/1/2018-11-01/transfer', [
             'to' => '',
         ]);
 
         $I->seeResponseCodeIsClientError();
         $I->seeResponseCodeIs(HttpCode::UNPROCESSABLE_ENTITY);
         $I->seeResponseContainsJson([
-            'forDate' => [
+            'to' => [
                 'This value should not be blank.',
             ],
         ]);
 
-        $I->sendPOST('/tasks/1/transfer', [
+        $I->sendPOST('/tasks/1/2018-11-01/transfer', [
             'to' => 'invalid date',
         ]);
 
@@ -100,8 +101,7 @@ class TransferTaskCest
             ],
         ]);
 
-        $I->sendPOST('/tasks/1/transfer', [
-            'forDate' => '2018-12-01',
+        $I->sendPOST('/tasks/1/2018-11-01/transfer', [
             'to' => '2018-12-01',
         ]);
 
@@ -109,7 +109,7 @@ class TransferTaskCest
         $I->seeResponseCodeIs(HttpCode::UNPROCESSABLE_ENTITY);
         $I->seeResponseContainsJson([
             'to' => [
-                'This value should not be equal to forDate.',
+                'Cannot set past date.',
             ],
         ]);
     }
@@ -119,9 +119,10 @@ class TransferTaskCest
      */
     public function transferTaskTest(ApiTester $I)
     {
-        $I->sendPOST('/tasks/5/transfer', [
-            'forDate' => '2018-12-01',
-            'to' => '2018-12-02',
+        $to = new \DateTime();
+
+        $I->sendPOST('/tasks/5/2018-12-01/transfer', [
+            'to' => $to->format('Y-m-d'),
         ]);
 
         $I->seeResponseCodeIsSuccessful();

@@ -11,17 +11,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 class UpdateTaskStateRequest implements RequestDtoInterface
 {
     /**
-     * @todo Проверка на существование задачи в этот день - если задачи нет, не можем менять статус в тот день.
-     *
-     * @var \DateTime
-     *
-     * @Assert\NotNull
-     * @Assert\NotBlank
-     * @Assert\Date
-     */
-    public $forDate;
-
-    /**
      * @var string
      *
      * @Assert\NotNull

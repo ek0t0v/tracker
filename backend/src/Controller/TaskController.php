@@ -62,45 +62,51 @@ class TaskController extends ApiController
 
     /**
      * @param Task                $task
+     * @param \DateTime           $forDate
      * @param TransferTaskRequest $request
      * @param TaskService         $taskService
      *
      * @return JsonResponse
      *
-     * @Route("/{id}/transfer", name="api_tasks_transfer_task", methods={"POST"})
-     * @ParamConverter("task", class="App\Entity\Task", converter="task_by_user")
+     * @Route("/{id}/{forDate}/transfer", name="api_tasks_transfer_task", methods={"POST"})
+     * @ParamConverter("task", converter="scheduled_task_by_user")
+     * @ParamConverter("forDate", options={"format": "Y-m-d"})
      */
-    public function transferTask(Task $task, TransferTaskRequest $request, TaskService $taskService): JsonResponse
+    public function transferTask(Task $task, \DateTime $forDate, TransferTaskRequest $request, TaskService $taskService): JsonResponse
     {
-        $task = $taskService->transferTask($task, new \DateTime($request->forDate), new \DateTime($request->to));
+        $task = $taskService->transferTask($task, $forDate, new \DateTime($request->to));
 
         return $this->apiResponse($task, ['api']);
     }
 
     /**
      * @param Task                   $task
+     * @param \DateTime              $forDate
      * @param UpdateTaskStateRequest $request
      *
      * @return JsonResponse
      *
-     * @Route("/{id}/state", name="api_tasks_update_task_state", methods={"POST"})
-     * @ParamConverter("task", class="App\Entity\Task", converter="task_by_user")
+     * @Route("/{id}/{forDate}/state", name="api_tasks_update_task_state", methods={"POST"})
+     * @ParamConverter("task", converter="scheduled_task_by_user")
+     * @ParamConverter("forDate", options={"format": "Y-m-d"})
      */
-    public function updateTaskState(Task $task, UpdateTaskStateRequest $request): JsonResponse
+    public function updateTaskState(Task $task, \DateTime $forDate, UpdateTaskStateRequest $request): JsonResponse
     {
         return $this->apiResponse();
     }
 
     /**
      * @param Task                      $task
+     * @param \DateTime                 $forDate
      * @param UpdateTaskPositionRequest $request
      *
      * @return JsonResponse
      *
-     * @Route("/{id}/position", name="api_tasks_update_task_position", methods={"POST"})
-     * @ParamConverter("task", class="App\Entity\Task", converter="task_by_user")
+     * @Route("/{id}/{forDate}/position", name="api_tasks_update_task_position", methods={"POST"})
+     * @ParamConverter("task", converter="scheduled_task_by_user")
+     * @ParamConverter("forDate", options={"format": "Y-m-d"})
      */
-    public function updateTaskPosition(Task $task, UpdateTaskPositionRequest $request): JsonResponse
+    public function updateTaskPosition(Task $task, \DateTime $forDate, UpdateTaskPositionRequest $request): JsonResponse
     {
         return $this->apiResponse();
     }
