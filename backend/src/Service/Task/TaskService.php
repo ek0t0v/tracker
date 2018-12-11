@@ -68,7 +68,7 @@ class TaskService
             $dto[] = $this->taskDtoService->create($result['task'], $result['forDate']);
         }
 
-        return $dto;
+        return $this->sortByPosition($dto);
     }
 
     /**
@@ -183,7 +183,10 @@ class TaskService
         $this->em->persist($change);
         $this->em->flush();
 
-        return $this->taskDtoService->create($task, $forDate);
+        $dto = $this->taskDtoService->create($task, $forDate);
+        $dto->state = $state;
+
+        return $dto;
     }
 
     /**
@@ -237,11 +240,14 @@ class TaskService
 
         $this->em->flush();
 
-        return $this->taskDtoService->create($task, $forDate);
+        $dto = $this->taskDtoService->create($task, $forDate);
+        $dto->position = $position;
+
+        return $dto;
     }
 
     /**
-     * @todo Добавить сортировку по position.
+     * @todo Сделать получение задач, которые перемещены именно с этого дня. Перемещенные задачи должны быть как-то помечены.
      *
      * @param array     $tasks
      * @param \DateTime $date
@@ -285,6 +291,26 @@ class TaskService
                         'forDate' => new \DateTime($forDate),
                     ];
                 }
+            }
+        }
+
+        return $result;
+    }
+
+    /**
+     * @param TaskDto[] $tasks
+     *
+     * @return TaskDto[]
+     */
+    private function sortByPosition(array $tasks): array
+    {
+        $result = array_filter($tasks, function ($task) {
+            return is_null($task->position);
+        });
+
+        foreach ($tasks as $task) {
+            if (!is_null($task->position)) {
+                array_splice($result, $task->position, 0, [$task]);
             }
         }
 
