@@ -3,10 +3,9 @@
 namespace App\Service\Task;
 
 use App\Entity\Task;
+use App\Entity\TaskChange;
 use App\Entity\TaskTransfer;
 use App\Repository\TaskRepository;
-use App\Request\Task\UpdateTaskPositionRequest;
-use App\Request\Task\UpdateTaskStateRequest;
 use App\Response\Task\TaskDto;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
@@ -158,23 +157,63 @@ class TaskService
     }
 
     /**
-     * @param Task                   $task
-     * @param UpdateTaskStateRequest $request
+     * @param Task      $task
+     * @param \DateTime $forDate
+     * @param string    $state
      *
      * @return TaskDto
      */
-    public function updateTaskState(Task $task, UpdateTaskStateRequest $request): TaskDto
+    public function updateTaskState(Task $task, \DateTime $forDate, string $state): TaskDto
     {
+        /**
+         * @var TaskChange|null $change
+         */
+        $change = $this->findChangeByTaskAndForDate($task, $forDate);
+
+        if (!$change) {
+            $change = new TaskChange();
+            $change->setTask($task);
+            $change->setForDate($forDate);
+            $change->setState($state);
+        } else {
+            $change->setState($state);
+        }
+
+        $this->em->persist($change);
+        $this->em->flush();
+
+        return $this->taskDtoService->create($task, $forDate);
     }
 
     /**
-     * @param Task                      $task
-     * @param UpdateTaskPositionRequest $request
+     * @todo Продумать, как будет работать изменение позиции.
+     *
+     * @param Task      $task
+     * @param \DateTime $forDate
+     * @param int       $position
      *
      * @return TaskDto
      */
-    public function updateTaskPosition(Task $task, UpdateTaskPositionRequest $request): TaskDto
+    public function updateTaskPosition(Task $task, \DateTime $forDate, int $position): TaskDto
     {
+        /**
+         * @var TaskChange|null $change
+         */
+        $change = $this->findChangeByTaskAndForDate($task, $forDate);
+
+        if (!$change) {
+            $change = new TaskChange();
+            $change->setTask($task);
+            $change->setForDate($forDate);
+            $change->setPosition($position);
+        } else {
+            $change->setPosition($position);
+        }
+
+        $this->em->persist($change);
+        $this->em->flush();
+
+        return $this->taskDtoService->create($task, $forDate);
     }
 
     /**
@@ -224,5 +263,19 @@ class TaskService
         }
 
         return $result;
+    }
+
+    /**
+     * @param Task      $task
+     * @param \DateTime $forDate
+     *
+     * @return TaskChange|null|object
+     */
+    private function findChangeByTaskAndForDate(Task $task, \DateTime $forDate)
+    {
+        return $this->em->getRepository(TaskChange::class)->findOneBy([
+            'task' => $task,
+            'forDate' => $forDate,
+        ]);
     }
 }

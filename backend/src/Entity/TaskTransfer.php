@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table(name="task_transfers")
  * @ORM\Entity(repositoryClass="App\Repository\TaskTransferRepository")
+ * @ORM\EntityListeners({"App\Doctrine\EventListener\TaskTransferListener"})
  */
 class TaskTransfer
 {
@@ -42,6 +43,13 @@ class TaskTransfer
      * @ORM\Column(name="for_date", type="date")
      */
     private $forDate;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="created_at", type="datetime")
+     */
+    private $createdAt;
 
     /**
      * @return int|null
@@ -87,6 +95,26 @@ class TaskTransfer
     public function setForDate(\DateTime $forDate): self
     {
         $this->forDate = $forDate;
+
+        return $this;
+    }
+
+    /**
+     * @return \DateTime|null
+     */
+    public function getCreatedAt(): ?\DateTime
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * @param \DateTime $createdAt
+     *
+     * @return TaskTransfer
+     */
+    public function setCreatedAt(\DateTime $createdAt): self
+    {
+        $this->createdAt = $createdAt;
 
         return $this;
     }

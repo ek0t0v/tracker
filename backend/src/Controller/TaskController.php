@@ -43,6 +43,18 @@ class TaskController extends ApiController
     }
 
     /**
+     * @param TaskService $taskService
+     *
+     * @return JsonResponse
+     *
+     * @Route("/overdue", name="api_tasks_get_overdue_tasks", methods={"GET"})
+     */
+    public function getOverdueTasks(TaskService $taskService)
+    {
+        return $this->apiResponse($taskService->getOverdueTasks(), ['api']);
+    }
+
+    /**
      * @param CreateTaskRequest $request
      * @param TaskService       $taskService
      *
@@ -68,7 +80,7 @@ class TaskController extends ApiController
      *
      * @return JsonResponse
      *
-     * @Route("/{id}/{forDate}/transfer", name="api_tasks_transfer_task", methods={"POST"})
+     * @Route("/{id}/{forDate}/transfer", name="api_tasks_transfer_task", methods={"PUT"})
      * @ParamConverter("task", converter="scheduled_task_by_user")
      * @ParamConverter("forDate", options={"format": "Y-m-d"})
      */
@@ -83,31 +95,37 @@ class TaskController extends ApiController
      * @param Task                   $task
      * @param \DateTime              $forDate
      * @param UpdateTaskStateRequest $request
+     * @param TaskService            $taskService
      *
      * @return JsonResponse
      *
-     * @Route("/{id}/{forDate}/state", name="api_tasks_update_task_state", methods={"POST"})
+     * @Route("/{id}/{forDate}/state", name="api_tasks_update_task_state", methods={"PUT"})
      * @ParamConverter("task", converter="scheduled_task_by_user")
      * @ParamConverter("forDate", options={"format": "Y-m-d"})
      */
-    public function updateTaskState(Task $task, \DateTime $forDate, UpdateTaskStateRequest $request): JsonResponse
+    public function updateTaskState(Task $task, \DateTime $forDate, UpdateTaskStateRequest $request, TaskService $taskService): JsonResponse
     {
-        return $this->apiResponse();
+        $task = $taskService->updateTaskState($task, $forDate, $request->state);
+
+        return $this->apiResponse($task, ['api']);
     }
 
     /**
      * @param Task                      $task
      * @param \DateTime                 $forDate
      * @param UpdateTaskPositionRequest $request
+     * @param TaskService               $taskService
      *
      * @return JsonResponse
      *
-     * @Route("/{id}/{forDate}/position", name="api_tasks_update_task_position", methods={"POST"})
+     * @Route("/{id}/{forDate}/position", name="api_tasks_update_task_position", methods={"PUT"})
      * @ParamConverter("task", converter="scheduled_task_by_user")
      * @ParamConverter("forDate", options={"format": "Y-m-d"})
      */
-    public function updateTaskPosition(Task $task, \DateTime $forDate, UpdateTaskPositionRequest $request): JsonResponse
+    public function updateTaskPosition(Task $task, \DateTime $forDate, UpdateTaskPositionRequest $request, TaskService $taskService): JsonResponse
     {
-        return $this->apiResponse();
+        $task = $taskService->updateTaskPosition($task, $forDate, $request->position);
+
+        return $this->apiResponse($task, ['api']);
     }
 }

@@ -45,14 +45,12 @@ class ExceptionListener
                 $response = $this->buildResponse('Not found.');
 
                 break;
-            default:
-                $response = $this->buildResponse('Something went wrong.');
-
-                break;
         }
 
-        $response->setStatusCode($this->getStatusCode($exception));
-        $event->setResponse($response);
+        if ($response) {
+            $response->setStatusCode($this->getStatusCode($exception));
+            $event->setResponse($response);
+        }
     }
 
     /**

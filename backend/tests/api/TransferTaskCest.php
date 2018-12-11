@@ -21,52 +21,12 @@ class TransferTaskCest
         $I->amBearerAuthenticated($I->getAccessToken('test_user_1@mail.ru', 'passw0rd'));
     }
 
-    ///**
-    // * @param ApiTester $I
-    // */
-    //public function transferTaskForDateValidationTest(ApiTester $I)
-    //{
-    //    $I->sendPOST('/tasks/1/transfer');
-    //
-    //    $I->seeResponseCodeIsClientError();
-    //    $I->seeResponseCodeIs(HttpCode::UNPROCESSABLE_ENTITY);
-    //    $I->seeResponseContainsJson([
-    //        'forDate' => [
-    //            'This value should not be null.',
-    //        ],
-    //    ]);
-    //
-    //    $I->sendPOST('/tasks/1/transfer', [
-    //        'forDate' => '',
-    //    ]);
-    //
-    //    $I->seeResponseCodeIsClientError();
-    //    $I->seeResponseCodeIs(HttpCode::UNPROCESSABLE_ENTITY);
-    //    $I->seeResponseContainsJson([
-    //        'forDate' => [
-    //            'This value should not be blank.',
-    //        ],
-    //    ]);
-    //
-    //    $I->sendPOST('/tasks/1/transfer', [
-    //        'forDate' => 'invalid date',
-    //    ]);
-    //
-    //    $I->seeResponseCodeIsClientError();
-    //    $I->seeResponseCodeIs(HttpCode::UNPROCESSABLE_ENTITY);
-    //    $I->seeResponseContainsJson([
-    //        'forDate' => [
-    //            'This value is not a valid date.',
-    //        ],
-    //    ]);
-    //}
-
     /**
      * @param ApiTester $I
      */
     public function transferTaskToValidationTest(ApiTester $I)
     {
-        $I->sendPOST('/tasks/1/2018-11-01/transfer');
+        $I->sendPUT('/tasks/1/2018-11-01/transfer');
 
         $I->seeResponseCodeIsClientError();
         $I->seeResponseCodeIs(HttpCode::UNPROCESSABLE_ENTITY);
@@ -77,7 +37,7 @@ class TransferTaskCest
             ],
         ]);
 
-        $I->sendPOST('/tasks/1/2018-11-01/transfer', [
+        $I->sendPUT('/tasks/1/2018-11-01/transfer', [
             'to' => '',
         ]);
 
@@ -89,7 +49,7 @@ class TransferTaskCest
             ],
         ]);
 
-        $I->sendPOST('/tasks/1/2018-11-01/transfer', [
+        $I->sendPUT('/tasks/1/2018-11-01/transfer', [
             'to' => 'invalid date',
         ]);
 
@@ -101,7 +61,7 @@ class TransferTaskCest
             ],
         ]);
 
-        $I->sendPOST('/tasks/1/2018-11-01/transfer', [
+        $I->sendPUT('/tasks/1/2018-11-01/transfer', [
             'to' => '2018-12-01',
         ]);
 
@@ -121,7 +81,7 @@ class TransferTaskCest
     {
         $to = new \DateTime();
 
-        $I->sendPOST('/tasks/5/2018-12-01/transfer', [
+        $I->sendPUT('/tasks/5/2018-12-01/transfer', [
             'to' => $to->format('Y-m-d'),
         ]);
 
