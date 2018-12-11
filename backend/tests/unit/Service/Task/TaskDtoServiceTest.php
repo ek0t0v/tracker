@@ -38,6 +38,9 @@ class TaskDtoServiceTest extends Unit
     public function testCreate()
     {
         try {
+            /**
+             * @var Task $task
+             */
             $task = $this->make(Task::class, [
                 'id' => 1,
                 'name' => 'Task',
@@ -45,16 +48,25 @@ class TaskDtoServiceTest extends Unit
                 'changes' => new ArrayCollection(),
             ]);
 
+            /**
+             * @var TaskChange $markTaskAsDoneChange
+             */
             $markTaskAsDoneChange = $this->make(TaskChange::class, [
                 'state' => 'done',
                 'forDate' => new \DateTime('2018-11-01'),
             ]);
 
+            /**
+             * @var TaskChange $markTaskAsCancelledChange
+             */
             $markTaskAsCancelledChange = $this->make(TaskChange::class, [
                 'state' => 'cancelled',
                 'forDate' => new \DateTime('2018-11-01'),
             ]);
 
+            /**
+             * @var TaskChange $updatePositionChange
+             */
             $updatePositionChange = $this->make(TaskChange::class, [
                 'position' => 1,
                 'forDate' => new \DateTime('2018-11-01'),

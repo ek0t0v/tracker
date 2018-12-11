@@ -6,9 +6,9 @@ use App\Entity\Task;
 use Codeception\Test\Unit;
 
 /**
- * Class TaskScheduleServiceTest.
+ * Class TaskIsScheduledTest.
  */
-class TaskScheduleServiceTest extends Unit
+class TaskIsScheduledTest extends Unit
 {
     /**
      * @var UnitTester
@@ -26,6 +26,9 @@ class TaskScheduleServiceTest extends Unit
     public function testFilterWithWorkTask(\DateTime $start, bool $expected)
     {
         try {
+            /**
+             * @var Task $task
+             */
             $task = $this->make(Task::class, [
                 'name' => 'Work',
                 'startDate' => new \DateTime('2018-10-29'),
@@ -49,6 +52,9 @@ class TaskScheduleServiceTest extends Unit
     public function testFilterWithExercisesTask(\DateTime $start, bool $expected)
     {
         try {
+            /**
+             * @var Task $task
+             */
             $task = $this->make(Task::class, [
                 'name' => 'Exercises',
                 'startDate' => new \DateTime('2018-11-01'),
@@ -73,6 +79,9 @@ class TaskScheduleServiceTest extends Unit
     public function testFilterWithReadingTask(\DateTime $start, bool $expected)
     {
         try {
+            /**
+             * @var Task $task
+             */
             $task = $this->make(Task::class, [
                 'name' => 'Reading',
                 'startDate' => new \DateTime('2018-11-19'),
