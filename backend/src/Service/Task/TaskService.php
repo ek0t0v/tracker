@@ -65,7 +65,7 @@ class TaskService
         $dto = [];
 
         foreach ($resultsForDate as $result) {
-            $dto[] = $this->taskDtoService->create($result['task'], $result['forDate']);
+            $dto[] = $this->taskDtoService->create($result['task'], $result['forDate'], $date);
         }
 
         return $this->sortByPosition($dto);
@@ -95,9 +95,15 @@ class TaskService
 
         $dto = [];
 
-        foreach ($period as $date) {
+        foreach (array_reverse(iterator_to_array($period)) as $date) {
+            $dtoByDate = [];
+
             foreach ($this->getActualTasksByDate($tasks, $date) as $result) {
-                $dto[] = $this->taskDtoService->create($result['task'], $result['forDate']);
+                $dtoByDate[] = $this->taskDtoService->create($result['task'], $result['forDate'], $date);
+            }
+
+            foreach ($this->sortByPosition($dtoByDate) as $item) {
+                $dto[] = $item;
             }
         }
 
@@ -137,6 +143,8 @@ class TaskService
     }
 
     /**
+     * @todo Сделать ограничения на перемещение задач, например, нельзя перемещать готовые/отмененные задачи.
+     *
      * @param Task      $task
      * @param \DateTime $forDate
      * @param \DateTime $to
@@ -247,8 +255,6 @@ class TaskService
     }
 
     /**
-     * @todo Сделать получение задач, которые перемещены именно с этого дня. Перемещенные задачи должны быть как-то помечены.
-     *
      * @param array     $tasks
      * @param \DateTime $date
      *
@@ -277,13 +283,6 @@ class TaskService
             }
 
             foreach ($transfersHash as $forDate => $to) {
-                // Задача за сегодняшний день перенесена и не вернулась потом на сегодня - убираем задачу.
-                if (new \DateTime($forDate) == $date && $to != $date) {
-                    unset($result[count($result) - 1]);
-
-                    continue;
-                }
-
                 // Задача перенесена на сегодня откуда-нибудь (но не с сегодняшнего дня) - добавляем задачу.
                 if ($to == $date) {
                     $result[] = [

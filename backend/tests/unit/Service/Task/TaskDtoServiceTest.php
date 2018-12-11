@@ -46,6 +46,7 @@ class TaskDtoServiceTest extends Unit
                 'name' => 'Task',
                 'startDate' => new \DateTime('2018-11-01'),
                 'changes' => new ArrayCollection(),
+                'transfers' => new ArrayCollection(),
             ]);
 
             /**

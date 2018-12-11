@@ -85,18 +85,6 @@ class GetTasksCest
 
     /**
      * @param ApiTester $I
-     */
-    public function getTasksByDateRangeTest(ApiTester $I)
-    {
-        $I->sendGET('/tasks?start=2018-11-01&end=2018-12-01');
-
-        $I->seeResponseCodeIsSuccessful();
-        $I->seeResponseCodeIs(HttpCode::OK);
-        $I->seeResponseIsJson();
-    }
-
-    /**
-     * @param ApiTester $I
      * @param Example   $example
      *
      * @dataProvider getTasksByDateDataProvider
@@ -109,6 +97,18 @@ class GetTasksCest
         $I->seeResponseCodeIs(HttpCode::OK);
         $I->seeResponseIsJson();
         $I->assertEquals($example['response'], json_decode($I->grabResponse(), true));
+    }
+
+    /**
+     * @param ApiTester $I
+     */
+    public function getTasksByDateRangeTest(ApiTester $I)
+    {
+        $I->sendGET('/tasks?start=2018-11-01&end=2018-12-01');
+
+        $I->seeResponseCodeIsSuccessful();
+        $I->seeResponseCodeIs(HttpCode::OK);
+        $I->seeResponseIsJson();
     }
 
     /**
@@ -128,6 +128,8 @@ class GetTasksCest
                             'start' => '2018-10-29T00:00:00+00:00',
                             'end' => null,
                             'forDate' => '2018-10-29T00:00:00+00:00',
+                            'transfers' => [],
+                            'isTransferred' => false,
                             'schedule' => [1, 1, 1, 1, 1, 0, 0],
                             'position' => null,
                         ],
@@ -145,6 +147,8 @@ class GetTasksCest
                             'start' => '2018-11-19T00:00:00+00:00',
                             'end' => null,
                             'forDate' => '2018-12-02T00:00:00+00:00',
+                            'transfers' => [],
+                            'isTransferred' => false,
                             'schedule' => [1],
                             'position' => null,
                         ],
@@ -154,7 +158,22 @@ class GetTasksCest
             '2018-11-03' => [
                 'date' => '2018-11-03',
                 'response' => [
-                    'items' => [],
+                    'items' => [
+                        [
+                            'id' => 1,
+                            'name' => 'Exercises',
+                            'state' => 'in_progress',
+                            'start' => '2018-11-01T00:00:00+00:00',
+                            'end' => '2018-12-01T00:00:00+00:00',
+                            'forDate' => '2018-11-03T00:00:00+00:00',
+                            'transfers' => [
+                                '2018-11-04T00:00:00+00:00',
+                            ],
+                            'isTransferred' => true,
+                            'schedule' => [1, 1, 1, 0],
+                            'position' => null,
+                        ],
+                    ],
                 ],
             ],
             '2018-11-04' => [
@@ -168,6 +187,10 @@ class GetTasksCest
                             'start' => '2018-11-01T00:00:00+00:00',
                             'end' => '2018-12-01T00:00:00+00:00',
                             'forDate' => '2018-11-03T00:00:00+00:00',
+                            'transfers' => [
+                                '2018-11-04T00:00:00+00:00',
+                            ],
+                            'isTransferred' => false,
                             'schedule' => [1, 1, 1, 0],
                             'position' => null,
                         ],
@@ -185,7 +208,24 @@ class GetTasksCest
                             'start' => '2018-10-29T00:00:00+00:00',
                             'end' => null,
                             'forDate' => '2018-11-06T00:00:00+00:00',
+                            'transfers' => [],
+                            'isTransferred' => false,
                             'schedule' => [1, 1, 1, 1, 1, 0, 0],
+                            'position' => null,
+                        ],
+                        [
+                            'id' => 1,
+                            'name' => 'Exercises',
+                            'state' => 'in_progress',
+                            'start' => '2018-11-01T00:00:00+00:00',
+                            'end' => '2018-12-01T00:00:00+00:00',
+                            'forDate' => '2018-11-06T00:00:00+00:00',
+                            'transfers' => [
+                                '2018-11-08T00:00:00+00:00',
+                                '2018-11-09T00:00:00+00:00',
+                            ],
+                            'isTransferred' => true,
+                            'schedule' => [1, 1, 1, 0],
                             'position' => null,
                         ],
                     ],
@@ -202,6 +242,11 @@ class GetTasksCest
                             'start' => '2018-11-07T00:00:00+00:00',
                             'end' => null,
                             'forDate' => '2018-11-07T00:00:00+00:00',
+                            'transfers' => [
+                                '2018-11-10T00:00:00+00:00',
+                                '2018-11-08T00:00:00+00:00',
+                            ],
+                            'isTransferred' => false,
                             'schedule' => null,
                             'position' => null,
                         ],
@@ -212,6 +257,8 @@ class GetTasksCest
                             'start' => '2018-10-29T00:00:00+00:00',
                             'end' => null,
                             'forDate' => '2018-11-08T00:00:00+00:00',
+                            'transfers' => [],
+                            'isTransferred' => false,
                             'schedule' => [1, 1, 1, 1, 1, 0, 0],
                             'position' => null,
                         ],
@@ -229,6 +276,8 @@ class GetTasksCest
                             'start' => '2018-10-29T00:00:00+00:00',
                             'end' => null,
                             'forDate' => '2018-11-09T00:00:00+00:00',
+                            'transfers' => [],
+                            'isTransferred' => false,
                             'schedule' => [1, 1, 1, 1, 1, 0, 0],
                             'position' => null,
                         ],
@@ -239,6 +288,8 @@ class GetTasksCest
                             'start' => '2018-11-01T00:00:00+00:00',
                             'end' => '2018-12-01T00:00:00+00:00',
                             'forDate' => '2018-11-09T00:00:00+00:00',
+                            'transfers' => [],
+                            'isTransferred' => false,
                             'schedule' => [1, 1, 1, 0],
                             'position' => null,
                         ],
@@ -249,6 +300,11 @@ class GetTasksCest
                             'start' => '2018-11-01T00:00:00+00:00',
                             'end' => '2018-12-01T00:00:00+00:00',
                             'forDate' => '2018-11-06T00:00:00+00:00',
+                            'transfers' => [
+                                '2018-11-08T00:00:00+00:00',
+                                '2018-11-09T00:00:00+00:00',
+                            ],
+                            'isTransferred' => false,
                             'schedule' => [1, 1, 1, 0],
                             'position' => null,
                         ],
@@ -260,12 +316,28 @@ class GetTasksCest
                 'response' => [
                     'items' => [
                         [
+                            'id' => 3,
+                            'name' => 'Reading',
+                            'state' => 'in_progress',
+                            'start' => '2018-11-19T00:00:00+00:00',
+                            'end' => null,
+                            'forDate' => '2018-11-22T00:00:00+00:00',
+                            'transfers' => [
+                                '2018-11-23T00:00:00+00:00',
+                            ],
+                            'isTransferred' => true,
+                            'schedule' => [1],
+                            'position' => null,
+                        ],
+                        [
                             'id' => 2,
                             'name' => 'Work',
                             'state' => 'in_progress',
                             'start' => '2018-10-29T00:00:00+00:00',
                             'end' => null,
                             'forDate' => '2018-11-22T00:00:00+00:00',
+                            'transfers' => [],
+                            'isTransferred' => false,
                             'schedule' => [1, 1, 1, 1, 1, 0, 0],
                             'position' => null,
                         ],
@@ -276,6 +348,8 @@ class GetTasksCest
                             'start' => '2018-11-01T00:00:00+00:00',
                             'end' => '2018-12-01T00:00:00+00:00',
                             'forDate' => '2018-11-22T00:00:00+00:00',
+                            'transfers' => [],
+                            'isTransferred' => false,
                             'schedule' => [1, 1, 1, 0],
                             'position' => null,
                         ],
@@ -293,6 +367,8 @@ class GetTasksCest
                             'start' => '2018-11-19T00:00:00+00:00',
                             'end' => null,
                             'forDate' => '2018-11-23T00:00:00+00:00',
+                            'transfers' => [],
+                            'isTransferred' => false,
                             'schedule' => [1],
                             'position' => null,
                         ],
@@ -303,6 +379,10 @@ class GetTasksCest
                             'start' => '2018-11-19T00:00:00+00:00',
                             'end' => null,
                             'forDate' => '2018-11-22T00:00:00+00:00',
+                            'transfers' => [
+                                '2018-11-23T00:00:00+00:00',
+                            ],
+                            'isTransferred' => false,
                             'schedule' => [1],
                             'position' => null,
                         ],
@@ -313,6 +393,8 @@ class GetTasksCest
                             'start' => '2018-10-29T00:00:00+00:00',
                             'end' => null,
                             'forDate' => '2018-11-23T00:00:00+00:00',
+                            'transfers' => [],
+                            'isTransferred' => false,
                             'schedule' => [1, 1, 1, 1, 1, 0, 0],
                             'position' => null,
                         ],
@@ -323,6 +405,8 @@ class GetTasksCest
                             'start' => '2018-11-01T00:00:00+00:00',
                             'end' => '2018-12-01T00:00:00+00:00',
                             'forDate' => '2018-11-23T00:00:00+00:00',
+                            'transfers' => [],
+                            'isTransferred' => false,
                             'schedule' => [1, 1, 1, 0],
                             'position' => null,
                         ],
@@ -340,6 +424,8 @@ class GetTasksCest
                             'start' => '2018-11-19T00:00:00+00:00',
                             'end' => null,
                             'forDate' => '2018-12-07T00:00:00+00:00',
+                            'transfers' => [],
+                            'isTransferred' => false,
                             'schedule' => [1],
                             'position' => null,
                         ],
@@ -350,6 +436,8 @@ class GetTasksCest
                             'start' => '2018-10-29T00:00:00+00:00',
                             'end' => null,
                             'forDate' => '2018-12-07T00:00:00+00:00',
+                            'transfers' => [],
+                            'isTransferred' => false,
                             'schedule' => [1, 1, 1, 1, 1, 0, 0],
                             'position' => null,
                         ],
@@ -360,6 +448,10 @@ class GetTasksCest
                             'start' => '2018-11-01T00:00:00+00:00',
                             'end' => '2018-12-01T00:00:00+00:00',
                             'forDate' => '2018-11-29T00:00:00+00:00',
+                            'transfers' => [
+                                '2018-12-07T00:00:00+00:00',
+                            ],
+                            'isTransferred' => false,
                             'schedule' => [1, 1, 1, 0],
                             'position' => null,
                         ],

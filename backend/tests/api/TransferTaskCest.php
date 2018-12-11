@@ -95,6 +95,8 @@ class TransferTaskCest
             'start' => '2018-12-01T00:00:00+00:00',
             'end' => null,
             'forDate' => '2018-12-01T00:00:00+00:00',
+            'transfers' => [],
+            'isTransferred' => false,
             'schedule' => null,
             'position' => null,
         ], json_decode($I->grabResponse(), true));

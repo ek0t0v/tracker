@@ -52,6 +52,20 @@ class TaskDto
     public $forDate;
 
     /**
+     * @var array
+     *
+     * @Groups({"api"})
+     */
+    public $transfers = [];
+
+    /**
+     * @var bool
+     *
+     * @Groups({"api"})
+     */
+    public $isTransferred = false;
+
+    /**
      * @var array|null
      *
      * @Groups({"api"})
