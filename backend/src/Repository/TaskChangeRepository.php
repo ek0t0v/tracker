@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\TaskChange;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
@@ -22,5 +23,25 @@ class TaskChangeRepository extends ServiceEntityRepository
     public function __construct(RegistryInterface $registry)
     {
         parent::__construct($registry, TaskChange::class);
+    }
+
+    /**
+     * @param \DateTime $forDate
+     * @param User      $user
+     *
+     * @return mixed
+     */
+    public function findByForDate(\DateTime $forDate, User $user)
+    {
+        return $this->createQueryBuilder('change')
+            ->addSelect('task')
+            ->andWhere('task.user = :user')
+            ->andWhere('change.forDate = :forDate')
+            ->leftJoin('change.task', 'task')
+            ->setParameter('user', $user)
+            ->setParameter('forDate', $forDate)
+            ->getQuery()
+            ->getResult()
+        ;
     }
 }

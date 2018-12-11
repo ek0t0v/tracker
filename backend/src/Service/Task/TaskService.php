@@ -5,6 +5,7 @@ namespace App\Service\Task;
 use App\Entity\Task;
 use App\Entity\TaskChange;
 use App\Entity\TaskTransfer;
+use App\Repository\TaskChangeRepository;
 use App\Repository\TaskRepository;
 use App\Response\Task\TaskDto;
 use Doctrine\ORM\EntityManagerInterface;
@@ -186,7 +187,7 @@ class TaskService
     }
 
     /**
-     * @todo Продумать, как будет работать изменение позиции.
+     * @todo Оптимизировать UPDATE-запросы (сейчас выполняются по одному).
      *
      * @param Task      $task
      * @param \DateTime $forDate
@@ -197,26 +198,51 @@ class TaskService
     public function updateTaskPosition(Task $task, \DateTime $forDate, int $position): TaskDto
     {
         /**
-         * @var TaskChange|null $change
+         * @var TaskChangeRepository $taskChangeRepository
          */
-        $change = $this->findChangeByTaskAndForDate($task, $forDate);
+        $taskChangeRepository = $this->em->getRepository(TaskChange::class);
+        $changes = $taskChangeRepository->findByForDate($forDate, $this->tokenStorage->getToken()->getUser());
 
-        if (!$change) {
-            $change = new TaskChange();
-            $change->setTask($task);
-            $change->setForDate($forDate);
-            $change->setPosition($position);
-        } else {
-            $change->setPosition($position);
+        $currentChangeExists = false;
+
+        /**
+         * @var TaskChange $change
+         */
+        foreach ($changes as $change) {
+            if ($change->getTask() === $task) {
+                $currentChangeExists = true;
+
+                $change->setPosition($position);
+
+                $this->em->persist($change);
+
+                continue;
+            }
+
+            if ($change->getPosition() >= $position) {
+                $change->setPosition($change->getPosition() + 1);
+
+                $this->em->persist($change);
+            }
         }
 
-        $this->em->persist($change);
+        if (!$currentChangeExists) {
+            $currentChange = new TaskChange();
+            $currentChange->setTask($task);
+            $currentChange->setForDate($forDate);
+            $currentChange->setPosition($position);
+
+            $this->em->persist($currentChange);
+        }
+
         $this->em->flush();
 
         return $this->taskDtoService->create($task, $forDate);
     }
 
     /**
+     * @todo Добавить сортировку по position.
+     *
      * @param array     $tasks
      * @param \DateTime $date
      *
