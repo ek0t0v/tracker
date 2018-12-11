@@ -22,13 +22,12 @@ final class TaskListener
     }
 
     /**
-     * @todo Установить/обновить updatedAt если произошли изменения.
-     *
      * @param Task $task
      *
      * @ORM\PreUpdate
      */
     public function preUpdate(Task $task)
     {
+        $task->setUpdatedAt(new \DateTime());
     }
 }

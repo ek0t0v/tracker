@@ -17,8 +17,6 @@ use Symfony\Component\Routing\Annotation\Route;
 class TimingController extends ApiController
 {
     /**
-     * todo: Добавить связь Timing с User.
-     *
      * @return JsonResponse
      *
      * @Route(name="api_timing_index", methods={"GET"})
