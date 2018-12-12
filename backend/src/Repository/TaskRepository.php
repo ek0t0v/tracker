@@ -49,4 +49,61 @@ class TaskRepository extends ServiceEntityRepository
             ->getResult()
         ;
     }
+
+    /**
+     * @param User $user
+     *
+     * @return mixed
+     */
+    public function findOverdueTasks(User $user)
+    {
+        return $this->createQueryBuilder('task')
+            ->addSelect('change')
+            ->addSelect('transfer')
+            ->andWhere('task.user = :user')
+            ->andWhere('task.startDate < CURRENT_TIMESTAMP()')
+            ->leftJoin('task.changes', 'change', Join::WITH, 'change.forDate < CURRENT_TIMESTAMP()')
+            ->leftJoin('task.transfers', 'transfer', Join::WITH, 'transfer.task = task')
+            ->orderBy('task.id', 'desc')
+            ->addOrderBy('transfer.id', 'asc')
+            ->setParameter('user', $user)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    /**
+     * @todo del
+     *
+     * @param User $user
+     *
+     * @return \DateTime|null
+     */
+    public function findOldestStartDate(User $user)
+    {
+        $dates = $this->createQueryBuilder('task')
+            ->select('MIN(task.startDate) AS startDate, MIN(transfer.transferTo) AS transferTo')
+            ->andWhere('task.user = :user')
+            ->leftJoin('task.transfers', 'transfer')
+            ->groupBy('task.id')
+            ->setParameter('user', $user)
+            ->getQuery()
+            ->getResult()
+        ;
+
+        $oldestDate = null;
+
+        array_map(function ($item) use (&$oldestDate) {
+            $startDate = new \DateTime($item['startDate']);
+            $transferTo = new \DateTime($item['transferTo']);
+
+            $date = $startDate <= $transferTo ? $startDate : $transferTo;
+
+            if (is_null($oldestDate) || $oldestDate > $date) {
+                $oldestDate = $date;
+            }
+        }, $dates);
+
+        return $oldestDate;
+    }
 }
