@@ -19,7 +19,7 @@ class UserUniqueEmail extends Constraint
     /**
      * @return string
      */
-    public function validatedBy()
+    public function validatedBy(): string
     {
         return 'user_unique_email';
     }

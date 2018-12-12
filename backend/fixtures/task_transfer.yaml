@@ -1,0 +1,41 @@
+App\Entity\TaskTransfer:
+    # перенос с 3 ноября на 4
+    # 4 ноября по расписанию нет этой задачи, но с переносом будет
+    transfer_exercises_task_1:
+        task: '@task_exercises'
+        transferTo: <dateTimeBetween(2018-11-04, 2018-11-04)>
+        forDate: <dateTimeBetween(2018-11-03, 2018-11-03)>
+    # перенос с 6 ноября на 8
+    # 8 ноября по расписанию нет этой задачи, но с переносом будет
+    transfer_exercises_task_2:
+        task: '@task_exercises'
+        transferTo: <dateTimeBetween(2018-11-08, 2018-11-08)>
+        forDate: <dateTimeBetween(2018-11-06, 2018-11-06)>
+    # перенос уже перенесенной задачи с 8 декабря на 9
+    # 8 ноября задачи не должно быть, а 9 ноября окажется 2 экземпляра одной задачи
+    transfer_exercises_task_3:
+        task: '@task_exercises'
+        transferTo: <dateTimeBetween(2018-11-09, 2018-11-09)>
+        forDate: <dateTimeBetween(2018-11-06, 2018-11-06)>
+    # перенос задачи за пределы endDate (когда задача уже закончилась)
+    # все равно должны получать эту задачу
+    transfer_exercises_task_4:
+        task: '@task_exercises'
+        transferTo: <dateTimeBetween(2018-12-07, 2018-12-07)>
+        forDate: <dateTimeBetween(2018-11-29, 2018-11-29)>
+    # перенос ежедневной задачи с 22 ноября на 23
+    # 23 ноября окажется 2 экземпляра одной задачи
+    transfer_reading_task_1:
+        task: '@task_reading'
+        transferTo: <dateTimeBetween(2018-11-23, 2018-11-23)>
+        forDate: <dateTimeBetween(2018-11-22, 2018-11-22)>
+    # перенос одноразовой задачи с 7 ноября на 10
+    transfer_singe_1_task_1:
+        task: '@task_single_1'
+        transferTo: <dateTimeBetween(2018-11-10, 2018-11-10)>
+        forDate: <dateTimeBetween(2018-11-07, 2018-11-07)>
+    # перенос уже перенесенной задачи с 10 ноября на 8 (т.е. "перенос в прошлое", назад)
+    transfer_singe_1_task_2:
+        task: '@task_single_1'
+        transferTo: <dateTimeBetween(2018-11-08, 2018-11-08)>
+        forDate: <dateTimeBetween(2018-11-07, 2018-11-07)>

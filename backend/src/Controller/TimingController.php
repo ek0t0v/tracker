@@ -3,7 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Task;
-use App\Entity\Timing;
+use App\Entity\TaskTiming;
 use App\Request\Timing\AddTimingRequest;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -12,24 +12,24 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * Class TimingController.
  *
- * @Route("/api/timing")
+ * @Route("/api/timings")
  */
 class TimingController extends ApiController
 {
     /**
-     * todo: Добавить связь Timing с User.
-     *
      * @return JsonResponse
      *
      * @Route(name="api_timing_index", methods={"GET"})
      */
     public function index()
     {
-        $items = $this->getDoctrine()->getRepository(Timing::class)->findBy([], [
+        $items = $this->getDoctrine()->getRepository(TaskTiming::class)->findBy([], [
             'startedAt' => 'desc',
         ]);
 
-        return $this->apiResponse($items, ['frontend']);
+        return $this->apiResponse([
+            'items' => $items,
+        ]);
     }
 
     /**
@@ -43,7 +43,7 @@ class TimingController extends ApiController
     {
         $task = $this->getDoctrine()->getRepository(Task::class)->find($request->taskId);
 
-        $timing = new Timing();
+        $timing = new TaskTiming();
         $timing->setTask($task);
         $timing->setStartedAt(new \DateTime('@'.$request->startedAt));
         $timing->setEndedAt(new \DateTime('@'.$request->endedAt));
@@ -54,6 +54,6 @@ class TimingController extends ApiController
 
         $em->flush();
 
-        return $this->apiResponse($timing, ['frontend'], Response::HTTP_CREATED);
+        return $this->apiResponse($timing, ['api'], Response::HTTP_CREATED);
     }
 }

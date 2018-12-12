@@ -1,0 +1,23 @@
+namespace: App\Tests
+paths:
+    tests: tests
+    output: tests/_output
+    data: tests/_data
+    support: tests/_support
+    envs: tests/_envs
+actor_suffix: Tester
+extensions:
+    enabled:
+        - Codeception\Extension\RunFailed
+params:
+    - .env.test
+modules:
+    config:
+        Db:
+            dsn: 'pgsql:host=postgres_test;dbname=symfony'
+            user: symfony
+            password: symfony
+            dump: tests/_data/dump.sql
+            populate: true
+            cleanup: true
+            reconnect: false

@@ -3,7 +3,9 @@
 namespace App\Repository;
 
 use App\Entity\Task;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Query\Expr\Join;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
@@ -14,37 +16,94 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
  */
 class TaskRepository extends ServiceEntityRepository
 {
+    /**
+     * TaskRepository constructor.
+     *
+     * @param RegistryInterface $registry
+     */
     public function __construct(RegistryInterface $registry)
     {
         parent::__construct($registry, Task::class);
     }
 
-//    /**
-//     * @return Task[] Returns an array of Task objects
-//     */
-    /*
-    public function findByExampleField($value)
+    /**
+     * @param \DateTime $start
+     * @param User      $user
+     *
+     * @return mixed
+     */
+    public function findByStartDate(\DateTime $start, User $user)
     {
-        return $this->createQueryBuilder('t')
-            ->andWhere('t.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('t.id', 'ASC')
-            ->setMaxResults(10)
+        return $this->createQueryBuilder('task')
+            ->addSelect('change')
+            ->addSelect('transfer')
+            ->andWhere('task.user = :user')
+            ->andWhere('task.startDate <= :start')
+            ->leftJoin('task.changes', 'change')
+            ->leftJoin('task.transfers', 'transfer', Join::WITH, 'transfer.task = task')
+            ->orderBy('task.id', 'desc')
+            ->addOrderBy('transfer.id', 'asc')
+            ->setParameter('user', $user)
+            ->setParameter('start', $start)
             ->getQuery()
             ->getResult()
         ;
     }
-    */
 
-    /*
-    public function findOneBySomeField($value): ?Task
+    /**
+     * @param User $user
+     *
+     * @return mixed
+     */
+    public function findOverdueTasks(User $user)
     {
-        return $this->createQueryBuilder('t')
-            ->andWhere('t.exampleField = :val')
-            ->setParameter('val', $value)
+        return $this->createQueryBuilder('task')
+            ->addSelect('change')
+            ->addSelect('transfer')
+            ->andWhere('task.user = :user')
+            ->andWhere('task.startDate < CURRENT_TIMESTAMP()')
+            ->leftJoin('task.changes', 'change', Join::WITH, 'change.forDate < CURRENT_TIMESTAMP()')
+            ->leftJoin('task.transfers', 'transfer', Join::WITH, 'transfer.task = task')
+            ->orderBy('task.id', 'desc')
+            ->addOrderBy('transfer.id', 'asc')
+            ->setParameter('user', $user)
             ->getQuery()
-            ->getOneOrNullResult()
+            ->getResult()
         ;
     }
-    */
+
+    /**
+     * @todo del
+     *
+     * @param User $user
+     *
+     * @return \DateTime|null
+     */
+    public function findOldestStartDate(User $user)
+    {
+        $dates = $this->createQueryBuilder('task')
+            ->select('MIN(task.startDate) AS startDate, MIN(transfer.transferTo) AS transferTo')
+            ->andWhere('task.user = :user')
+            ->leftJoin('task.transfers', 'transfer')
+            ->groupBy('task.id')
+            ->setParameter('user', $user)
+            ->getQuery()
+            ->getResult()
+        ;
+
+        $oldestDate = null;
+
+        array_map(function ($item) use (&$oldestDate) {
+            $startDate = new \DateTime($item['startDate']);
+            $transferTo = new \DateTime($item['transferTo']);
+
+            $date = $startDate <= $transferTo ? $startDate : $transferTo;
+
+            if (is_null($oldestDate) || $oldestDate > $date) {
+                $oldestDate = $date;
+            }
+        }, $dates);
+
+        return $oldestDate;
+    }
 }

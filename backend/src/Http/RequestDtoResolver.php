@@ -52,11 +52,17 @@ final class RequestDtoResolver implements ArgumentValueResolverInterface
      */
     public function resolve(Request $request, ArgumentMetadata $argument)
     {
-        if (!$this->isJson($request->getContent())) {
+        if (in_array($request->getMethod(), ['POST', 'PUT']) && !$this->isJson($request->getContent())) {
             throw new ApiJsonException();
         }
 
-        $dto = $this->serializer->deserialize($request->getContent(), $argument->getType(), 'json');
+        $bodyAsArray = json_decode($request->getContent(), true);
+
+        $data = !is_null($bodyAsArray)
+            ? json_encode(array_merge($bodyAsArray, $request->query->all()))
+            : json_encode($request->query->all());
+
+        $dto = $this->serializer->deserialize($data, $argument->getType(), 'json');
         $violations = $this->validator->validate($dto);
 
         if (count($violations)) {
@@ -67,11 +73,11 @@ final class RequestDtoResolver implements ArgumentValueResolverInterface
     }
 
     /**
-     * @param $string
+     * @param string $string
      *
      * @return bool
      */
-    private function isJson($string): bool
+    private function isJson(string $string): bool
     {
         json_decode($string);
 

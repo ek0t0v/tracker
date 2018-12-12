@@ -11,7 +11,7 @@ security:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
         api_user_register:
-            pattern: ^/api/user/register
+            pattern: ^/api/users
             anonymous: true
         api_token_create:
             pattern: ^/api/token/create
@@ -35,6 +35,6 @@ security:
         main:
             anonymous: true
     access_control:
-        - { path: ^/api/user, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/api/users, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/api/token, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/api, roles: IS_AUTHENTICATED_FULLY }

@@ -4,6 +4,9 @@ App\Entity\User:
         plainPassword: 'passw0rd'
         enabled: true
 
-    user (extends user_template):
-        email: 'user@mail.ru'
-        username: 'user'
+    test_user_1 (extends user_template):
+        email: 'test_user_1@mail.ru'
+        username: 'test_user_1'
+    test_user_2 (extends user_template):
+        email: 'test_user_2@mail.ru'
+        username: 'test_user_2'

@@ -9,3 +9,15 @@ services:
         class: App\Validator\UserUniqueEmailValidator
         tags:
             - { name: validator.constraint_validator, alias: user_unique_email }
+    task_schedule:
+        class: App\Validator\TaskScheduleValidator
+        tags:
+            - { name: validator.constraint_validator, alias: task_schedule }
+    not_blank_if_not_null:
+        class: App\Validator\NotBlankIfNotNullValidator
+        tags:
+            - { name: validator.constraint_validator, alias: not_blank_if_not_null }
+    not_past:
+        class: App\Validator\NotPastValidator
+        tags:
+            - { name: validator.constraint_validator, alias: not_past }

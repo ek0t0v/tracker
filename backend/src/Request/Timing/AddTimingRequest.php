@@ -13,8 +13,8 @@ class AddTimingRequest implements RequestDtoInterface
     /**
      * @var int
      *
-     * @Assert\NotBlank()
-     * @Assert\NotNull()
+     * @Assert\NotBlank
+     * @Assert\NotNull
      * @Assert\GreaterThan(0)
      */
     public $taskId;
@@ -22,8 +22,8 @@ class AddTimingRequest implements RequestDtoInterface
     /**
      * @var int
      *
-     * @Assert\NotBlank()
-     * @Assert\NotNull()
+     * @Assert\NotBlank
+     * @Assert\NotNull
      * @Assert\GreaterThan(0)
      */
     public $startedAt;
@@ -31,8 +31,8 @@ class AddTimingRequest implements RequestDtoInterface
     /**
      * @var int
      *
-     * @Assert\NotBlank()
-     * @Assert\NotNull()
+     * @Assert\NotBlank
+     * @Assert\NotNull
      * @Assert\GreaterThan(0)
      */
     public $endedAt;

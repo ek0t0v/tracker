@@ -34,7 +34,7 @@ abstract class ApiController extends AbstractController
      *
      * @return JsonResponse
      */
-    public function apiResponse($data = [], array $groups = [], int $statusCode = Response::HTTP_OK): JsonResponse
+    public function apiResponse($data = [], array $groups = ['api'], int $statusCode = Response::HTTP_OK): JsonResponse
     {
         $json = $this->serializer->serialize($data, 'json', ['groups' => $groups]);
 

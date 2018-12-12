@@ -3,11 +3,12 @@
 namespace App\Controller;
 
 use App\Entity\Task;
-use App\Request\Task\AddTaskRequest;
-use App\Request\Task\MoveTaskRequest;
-use App\Request\Task\RemoveTaskRequest;
-use App\Request\Task\RenameTaskRequest;
-use App\Service\Task\TaskManagerInterface;
+use App\Request\Task\UpdateTaskPositionRequest;
+use App\Request\Task\UpdateTaskStateRequest;
+use App\Request\Task\CreateTaskRequest;
+use App\Request\Task\GetTasksRequest;
+use App\Request\Task\TransferTaskRequest;
+use App\Service\Task\TaskService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,87 +17,115 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * Class TaskController.
  *
- * @Route("/api/task")
+ * @Route("/api/tasks")
  */
 class TaskController extends ApiController
 {
     /**
+     * @param GetTasksRequest $request
+     * @param TaskService     $taskService
+     *
+     * @throws \Exception
+     *
      * @return JsonResponse
      *
-     * @Route(name="api_task_index", methods={"GET"})
+     * @Route(name="api_tasks_get_tasks", methods={"GET"})
      */
-    public function index(): JsonResponse
+    public function getTasks(GetTasksRequest $request, TaskService $taskService): JsonResponse
     {
-        $tasks = $this->getDoctrine()->getRepository(Task::class)->findBy([
-            'user' => $this->getUser(),
-        ], [
-            'position' => 'asc',
+        $tasks = is_null($request->end)
+            ? $taskService->getTasksByDate(new \DateTime($request->start))
+            : $taskService->getTasksByDateRange(new \DateTime($request->start), new \DateTime($request->end));
+
+        return $this->apiResponse([
+            'items' => $tasks,
         ]);
-
-        return $this->apiResponse($tasks, ['frontend']);
     }
 
     /**
-     * @param AddTaskRequest       $request
-     * @param TaskManagerInterface $taskManager
+     * @param TaskService $taskService
      *
      * @return JsonResponse
      *
-     * @Route(name="api_task_add_task", methods={"POST"})
+     * @Route("/overdue", name="api_tasks_get_overdue_tasks", methods={"GET"})
      */
-    public function add(AddTaskRequest $request, TaskManagerInterface $taskManager): JsonResponse
+    public function getOverdueTasks(TaskService $taskService)
     {
-        $task = $taskManager->add($request->name, $this->getUser());
-
-        return $this->apiResponse($task, ['frontend'], Response::HTTP_CREATED);
+        return $this->apiResponse($taskService->getOverdueTasks(), ['api']);
     }
 
     /**
-     * @param Task                 $task
-     * @param RenameTaskRequest    $request
-     * @param TaskManagerInterface $taskManager
+     * @param CreateTaskRequest $request
+     * @param TaskService       $taskService
      *
      * @return JsonResponse
      *
-     * @Route("/{id}/name", name="api_task_rename_task", methods={"POST"})
-     * @ParamConverter("task", class="App\Entity\Task", converter="task_by_user")
+     * @Route(name="api_tasks_create_task", methods={"POST"})
      */
-    public function rename(Task $task, RenameTaskRequest $request, TaskManagerInterface $taskManager): JsonResponse
+    public function createTask(CreateTaskRequest $request, TaskService $taskService): JsonResponse
     {
-        $taskManager->rename($task, $request->name);
+        $start = new \DateTime($request->start);
+        $end = !is_null($request->end) ? new \DateTime($request->end) : null;
 
-        return $this->apiResponse($task, ['frontend']);
+        $task = $taskService->createTask($request->name, $start, $end, $request->schedule);
+
+        return $this->apiResponse($task, ['api'], Response::HTTP_CREATED);
     }
 
     /**
-     * @param RemoveTaskRequest    $request
-     * @param TaskManagerInterface $taskManager
+     * @param Task                $task
+     * @param \DateTime           $forDate
+     * @param TransferTaskRequest $request
+     * @param TaskService         $taskService
      *
      * @return JsonResponse
      *
-     * @Route(name="api_task_remove_tasks_by_ids", methods={"DELETE"})
+     * @Route("/{id}/{forDate}/transfer", name="api_tasks_transfer_task", methods={"PUT"})
+     * @ParamConverter("task", converter="scheduled_task_by_user")
+     * @ParamConverter("forDate", options={"format": "Y-m-d"})
      */
-    public function remove(RemoveTaskRequest $request, TaskManagerInterface $taskManager): JsonResponse
+    public function transferTask(Task $task, \DateTime $forDate, TransferTaskRequest $request, TaskService $taskService): JsonResponse
     {
-        $taskManager->remove($request->ids, $this->getUser());
+        $task = $taskService->transferTask($task, $forDate, new \DateTime($request->to));
 
-        return $this->apiResponse();
+        return $this->apiResponse($task, ['api']);
     }
 
     /**
-     * @param Task                 $task
-     * @param MoveTaskRequest      $request
-     * @param TaskManagerInterface $taskManager
+     * @param Task                   $task
+     * @param \DateTime              $forDate
+     * @param UpdateTaskStateRequest $request
+     * @param TaskService            $taskService
      *
      * @return JsonResponse
      *
-     * @Route("/{id}/move", name="api_task_move_task", methods={"POST"})
-     * @ParamConverter("task", class="App\Entity\Task", converter="task_by_user")
+     * @Route("/{id}/{forDate}/state", name="api_tasks_update_task_state", methods={"PUT"})
+     * @ParamConverter("task", converter="scheduled_task_by_user")
+     * @ParamConverter("forDate", options={"format": "Y-m-d"})
      */
-    public function move(Task $task, MoveTaskRequest $request, TaskManagerInterface $taskManager): JsonResponse
+    public function updateTaskState(Task $task, \DateTime $forDate, UpdateTaskStateRequest $request, TaskService $taskService): JsonResponse
     {
-        $taskManager->move($task, $request->position);
+        $task = $taskService->updateTaskState($task, $forDate, $request->state);
 
-        return $this->apiResponse();
+        return $this->apiResponse($task, ['api']);
+    }
+
+    /**
+     * @param Task                      $task
+     * @param \DateTime                 $forDate
+     * @param UpdateTaskPositionRequest $request
+     * @param TaskService               $taskService
+     *
+     * @return JsonResponse
+     *
+     * @Route("/{id}/{forDate}/position", name="api_tasks_update_task_position", methods={"PUT"})
+     * @ParamConverter("task", converter="scheduled_task_by_user")
+     * @ParamConverter("forDate", options={"format": "Y-m-d"})
+     */
+    public function updateTaskPosition(Task $task, \DateTime $forDate, UpdateTaskPositionRequest $request, TaskService $taskService): JsonResponse
+    {
+        $task = $taskService->updateTaskPosition($task, $forDate, $request->position);
+
+        return $this->apiResponse($task, ['api']);
     }
 }

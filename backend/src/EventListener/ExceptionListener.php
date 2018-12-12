@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * Class ExceptionListener.
@@ -22,23 +23,28 @@ class ExceptionListener
         $exception = $event->getException();
         $response = null;
 
-        if ($exception instanceof ApiValidationException) {
-            $result = [];
+        switch (true) {
+            case $exception instanceof ApiValidationException:
+                $result = [];
 
-            foreach ($exception->getViolations() as $violation) {
-                $result[$violation->getPropertyPath()][] = $violation->getMessage();
-            }
+                foreach ($exception->getViolations() as $violation) {
+                    $result[$violation->getPropertyPath()][] = $violation->getMessage();
+                }
 
-            $response = $this->buildResponse(
-                0,
-                'Validation error.',
-                Response::HTTP_UNPROCESSABLE_ENTITY,
-                $result
-            );
-        }
+                $response = $this->buildResponse(
+                    'Validation error.',
+                    $result
+                );
 
-        if ($exception instanceof ApiJsonException) {
-            $response = $this->buildResponse(0, 'Invalid json.');
+                break;
+            case $exception instanceof ApiJsonException:
+                $response = $this->buildResponse('Invalid json.');
+
+                break;
+            case $exception instanceof NotFoundHttpException:
+                $response = $this->buildResponse('Not found.');
+
+                break;
         }
 
         if ($response) {
@@ -62,24 +68,21 @@ class ExceptionListener
     }
 
     /**
-     * @param int    $code
-     * @param string $message
-     * @param int    $status
-     * @param array  $violations
+     * @param string     $message
+     * @param array|null $violations
      *
      * @return JsonResponse
      */
-    private function buildResponse(
-        int $code = 0,
-        string $message = '',
-        int $status = Response::HTTP_BAD_REQUEST,
-        array $violations = []
-    ): JsonResponse {
-        return new JsonResponse([
-            'code' => $code,
+    private function buildResponse(string $message = '', $violations = null): JsonResponse
+    {
+        $responseArray = [
             'message' => $message,
-            'violations' => $violations,
-            'status' => $status,
-        ]);
+        ];
+
+        if (!is_null($violations)) {
+            $responseArray['violations'] = $violations;
+        }
+
+        return new JsonResponse($responseArray);
     }
 }

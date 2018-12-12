@@ -3,7 +3,6 @@
 namespace App\Doctrine\EventListener;
 
 use App\Entity\Task;
-use Doctrine\ORM\Event\PreUpdateEventArgs;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -12,12 +11,23 @@ use Doctrine\ORM\Mapping as ORM;
 final class TaskListener
 {
     /**
-     * @param Task               $task
-     * @param PreUpdateEventArgs $event
+     * @param Task $task
+     *
+     * @ORM\PrePersist
+     */
+    public function prePersist(Task $task)
+    {
+        $task->setUpdatedAt(new \DateTime());
+        $task->setCreatedAt(new \DateTime());
+    }
+
+    /**
+     * @param Task $task
      *
      * @ORM\PreUpdate
      */
-    public function preUpdateHandler(Task $task, PreUpdateEventArgs $event)
+    public function preUpdate(Task $task)
     {
+        $task->setUpdatedAt(new \DateTime());
     }
 }

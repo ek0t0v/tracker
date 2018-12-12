@@ -1,9 +1,30 @@
 {
+    "behat/gherkin": {
+        "version": "v4.5.1"
+    },
     "behat/transliterator": {
         "version": "v1.2.0"
     },
+    "codeception/codeception": {
+        "version": "2.3",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "master",
+            "version": "2.3",
+            "ref": "d2a29c0abee586aff913fd45fae1f59b669f4cbe"
+        }
+    },
+    "codeception/phpunit-wrapper": {
+        "version": "7.3.2"
+    },
+    "codeception/stub": {
+        "version": "2.0.4"
+    },
     "composer/ca-bundle": {
         "version": "1.1.3"
+    },
+    "composer/xdebug-handler": {
+        "version": "1.3.1"
     },
     "doctrine/annotations": {
         "version": "1.0",
@@ -74,6 +95,18 @@
     "doctrine/reflection": {
         "version": "v1.0.0"
     },
+    "facebook/webdriver": {
+        "version": "1.6.0"
+    },
+    "fresh/doctrine-enum-bundle": {
+        "version": "6.0",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "master",
+            "version": "6.0",
+            "ref": "fab86661c13bc12e4f14f706c86af09912d55bfb"
+        }
+    },
     "fzaninotto/faker": {
         "version": "v1.8.0"
     },
@@ -82,6 +115,15 @@
     },
     "gesdinet/jwt-refresh-token-bundle": {
         "version": "v0.5.3"
+    },
+    "guzzlehttp/guzzle": {
+        "version": "6.3.3"
+    },
+    "guzzlehttp/promises": {
+        "version": "v1.3.1"
+    },
+    "guzzlehttp/psr7": {
+        "version": "1.4.2"
     },
     "hautelook/alice-bundle": {
         "version": "2.1",
@@ -94,6 +136,9 @@
     },
     "jdorn/sql-formatter": {
         "version": "v1.2.17"
+    },
+    "jean85/pretty-package-versions": {
+        "version": "1.2"
     },
     "lcobucci/jwt": {
         "version": "3.2.4"
@@ -134,6 +179,27 @@
             "ref": "f0436fc35fca88eada758311f8de43bfb61f1980"
         }
     },
+    "nette/bootstrap": {
+        "version": "v2.4.6"
+    },
+    "nette/di": {
+        "version": "v2.4.14"
+    },
+    "nette/finder": {
+        "version": "v2.4.2"
+    },
+    "nette/neon": {
+        "version": "v2.4.3"
+    },
+    "nette/php-generator": {
+        "version": "v3.0.5"
+    },
+    "nette/robot-loader": {
+        "version": "v3.1.0"
+    },
+    "nette/utils": {
+        "version": "v2.5.3"
+    },
     "nikic/php-parser": {
         "version": "v4.1.0"
     },
@@ -143,16 +209,70 @@
     "ocramius/proxy-manager": {
         "version": "2.1.1"
     },
+    "phar-io/manifest": {
+        "version": "1.0.3"
+    },
+    "phar-io/version": {
+        "version": "2.0.1"
+    },
+    "phpdocumentor/reflection-common": {
+        "version": "1.0.1"
+    },
+    "phpdocumentor/reflection-docblock": {
+        "version": "4.3.0"
+    },
+    "phpdocumentor/type-resolver": {
+        "version": "0.4.0"
+    },
+    "phpspec/prophecy": {
+        "version": "1.8.0"
+    },
+    "phpstan/phpdoc-parser": {
+        "version": "0.3"
+    },
+    "phpstan/phpstan": {
+        "version": "0.10.6"
+    },
+    "phpunit/php-code-coverage": {
+        "version": "6.1.4"
+    },
+    "phpunit/php-file-iterator": {
+        "version": "2.0.2"
+    },
+    "phpunit/php-text-template": {
+        "version": "1.2.1"
+    },
+    "phpunit/php-timer": {
+        "version": "2.0.0"
+    },
+    "phpunit/php-token-stream": {
+        "version": "3.0.1"
+    },
+    "phpunit/phpunit": {
+        "version": "4.7",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "4.7",
+            "ref": "6bc11edaafb96a970c5b55755f7827bbbd05352c"
+        }
+    },
     "psr/cache": {
         "version": "1.0.1"
     },
     "psr/container": {
         "version": "1.0.0"
     },
+    "psr/http-message": {
+        "version": "1.0.1"
+    },
     "psr/log": {
         "version": "1.0.2"
     },
     "psr/simple-cache": {
+        "version": "1.0.1"
+    },
+    "sebastian/code-unit-reverse-lookup": {
         "version": "1.0.1"
     },
     "sebastian/comparator": {
@@ -161,11 +281,29 @@
     "sebastian/diff": {
         "version": "3.0.1"
     },
+    "sebastian/environment": {
+        "version": "3.1.0"
+    },
     "sebastian/exporter": {
         "version": "3.1.0"
     },
+    "sebastian/global-state": {
+        "version": "2.0.0"
+    },
+    "sebastian/object-enumerator": {
+        "version": "3.0.3"
+    },
+    "sebastian/object-reflector": {
+        "version": "1.1.1"
+    },
     "sebastian/recursion-context": {
         "version": "3.0.0"
+    },
+    "sebastian/resource-operations": {
+        "version": "1.0.0"
+    },
+    "sebastian/version": {
+        "version": "2.0.1"
     },
     "sensio/framework-extra-bundle": {
         "version": "5.2",
@@ -185,6 +323,9 @@
             "ref": "421933bf8f0e75546ac8e00cb3eb12904fa2ac1a"
         }
     },
+    "symfony/browser-kit": {
+        "version": "v4.1.7"
+    },
     "symfony/cache": {
         "version": "v4.1.6"
     },
@@ -200,6 +341,9 @@
             "ref": "e3868d2f4a5104f19f844fe551099a00c6562527"
         }
     },
+    "symfony/css-selector": {
+        "version": "v4.1.7"
+    },
     "symfony/debug": {
         "version": "v4.1.6"
     },
@@ -209,11 +353,17 @@
     "symfony/doctrine-bridge": {
         "version": "v4.1.6"
     },
+    "symfony/dom-crawler": {
+        "version": "v4.1.7"
+    },
     "symfony/dotenv": {
         "version": "v4.1.6"
     },
     "symfony/event-dispatcher": {
         "version": "v4.1.6"
+    },
+    "symfony/expression-language": {
+        "version": "v4.1.9"
     },
     "symfony/filesystem": {
         "version": "v4.1.6"
@@ -277,6 +427,9 @@
     },
     "symfony/polyfill-php72": {
         "version": "v1.9.0"
+    },
+    "symfony/process": {
+        "version": "v4.1.7"
     },
     "symfony/profiler-pack": {
         "version": "v1.0.3"
@@ -365,8 +518,14 @@
             "ref": "fe5a50faf580eb58f08ada2abe8afbd2d4941e05"
         }
     },
+    "theseer/tokenizer": {
+        "version": "1.1.0"
+    },
     "twig/twig": {
         "version": "v2.5.0"
+    },
+    "webmozart/assert": {
+        "version": "1.3.0"
     },
     "zendframework/zend-code": {
         "version": "3.3.1"

@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# todo: Сокращения типа req не работают :(
+
 isCommand() {
   for cmd in \
     "about" \
