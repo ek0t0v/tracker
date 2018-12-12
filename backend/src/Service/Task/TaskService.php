@@ -56,10 +56,10 @@ class TaskService
     public function getTasksByDate(\DateTime $date): array
     {
         /**
-         * @var TaskRepository
+         * @var TaskRepository $taskRepository
          */
-        $repository = $this->em->getRepository(Task::class);
-        $tasks = $repository->findByStartDate($date, $this->tokenStorage->getToken()->getUser());
+        $taskRepository = $this->em->getRepository(Task::class);
+        $tasks = $taskRepository->findByStartDate($date, $this->tokenStorage->getToken()->getUser());
 
         $resultsForDate = $this->getActualTasksByDate($tasks, $date);
         $dto = [];
@@ -82,10 +82,10 @@ class TaskService
     public function getTasksByDateRange(\DateTime $start, \DateTime $end): array
     {
         /**
-         * @var TaskRepository
+         * @var TaskRepository $taskRepository
          */
-        $repository = $this->em->getRepository(Task::class);
-        $tasks = $repository->findByStartDate($start, $this->tokenStorage->getToken()->getUser());
+        $taskRepository = $this->em->getRepository(Task::class);
+        $tasks = $taskRepository->findByStartDate($start, $this->tokenStorage->getToken()->getUser());
 
         // Увеличивает на 1 секунду, чтобы период включал в себя последний день.
         $end->setTime(0, 0, 1);
@@ -175,9 +175,13 @@ class TaskService
     public function updateTaskState(Task $task, \DateTime $forDate, string $state): TaskDto
     {
         /**
-         * @var TaskChange|null $change
+         * @var TaskChangeRepository $taskChangeRepository
          */
-        $change = $this->findChangeByTaskAndForDate($task, $forDate);
+        $taskChangeRepository = $this->em->getRepository(TaskChange::class);
+        $change = $taskChangeRepository->findOneBy([
+            'task' => $task,
+            'forDate' => $forDate,
+        ]);
 
         if (!$change) {
             $change = new TaskChange();
@@ -314,19 +318,5 @@ class TaskService
         }
 
         return $result;
-    }
-
-    /**
-     * @param Task      $task
-     * @param \DateTime $forDate
-     *
-     * @return TaskChange|null|object
-     */
-    private function findChangeByTaskAndForDate(Task $task, \DateTime $forDate)
-    {
-        return $this->em->getRepository(TaskChange::class)->findOneBy([
-            'task' => $task,
-            'forDate' => $forDate,
-        ]);
     }
 }
