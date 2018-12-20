@@ -1,4 +1,5 @@
 import api from '../modules/api';
+import moment from 'moment';
 
 function initialState() {
     return {
@@ -11,91 +12,37 @@ export default {
     state: initialState,
     getters: {
         items: state => state.items,
-        tasksCount: state => state.items.length,
+        count: state => state.items.length,
     },
     actions: {
-        taskLoad({ commit }) {
-            api.get('/task')
-                .then(response => commit('taskLoad', response.data))
+        load({ commit }, start) {
+            return api.get('/tasks?start=' + moment(start).format('YYYY-MM-DD'))
+                .then(response => commit('load', response.data.items))
             ;
         },
-        taskAdd({ commit }, { name }) {
-            api.post('/task', {
-                name,
+        setState({ commit }, payload) {
+            api.put('/tasks/' + payload.id + '/' + moment(payload.forDate).format('YYYY-MM-DD') + '/state', {
+                state: payload.state,
             })
-                .then(response => commit('taskAdd', response.data))
+                .then(() => commit('setState', payload))
             ;
-        },
-        taskRename({ commit }, { id, name }) {
-            api.post('/task/' + id + '/name', {
-                name,
-            })
-                .then(() => commit('taskRename', { id, name }))
-            ;
-        },
-        taskRemove({ commit }, { ids }) {
-            // todo: Удалять также связанные тайминги (или нет?).
-
-            api.delete('/task', {
-                data: {
-                    ids,
-                },
-            })
-                .then(() => commit('taskRemove', ids))
-            ;
-        },
-        taskMove({ commit }, { id, position }) {
-            api.post('/task/' + id + '/move', {
-                position,
-            })
-                .then(() => commit('taskMove'))
-            ;
-        },
+        }
     },
     mutations: {
-        taskLoad(state, tasks) {
-            tasks.forEach(task => state.items.push(task));
-        },
-        taskAdd(state, task) {
-            state.items.unshift(task);
+        load(state, tasks) {
+            state.items = [];
 
-            state.items.forEach((task, index) => {
-                if (index !== 0) {
-                    task.position++;
-                }
+            tasks.forEach(task => {
+                task.forDate = new Date(Date.parse(task.forDate));
+                state.items.push(task);
             });
         },
-        taskRename(state, { id, name }) {
-            state.items.find(task => {
-                if (task.id === id) {
-                    return task;
+        setState(state, task) {
+            state.items.forEach(item => {
+                if (item.id === task.id && item.forDate === task.forDate) {
+                    item.state = task.state;
                 }
-            }).name = name;
-        },
-        taskRemove(state, ids) {
-            ids.forEach(id => {
-                state.items.forEach((task, index) => {
-                    if (id === task.id) {
-                        state.items.splice(index, 1);
-                    }
-                });
-            });
-
-            for (let i = 0; i < state.items.length; i++) {
-                state.items[i].position = i;
-            }
-        },
-        taskMove(state) {
-            for (let i = 0; i < state.items.length; i++) {
-                state.items[i].position = i;
-            }
-        },
-        reset(state) {
-            const s = initialState();
-
-            Object.keys(s).forEach(key => {
-                state[key] = s[key];
             });
         },
     },
-};
+}

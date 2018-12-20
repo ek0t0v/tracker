@@ -1,17 +1,19 @@
 import Vuex from 'vuex';
 import Vue from 'vue';
 import task from './task';
-import user from './user';
-import timing from './timing';
-import sidebar from './sidebar';
 
 Vue.use(Vuex);
 
+function initialState() {
+    return {};
+}
+
 export default new Vuex.Store({
     modules: {
-        user,
         task,
-        timing,
-        sidebar,
     },
-});
+    state: initialState,
+    getters: {},
+    actions: {},
+    mutations: {},
+})

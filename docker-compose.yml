@@ -9,7 +9,7 @@ services:
             - ${SERVER_NGINX_PORT}:80
         volumes:
             - ./backend:/var/www/backend
-            - ./new-frontend:/var/www/new-frontend
+            - ./frontend:/var/www/frontend
     php:
         build: docker/php
         user: www-data:www-data
@@ -44,11 +44,11 @@ services:
     node:
         image: node:9.11
         user: 1000:1000
-        working_dir: /var/www/new-frontend
+        working_dir: /var/www/frontend
         ports:
             - ${SERVER_NODE_PORT}:8080
         expose:
             - 8080
         volumes:
-            - ./new-frontend:/var/www/new-frontend
+            - ./frontend:/var/www/frontend
 

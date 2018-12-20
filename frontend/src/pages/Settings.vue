@@ -1,15 +1,22 @@
 <template>
-    <div>
-        <div class="dashboard-header">
-            <h1>Settings</h1>
+    <div class="root">
+        <div class="dashboard-header-wrapper">
+            <DashboardHeader>Settings</DashboardHeader>
         </div>
     </div>
 </template>
 
 <script>
+    import DashboardHeader from '../components/Dashboard/DashboardHeader';
+
     export default {
         name: 'Settings',
-    };
+        components: {
+            DashboardHeader,
+        },
+    }
 </script>
 
-<style lang="less" scoped></style>
+<style lang="less" scoped>
+    @import '../less/style';
+</style>
