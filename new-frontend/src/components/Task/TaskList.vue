@@ -1,195 +1,58 @@
 <template>
     <div class="task-list">
+        <div
+            v-if="items.length === 0"
+            class="task-list__empty"
+        >
+            <span>Nothing found!</span>
+        </div>
         <TaskItem
-            v-for="item in items"
+            v-for="(item, index) in items"
             :id="item.id"
-            :key="item.id"
+            :key="index"
             :name="item.name"
-            :important="item.important"
+            :for-date="item.forDate"
+            :state="item.state"
+            :is-transferred="item.isTransferred"
+            :transfers="item.transfers"
+            :schedule="item.schedule"
         />
     </div>
 </template>
 
 <script>
     import TaskItem from './TaskItem';
+    import { mapGetters } from 'vuex';
 
     export default {
         name: 'TaskList',
         components: {
             TaskItem,
         },
-        data() {
-            return {
-                items: [
-                    {
-                        id: 1,
-                        name: 'Чтение (1h)',
-                        important: false,
-                    },
-                    {
-                        id: 2,
-                        name: 'Прибраться на кухне',
-                        important: true,
-                    },
-                    {
-                        id: 3,
-                        name: 'Работа над тайм-трекером',
-                        important: false,
-                    },
-                    {
-                        id: 4,
-                        name: 'Упражнения',
-                        important: false,
-                    },
-                    {
-                        id: 5,
-                        name: 'Чтение (1h)',
-                        important: false,
-                    },
-                    {
-                        id: 6,
-                        name: 'Прибраться на кухне',
-                        important: true,
-                    },
-                    {
-                        id: 7,
-                        name: 'Работа над тайм-трекером',
-                        important: false,
-                    },
-                    {
-                        id: 8,
-                        name: 'Упражнения',
-                        important: false,
-                    },
-                    {
-                        id: 9,
-                        name: 'Чтение (1h)',
-                        important: false,
-                    },
-                    {
-                        id: 10,
-                        name: 'Прибраться на кухне',
-                        important: true,
-                    },
-                    {
-                        id: 11,
-                        name: 'Работа над тайм-трекером',
-                        important: false,
-                    },
-                    {
-                        id: 12,
-                        name: 'Упражнения',
-                        important: false,
-                    },
-                    {
-                        id: 13,
-                        name: 'Чтение (1h)',
-                        important: false,
-                    },
-                    {
-                        id: 14,
-                        name: 'Прибраться на кухне',
-                        important: true,
-                    },
-                    {
-                        id: 15,
-                        name: 'Работа над тайм-трекером',
-                        important: false,
-                    },
-                    {
-                        id: 16,
-                        name: 'Упражнения',
-                        important: false,
-                    },
-                    {
-                        id: 17,
-                        name: 'Чтение (1h)',
-                        important: false,
-                    },
-                    {
-                        id: 18,
-                        name: 'Прибраться на кухне',
-                        important: true,
-                    },
-                    {
-                        id: 19,
-                        name: 'Работа над тайм-трекером',
-                        important: false,
-                    },
-                    {
-                        id: 20,
-                        name: 'Упражнения',
-                        important: false,
-                    },
-                    {
-                        id: 21,
-                        name: 'Чтение (1h)',
-                        important: false,
-                    },
-                    {
-                        id: 22,
-                        name: 'Прибраться на кухне',
-                        important: true,
-                    },
-                    {
-                        id: 23,
-                        name: 'Работа над тайм-трекером',
-                        important: false,
-                    },
-                    {
-                        id: 24,
-                        name: 'Упражнения',
-                        important: false,
-                    },
-                    {
-                        id: 25,
-                        name: 'Чтение (1h)',
-                        important: false,
-                    },
-                    {
-                        id: 26,
-                        name: 'Прибраться на кухне',
-                        important: true,
-                    },
-                    {
-                        id: 27,
-                        name: 'Работа над тайм-трекером',
-                        important: false,
-                    },
-                    {
-                        id: 28,
-                        name: 'Упражнения',
-                        important: false,
-                    },
-                    {
-                        id: 29,
-                        name: 'Чтение (1h)',
-                        important: false,
-                    },
-                    {
-                        id: 30,
-                        name: 'Прибраться на кухне',
-                        important: true,
-                    },
-                    {
-                        id: 31,
-                        name: 'Работа над тайм-трекером',
-                        important: false,
-                    },
-                    {
-                        id: 32,
-                        name: 'Упражнения',
-                        important: false,
-                    },
-                ],
-            };
+        computed: {
+            ...mapGetters('task', [
+                'items',
+            ]),
         },
     }
 </script>
 
 <style lang="less" scoped>
+    @import '../../less/style';
+
     .task-list {
+
         width: 800px;
         margin: 128px 0 0 0;
+
+        &__empty {
+            .flex(row, nowrap, center, center);
+            width: 100%;
+
+            span {
+                .font(@primary-font, 16px, 500, @blue_2);
+            }
+        }
+
     }
 </style>
