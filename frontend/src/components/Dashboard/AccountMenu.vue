@@ -1,17 +1,17 @@
 <template>
     <div class="account-menu">
         <app-menu-item
-            :icon-css-class="'fas fa-cog'"
+            :icon-css-class="$t('accountMenu.settings.iconCssClass')"
             @click.native="openSettingsModal"
         >
-            {{ $t('settings.label') }}
+            {{ $t('accountMenu.settings.label') }}
         </app-menu-item>
         <app-menu-delimiter />
         <app-menu-item
-            :icon-css-class="'fas fa-sign-out-alt'"
+            :icon-css-class="$t('accountMenu.logout.iconCssClass')"
             :type="'danger'"
         >
-            {{ $t('logout.label') }}
+            {{ $t('accountMenu.logout.label') }}
         </app-menu-item>
     </div>
 </template>
@@ -27,29 +27,9 @@
             AppMenuItem,
             AppMenuDelimiter,
         },
-        i18n: {
-            messages: {
-                en: {
-                    settings: {
-                        label: 'Settings',
-                    },
-                    logout: {
-                        label: 'Logout',
-                    },
-                },
-                ru: {
-                    settings: {
-                        label: 'Настройки',
-                    },
-                    logout: {
-                        label: 'Выход',
-                    },
-                },
-            },
-        },
         methods: {
             openSettingsModal() {
-                this.$modal.open(SettingsForm, {}, this.$t('modalHeader.settings'));
+                this.$modal.open(SettingsForm, {}, this.$t('modal.header.settings'));
             },
         },
     }

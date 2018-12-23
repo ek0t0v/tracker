@@ -2,7 +2,7 @@
     <div class="dashboard-header">
         <div class="dashboard-header__column">
             <div class="dashboard-header-logo">
-                <i class="fab fa-vuejs" />
+                <i class="far fa-calendar-check" />
             </div>
         </div>
         <div class="dashboard-header__column">
@@ -90,7 +90,7 @@
                 this.selectedDate = date;
             },
             openCreateTaskModal() {
-                this.$modal.open(CreateTaskForm, {}, this.$t('modalHeader.createTaskForm'));
+                this.$modal.open(CreateTaskForm, {}, this.$t('modal.header.createTaskForm'));
             },
             openAccountMenu(e) {
                 let coordinates = e.currentTarget.getBoundingClientRect();

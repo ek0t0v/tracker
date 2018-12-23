@@ -1,0 +1,69 @@
+{
+    "modal": {
+        "header": {
+            "settings": "Настройки",
+            "createTaskForm": "Новая задача"
+        }
+    },
+    "header": {
+        "text": {
+            "today": "Сегодня",
+            "yesterday": "Вчера",
+            "tomorrow": "Завтра"
+        }
+    },
+    "createTaskForm": {
+        "name": {
+            "label": "Название задачи",
+            "placeholder": "Сделать что-то",
+            "validation": {
+                "empty": "Введите название задачи."
+            }
+        },
+        "start": {
+            "label": "Дата",
+            "placeholder": "2018-12-19"
+        },
+        "end": {
+            "label": "Дата окончания",
+            "placeholder": "2018-12-25"
+        },
+        "repeatable": "Повтор",
+        "submit": "Создать задачу"
+    },
+    "datepicker": {
+        "monthFormat": "MMMM"
+    },
+    "accountMenu": {
+        "settings": {
+            "label": "Настройки",
+            "iconCssClass": "fas fa-cog"
+        },
+        "logout": {
+            "label": "Выход",
+            "iconCssClass": "fas fa-sign-out-alt"
+        }
+    },
+    "taskMenu": {
+        "edit": {
+            "label": "Редактировать",
+            "iconCssClass": "fas fa-pen"
+        },
+        "timer": {
+            "label": "Запустить таймер",
+            "iconCssClass": "fas fa-hourglass-start"
+        },
+        "transfer": {
+            "label": "Перенести",
+            "iconCssClass": "fas fa-share"
+        },
+        "markAsImportant": {
+            "label": "Пометить как важную",
+            "iconCssClass": "fas fa-star"
+        },
+        "delete": {
+            "label": "Удалить",
+            "iconCssClass": "fas fa-trash"
+        }
+    }
+}

@@ -6,23 +6,23 @@
         <div class="create-task-form__element">
             <app-text-input
                 :value="name"
-                :placeholder="$t('name.placeholder')"
+                :placeholder="$t('createTaskForm.name.placeholder')"
                 :mark-label-as-required="true"
                 :on-blur="validateName"
                 :validation-errors="validation.name"
                 @on-change="onNameChanged"
             >
-                {{ $t('name.label') }}
+                {{ $t('createTaskForm.name.label') }}
             </app-text-input>
         </div>
         <div class="create-task-form__element">
             <app-date-input
                 :value="start"
-                :placeholder="'2018-12-19'"
+                :placeholder="$t('createTaskForm.start.placeholder')"
                 :mark-label-as-required="true"
                 @on-change="onStartChanged"
             >
-                {{ $t('start.label') }}
+                {{ $t('createTaskForm.start.label') }}
             </app-date-input>
         </div>
         <div class="create-task-form__element">
@@ -30,7 +30,7 @@
                 :is-checked="isRepeatable"
                 @on-checked="isRepeatable = !isRepeatable"
             >
-                {{ $t('repeatable') }}
+                {{ $t('createTaskForm.repeatable') }}
             </app-checkbox>
         </div>
         <div
@@ -39,15 +39,15 @@
         >
             <app-date-input
                 :value="end"
-                :placeholder="'2018-12-19'"
+                :placeholder="$t('createTaskForm.end.placeholder')"
                 @on-change="onEndChanged"
             >
-                End date
+                {{ $t('createTaskForm.end.label') }}
             </app-date-input>
         </div>
         <input
             type="submit"
-            :value="$t('submit')"
+            :value="$t('createTaskForm.submit')"
             class="common-button create-task-form__submit-button"
         />
     </form>
@@ -66,38 +66,6 @@
             AppCheckbox,
             AppTextInput,
             AppDateInput,
-        },
-        i18n: {
-            messages: {
-                en: {
-                    name: {
-                        label: 'Task name',
-                        placeholder: 'Do something',
-                        validation: {
-                            empty: 'Enter task name.',
-                        },
-                    },
-                    start: {
-                        label: 'Date',
-                    },
-                    repeatable: 'Repeatable',
-                    submit: 'Create new task',
-                },
-                ru: {
-                    name: {
-                        label: 'Название задачи',
-                        placeholder: 'Сделать что-то',
-                        validation: {
-                            empty: 'Введите название задачи.',
-                        },
-                    },
-                    start: {
-                        label: 'Дата начала',
-                    },
-                    repeatable: 'Повтор',
-                    submit: 'Создать задачу',
-                },
-            },
         },
         data() {
             return {
@@ -122,7 +90,7 @@
 
                 if (this.name === '') {
                     this.validation.name = [
-                        this.$t('name.validation.empty'),
+                        this.$t('createTaskForm.name.validation.empty'),
                     ];
                 }
             },

@@ -1,0 +1,69 @@
+{
+    "modal": {
+        "header": {
+            "settings": "Settings",
+            "createTaskForm": "New task"
+        }
+    },
+    "header": {
+        "text": {
+            "today": "Today",
+            "yesterday": "Yesterday",
+            "tomorrow": "Tomorrow"
+        }
+    },
+    "createTaskForm": {
+        "name": {
+            "label": "Task name",
+            "placeholder": "Do something",
+            "validation": {
+                "empty": "Enter task name."
+            }
+        },
+        "start": {
+            "label": "Date",
+            "placeholder": "2018-12-19"
+        },
+        "end": {
+            "label": "End date",
+            "placeholder": "2018-12-25"
+        },
+        "repeatable": "Repeatable",
+        "submit": "Create new task"
+    },
+    "datepicker": {
+        "monthFormat": "MMMM"
+    },
+    "accountMenu": {
+        "settings": {
+            "label": "Settings",
+            "iconCssClass": "fas fa-cog"
+        },
+        "logout": {
+            "label": "Logout",
+            "iconCssClass": "fas fa-sign-out-alt"
+        }
+    },
+    "taskMenu": {
+        "edit": {
+            "label": "Edit",
+            "iconCssClass": "fas fa-pen"
+        },
+        "timer": {
+            "label": "Start timer",
+            "iconCssClass": "fas fa-hourglass-start"
+        },
+        "transfer": {
+            "label": "Transfer",
+            "iconCssClass": "fas fa-share"
+        },
+        "markAsImportant": {
+            "label": "Mark as important",
+            "iconCssClass": "fas fa-star"
+        },
+        "delete": {
+            "label": "Delete",
+            "iconCssClass": "fas fa-trash"
+        }
+    }
+}

@@ -81,19 +81,9 @@
                 localDate: this.date,
             };
         },
-        i18n: {
-            messages: {
-                en: {
-                    monthFormat: 'MMMM',
-                },
-                ru: {
-                    monthFormat: 'MMMM',
-                },
-            },
-        },
         computed: {
             currentMonthName() {
-                return moment(this.localDate).format(this.$t('monthFormat'));
+                return moment(this.localDate).format(this.$t('datepicker.monthFormat'));
             },
             currentDay() {
                 return moment(this.localDate).day();

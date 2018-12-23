@@ -7,6 +7,8 @@ import store from './store';
 import Menu from './plugins/Menu';
 import Modal from './plugins/Modal';
 import ClickOutside from 'v-click-outside';
+import en from './locales/en';
+import ru from './locales/ru';
 
 Vue.use(VueRouter);
 Vue.use(VueI18n);
@@ -15,21 +17,11 @@ Vue.use(Modal);
 Vue.use(Menu);
 
 const i18n = new VueI18n({
-    locale: 'ru',
+    locale: 'en',
     fallbackLocale: 'en',
     messages: {
-        en: {
-            modalHeader: {
-                settings: 'Settings',
-                createTaskForm: 'New task',
-            },
-        },
-        ru: {
-            modalHeader: {
-                settings: 'Настройки',
-                createTaskForm: 'Новая задача',
-            },
-        },
+        en,
+        ru,
     },
 });
 

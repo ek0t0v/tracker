@@ -1,34 +1,34 @@
 <template>
     <div class="task-menu">
         <app-menu-item
-            :icon-css-class="'fas fa-pen'"
+            :icon-css-class="$t('taskMenu.edit.iconCssClass')"
             @click.native="onEdit"
         >
-            {{ $t('edit.label') }}
+            {{ $t('taskMenu.edit.label') }}
         </app-menu-item>
         <app-menu-item
-            :icon-css-class="'fas fa-hourglass-start'"
+            :icon-css-class="$t('taskMenu.timer.iconCssClass')"
         >
-            {{ $t('timer.label') }}
+            {{ $t('taskMenu.timer.label') }}
         </app-menu-item>
         <app-menu-item
-            :icon-css-class="'fas fa-share'"
+            :icon-css-class="$t('taskMenu.transfer.iconCssClass')"
         >
-            {{ $t('transfer.label') }}
+            {{ $t('taskMenu.transfer.label') }}
         </app-menu-item>
         <app-menu-item
-            :icon-css-class="'fas fa-star'"
+            :icon-css-class="$t('taskMenu.markAsImportant.iconCssClass')"
             :is-disabled="true"
         >
-            {{ $t('markAsImportant.label') }}
+            {{ $t('taskMenu.markAsImportant.label') }}
         </app-menu-item>
         <app-menu-delimiter />
         <app-menu-item
             :type="'danger'"
-            :icon-css-class="'fas fa-trash'"
+            :icon-css-class="$t('taskMenu.delete.iconCssClass')"
             :close-menu-on-click="false"
         >
-            {{ $t('delete.label') }}
+            {{ $t('taskMenu.delete.label') }}
         </app-menu-item>
     </div>
 </template>
@@ -43,44 +43,6 @@
         components: {
             AppMenuItem,
             AppMenuDelimiter,
-        },
-        i18n: {
-            messages: {
-                en: {
-                    edit: {
-                        label: 'Edit',
-                    },
-                    timer: {
-                        label: 'Start timer',
-                    },
-                    transfer: {
-                        label: 'Transfer',
-                    },
-                    markAsImportant: {
-                        label: 'Mark as important',
-                    },
-                    delete: {
-                        label: 'Delete',
-                    },
-                },
-                ru: {
-                    edit: {
-                        label: 'Редактировать',
-                    },
-                    timer: {
-                        label: 'Запустить таймер',
-                    },
-                    transfer: {
-                        label: 'Перенести',
-                    },
-                    markAsImportant: {
-                        label: 'Отметить как важную',
-                    },
-                    delete: {
-                        label: 'Удалить',
-                    },
-                },
-            },
         },
         props: {
             id: {
