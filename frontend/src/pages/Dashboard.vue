@@ -30,18 +30,40 @@
                 let headerText;
 
                 if (moment(this.start).isSame(moment(), 'day')) {
-                    headerText = 'Today';
+                    headerText = this.$t('headerText.today');
                 } else if (moment(this.start).isSame(moment().subtract(1, 'days'), 'day')) {
-                    headerText = 'Yesterday';
+                    headerText = this.$t('headerText.yesterday');
                 } else if (moment(this.start).isSame(moment().add(1, 'days'), 'day')) {
-                    headerText = 'Tomorrow';
+                    headerText = this.$t('headerText.tomorrow');
                 } else if (moment(this.start).year() === moment().year()) {
-                    headerText = moment(this.start).format('MMMM Do');
+                    headerText = moment(this.start).format(this.$t('headerText.thisYearDateFormat'));
                 } else {
-                    headerText = moment(this.start).format('MMMM Do YYYY');
+                    headerText = moment(this.start).format(this.$t('headerText.anotherYearDateFormat'));
                 }
 
                 return headerText;
+            },
+        },
+        i18n: {
+            messages: {
+                en: {
+                    headerText: {
+                        yesterday: 'Yesterday',
+                        today: 'Today',
+                        tomorrow: 'Tomorrow',
+                        thisYearDateFormat: 'MMMM Do',
+                        anotherYearDateFormat: 'MMMM Do YYYY',
+                    },
+                },
+                ru: {
+                    headerText: {
+                        yesterday: 'Вчера',
+                        today: 'Сегодня',
+                        tomorrow: 'Завтра',
+                        thisYearDateFormat: 'D MMMM',
+                        anotherYearDateFormat: 'D MMMM YYYY',
+                    },
+                },
             },
         },
         watch: {

@@ -11,12 +11,16 @@
 <script>
     import AppModal from './AppModal';
     import AppMenu from './AppMenu';
+    import moment from 'moment';
 
     export default {
         name: 'App',
         components: {
             AppModal,
             AppMenu,
+        },
+        created() {
+            moment.locale(this.$i18n.locale);
         },
     }
 </script>

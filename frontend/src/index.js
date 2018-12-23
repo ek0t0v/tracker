@@ -17,6 +17,20 @@ Vue.use(Menu);
 const i18n = new VueI18n({
     locale: 'ru',
     fallbackLocale: 'en',
+    messages: {
+        en: {
+            modalHeader: {
+                settings: 'Settings',
+                createTaskForm: 'New task',
+            },
+        },
+        ru: {
+            modalHeader: {
+                settings: 'Настройки',
+                createTaskForm: 'Новая задача',
+            },
+        },
+    },
 });
 
 new Vue({

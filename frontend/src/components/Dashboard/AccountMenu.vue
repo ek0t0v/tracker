@@ -49,7 +49,7 @@
         },
         methods: {
             openSettingsModal() {
-                this.$modal.open(SettingsForm, {}, 'Settings');
+                this.$modal.open(SettingsForm, {}, this.$t('modalHeader.settings'));
             },
         },
     }

@@ -1,6 +1,5 @@
 import VueRouter from 'vue-router';
 import Dashboard from '../pages/Dashboard';
-import Settings from '../pages/Settings';
 
 const router = new VueRouter({
     routes: [
@@ -11,14 +10,6 @@ const router = new VueRouter({
                 start: route.query.start === undefined ? new Date() : new Date(route.query.start),
             }),
             name: 'dashboard',
-            meta: {
-                requiresAuth: false,
-            },
-        },
-        {
-            path: '/settings',
-            component: Settings,
-            name: 'settings',
             meta: {
                 requiresAuth: false,
             },

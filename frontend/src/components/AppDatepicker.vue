@@ -81,9 +81,19 @@
                 localDate: this.date,
             };
         },
+        i18n: {
+            messages: {
+                en: {
+                    monthFormat: 'MMMM',
+                },
+                ru: {
+                    monthFormat: 'MMMM',
+                },
+            },
+        },
         computed: {
             currentMonthName() {
-                return moment(this.localDate).format('MMMM');
+                return moment(this.localDate).format(this.$t('monthFormat'));
             },
             currentDay() {
                 return moment(this.localDate).day();
@@ -214,6 +224,7 @@
 
         &__month {
             .font(@primary-font, 16px, 600, #525975);
+            text-transform: capitalize;
         }
 
         &__button {
@@ -247,6 +258,7 @@
             width: 34px;
             height: 34px;
             color: @blue_1;
+            text-transform: capitalize;
 
             span {
                 .font(@primary-font, 14px, 700, inherit);

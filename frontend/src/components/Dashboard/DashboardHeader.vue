@@ -90,12 +90,12 @@
                 this.selectedDate = date;
             },
             openCreateTaskModal() {
-                this.$modal.open(CreateTaskForm, {}, 'New task');
+                this.$modal.open(CreateTaskForm, {}, this.$t('modalHeader.createTaskForm'));
             },
             openAccountMenu(e) {
                 let coordinates = e.currentTarget.getBoundingClientRect();
 
-                this.$menu.open(AccountMenu, {},  coordinates.y + 40, coordinates.x);
+                this.$menu.open(AccountMenu, {}, coordinates.y + 40, coordinates.x);
             },
         }
     }
