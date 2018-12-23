@@ -14,27 +14,28 @@
     "vue": "^2.0.0"
   },
   "devDependencies": {
-    "babel-core": "^6.26.3",
+    "@babel/core": "^7.2.2",
+    "@babel/preset-env": "^7.2.3",
     "babel-eslint": "^10.0.1",
-    "babel-loader": "^7.1.4",
+    "babel-loader": "^8.0.4",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
-    "babel-preset-env": "^1.7.0",
+    "css-loader": "^2.0.2",
     "eslint": "^5.8.0",
     "eslint-plugin-vue": "^5.0.0-beta.3",
     "less": "^3.0.4",
     "less-loader": "^4.1.0",
     "mini-css-extract-plugin": "^0.4.4",
     "style-loader": "^0.21.0",
+    "uglifyjs-webpack-plugin": "^2.1.0",
     "vue-loader": "^15.2.4",
     "vue-template-compiler": "^2.5.16",
-    "webpack": "^4.10.2",
+    "webpack": "^4.28.2",
     "webpack-cli": "^3.1.1",
     "webpack-dev-server": "^3.1.9",
     "webpack-merge": "^4.1.4"
   },
   "dependencies": {
     "axios": "^0.18.0",
-    "css-loader": "^2.0.0",
     "es6-promise": "^4.2.5",
     "moment": "^2.22.2",
     "v-click-outside": "^2.0.2",
@@ -44,7 +45,9 @@
     "vuex": "^3.0.1"
   },
   "babel": {
-    "presets": [],
+    "presets": [
+      "@babel/env"
+    ],
     "plugins": [
       "transform-object-rest-spread"
     ]

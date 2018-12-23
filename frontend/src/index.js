@@ -9,6 +9,7 @@ import Modal from './plugins/Modal';
 import ClickOutside from 'v-click-outside';
 import en from './locales/en';
 import ru from './locales/ru';
+import 'moment/locale/ru.js';
 
 Vue.use(VueRouter);
 Vue.use(VueI18n);

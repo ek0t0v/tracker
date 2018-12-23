@@ -1,3 +1,4 @@
+const webpack = require('webpack');
 const path = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
@@ -39,7 +40,7 @@ module.exports = {
                 use: {
                     loader: 'babel-loader',
                     options: {
-                        presets: ['env'],
+                        presets: ['@babel/env'],
                     },
                 },
             },
@@ -50,6 +51,7 @@ module.exports = {
         new MiniCssExtractPlugin({
             filename: 'style.css',
         }),
+        new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
     ],
     resolve: {
         modules: ['node_modules', 'src'],
