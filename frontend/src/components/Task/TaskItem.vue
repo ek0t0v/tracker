@@ -17,6 +17,7 @@
                 </span>
             </div>
             <div class="task-item__checkbox">
+                <!-- todo: Использовать компонент AppCheckbox. -->
                 <div
                     class="checkbox"
                     :class="{

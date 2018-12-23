@@ -13,19 +13,9 @@
             type="text"
             class="date-input__input"
             @change="onChange"
-            @click.self.prevent="showDatepicker"
+            @click="openDatepickerMenu"
         />
         <i class="date-input__icon fas fa-calendar" />
-        <transition name="fade">
-            <app-datepicker
-                v-show="isDatepickerOpened"
-                :mode="'single'"
-                :week-start-index="1"
-                :date="value"
-                class="date-input__datepicker"
-                @on-date-changed="onChangedFromDatepicker"
-            />
-        </transition>
     </div>
 </template>
 
@@ -35,9 +25,6 @@
 
     export default {
         name: 'AppDateInput',
-        components: {
-            AppDatepicker,
-        },
         props: {
             value: {
                 type: Date,
@@ -66,11 +53,14 @@
             onChangedFromDatepicker(date) {
                 this.$emit('on-change', date);
             },
-            showDatepicker() {
-                this.isDatepickerOpened ? this.hideDatepicker() : this.isDatepickerOpened = true;
-            },
-            hideDatepicker() {
-                this.isDatepickerOpened = false;
+            openDatepickerMenu(e) {
+                let coordinates = e.currentTarget.getBoundingClientRect();
+
+                this.$menu.open(AppDatepicker, {
+                    mode: 'single',
+                    weekStartIndex: 1,
+                    date: this.localSelectedDate,
+                }, coordinates.y + 40, coordinates.x);
             },
         },
     }

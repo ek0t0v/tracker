@@ -48,7 +48,6 @@
     @import '../less/style';
 
     .modal-wrapper {
-
         display: block;
         position: absolute;
         width: 100%;
@@ -58,7 +57,6 @@
         overflow-y: auto;
         opacity: 1;
         background-color: rgba(25,25,25,.7);
-
     }
 
     .modal {
@@ -67,12 +65,12 @@
         margin: 0 auto;
         border-radius: 3px;
         box-shadow: 0 0 0 1px rgba(29,44,76,.1), 0 4px 8px rgba(0,0,0,.15);
-        background-color: #fff;
+        overflow: hidden;
 
         &__header {
 
             padding: 32px;
-            background-color: @blue_1;
+            background-color: rgba(82,89,117,.9);
 
             h1 {
                 .font(@primary-font, 20px, 700, #fff);
@@ -82,6 +80,7 @@
 
         &__content {
             padding: 32px;
+            background-color: #fff;
         }
 
     }

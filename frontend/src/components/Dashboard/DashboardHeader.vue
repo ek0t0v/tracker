@@ -19,21 +19,10 @@
                     <i class="fas fa-plus" />
                 </button>
                 <button
-                    v-click-outside="hideDatepicker"
                     class="dashboard-header-menu__button"
-                    @click.self.prevent="toggleDatepicker"
+                    @click="openDatepickerMenu"
                 >
                     <i class="fas fa-calendar" />
-                    <transition name="fade">
-                        <app-datepicker
-                            v-show="datepickerOpened"
-                            :mode="'single'"
-                            :week-start-index="1"
-                            :date="localSelectedDate"
-                            class="dashboard-header-datepicker"
-                            @on-date-changed="onDateChanged"
-                        />
-                    </transition>
                 </button>
             </div>
             <div
@@ -53,9 +42,6 @@
 
     export default {
         name: 'DashboardHeader',
-        components: {
-            AppDatepicker,
-        },
         props: {
             selectedDate: {
                 type: Date,
@@ -106,6 +92,15 @@
                 let coordinates = e.currentTarget.getBoundingClientRect();
 
                 this.$menu.open(AccountMenu, {}, coordinates.y + 40, coordinates.x);
+            },
+            openDatepickerMenu(e) {
+                let coordinates = e.currentTarget.getBoundingClientRect();
+
+                this.$menu.open(AppDatepicker, {
+                    mode: 'single',
+                    weekStartIndex: 1,
+                    date: this.localSelectedDate,
+                }, coordinates.y + 40, coordinates.x);
             },
         }
     }

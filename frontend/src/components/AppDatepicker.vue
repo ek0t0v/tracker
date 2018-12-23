@@ -1,5 +1,5 @@
 <template>
-    <div class="datepicker">
+    <div class="datepicker" @click="onClick">
         <div class="datepicker-navigation">
             <span
                 class="datepicker-navigation__button"
@@ -74,6 +74,10 @@
             rightDateLimit: {
                 type: Date,
                 default: null,
+            },
+            stopPropagationEnabled: {
+                type: Boolean,
+                default: true,
             },
         },
         data() {
@@ -182,6 +186,11 @@
                     ? localDateAsMoment.date()
                     : null;
             },
+            onClick(e) {
+                if (this.stopPropagationEnabled) {
+                    e.stopPropagation();
+                }
+            },
         },
     }
 </script>
@@ -193,14 +202,14 @@
 
         .noselect;
         width: 286px;
-        padding: 24px;
+        padding: 16px 24px;
         box-sizing: border-box;
         border-radius: 3px;
         background-color: #fff;
-        box-shadow: 0 0 0 1px rgba(29,44,76,.1), 0 4px 8px rgba(0,0,0,.15);
+        /*box-shadow: 0 0 0 1px rgba(29,44,76,.1), 0 4px 8px rgba(0,0,0,.15);*/
         z-index: 100000000;
         will-change: transform;
-        position: absolute;
+        position: relative;
 
         &:before,
         &:after {
@@ -214,14 +223,14 @@
         }
 
         &:after {
-            top: -20px;
+            top: -27px;
             border-color: transparent transparent #fff transparent;
             border-width: 10px;
         }
 
         &:before {
-            top: -21px;
-            border-color: transparent transparent #e6e7eb transparent;
+            top: -29px;
+            border-color: transparent transparent rgba(29, 44, 76, 0.1) transparent;
             border-width: 10px;
         }
 

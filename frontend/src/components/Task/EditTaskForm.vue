@@ -1,7 +1,5 @@
 <template>
-    <div class="edit-task-form">
-        {{ id }}
-    </div>
+    <div class="edit-task-form"></div>
 </template>
 
 <script>
@@ -19,5 +17,7 @@
 <style lang="less" scoped>
     @import '../../less/style';
 
-    .edit-task-form {}
+    .edit-task-form {
+        width: 512px;
+    }
 </style>

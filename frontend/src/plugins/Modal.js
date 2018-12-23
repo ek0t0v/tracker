@@ -20,7 +20,7 @@ const Modal = {
                     this.props = props;
                 },
                 close() {
-                    // todo: Сделать сброс прокрутки при закрытии окна (scrollTop?)
+                    // todo: Сделать сброс прокрутки при закрытии окна (scrollTop?).
 
                     document.body.removeAttribute('style');
 
