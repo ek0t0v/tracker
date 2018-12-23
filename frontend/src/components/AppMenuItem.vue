@@ -1,61 +1,80 @@
 <template>
     <div
-        class="common-context-menu-item"
-        :class="{ 'common-context-menu-item--danger': type === 'danger' }"
-        @click.capture.prevent
+        class="menu-item"
+        :class="{
+            'menu-item--disabled': isDisabled,
+            'menu-item--danger': type === 'danger'
+        }"
+        @click="onClick"
     >
-        <div class="common-context-menu-item__icon">
+        <div class="menu-item__icon">
             <i :class="iconCssClass" />
         </div>
-        <span class="common-context-menu-item__label">{{ label }}</span>
+        <div class="menu-item__label">
+            <slot />
+        </div>
     </div>
 </template>
 
 <script>
     export default {
-        name: 'CommonContextMenuItem',
+        name: 'AppMenuItem',
         props: {
             iconCssClass: {
                 type: String,
                 default: '',
             },
-            label: {
-                type: String,
-                default: '',
-            },
             type: {
                 type: String,
-                default: '',
+                default: 'default',
                 validator: value => [
-                    '',
+                    'default',
                     'danger',
                 ].indexOf(value) !== -1,
+            },
+            isDisabled: Boolean,
+            closeMenuOnClick: {
+                type: Boolean,
+                default: true,
+            },
+        },
+        methods: {
+            onClick(e) {
+                if (!this.closeMenuOnClick) {
+                    e.stopPropagation();
+                }
             },
         },
     }
 </script>
 
 <style lang="less" scoped>
-    @import '../../less/style';
+    @import '../less/style';
 
-    .common-context-menu-item {
+    .menu-item {
 
         .flex(row, nowrap, flex-start, center);
-        padding: 5px 19px 5px 13px;
+        padding: 8px 22px 8px 16px;
         cursor: pointer;
         color: @header_color;
         transition: .1s all ease-in-out;
 
-        &:hover {
+        &:hover:not(.menu-item--disabled) {
             background-color: rgba(82,89,117, .05);
+        }
+
+        &--disabled {
+            opacity: .25;
+            cursor: default;
+            filter: grayscale(100%);
         }
 
         &--danger {
 
             color: #D60000;
 
-            &:hover {
-                background-color: rgba(214,0,0,.05) !important;
+            &:hover:not(.menu-item--disabled) {
+                background-color: rgba(214,0,0,.05);
             }
 
         }
@@ -65,7 +84,7 @@
             .flex(row, nowrap, center, center);
             width: 18px;
             height: 18px;
-            margin: 0 8px 0 0;
+            margin: 0 10px 0 0;
             border-radius: 3px;
 
             i {

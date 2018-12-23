@@ -1,45 +1,45 @@
 <template>
     <transition name="modal">
-        <div class="modal-mask">
-            <div
-                class="modal-wrapper"
-                @click.self.prevent="$emit('on-close')"
-            >
-                <div class="modal-container">
-                    <div
-                        v-if="isHeaderEnabled"
-                        class="modal-header"
-                    >
-                        <slot name="header" />
+        <div
+            v-show="this.$modal.isVisible"
+            class="modal-wrapper"
+            @click.self.prevent="close"
+        >
+            <transition name="fade">
+                <div
+                    v-show="this.$modal.isVisible"
+                    class="modal"
+                >
+                    <div class="modal__header">
+                        <h1>{{ this.$modal.header }}</h1>
                     </div>
-                    <div class="modal-body">
-                        <slot name="body" />
-                    </div>
-                    <div
-                        v-if="isFooterEnabled"
-                        class="modal-footer"
-                    >
-                        <slot name="footer">
-                            <button
-                                class="modal-footer__button"
-                                @click="$emit('on-close')"
-                            >
-                                Close
-                            </button>
-                        </slot>
+                    <div class="modal__content">
+                        <current-modal-component />
                     </div>
                 </div>
-            </div>
+            </transition>
         </div>
     </transition>
 </template>
 
+
 <script>
+    import Vue from 'vue';
+
+    Vue.component('current-modal-component', {
+        render(h) {
+            return h(this.$modal.component, {
+                props: this.$modal.props,
+            });
+        },
+    });
+
     export default {
         name: 'AppModal',
-        props: {
-            isHeaderEnabled: Boolean,
-            isFooterEnabled: Boolean,
+        methods: {
+            close() {
+                this.$modal.close();
+            },
         },
     }
 </script>
@@ -47,70 +47,50 @@
 <style lang="less" scoped>
     @import '../less/style';
 
-    .modal {}
-    .modal-mask {
-        position: fixed;
-        z-index: 9998;
-        top: 0;
-        left: 0;
+    .modal-wrapper {
+
+        display: block;
+        position: absolute;
         width: 100%;
         height: 100%;
-        background-color: rgba(0,0,0,.75);
-        display: table;
-        transition: opacity .1s ease-in-out;
-    }
-    .modal-wrapper {
-        display: table-cell;
-        vertical-align: middle;
-    }
-    .modal-container {
-        width: 512px;
         box-sizing: border-box;
+        padding: 48px 0;
+        overflow-y: auto;
+        opacity: 1;
+        background-color: rgba(25,25,25,.7);
+
+    }
+
+    .modal {
+
+        width: fit-content;
         margin: 0 auto;
-        background-color: #fff;
         border-radius: 3px;
         box-shadow: 0 0 0 1px rgba(29,44,76,.1), 0 4px 8px rgba(0,0,0,.15);
-        transition: all .1s ease-in-out;
-    }
-    .modal-header {
-        margin-top: 0;
-        color: #42b983;
-    }
-    .modal-body {
-        .flex(column, nowrap, flex-start, flex-start);
-        padding: 32px;
-    }
-    .modal-footer {
+        background-color: #fff;
 
-        .flex(row, nowrap, flex-start, flex-start);
-        padding: 0 32px 32px 32px;
-        //background-color: @blue_5;
-        border-radius: 0 0 3px 3px;
+        &__header {
 
-        &__button {
-            .common-button;
+            padding: 32px;
+            background-color: @blue_1;
+
+            h1 {
+                .font(@primary-font, 20px, 700, #fff);
+            }
+
+        }
+
+        &__content {
+            padding: 32px;
         }
 
     }
 
-    .modal-header h3 {
-        margin-top: 0;
-        color: #42b983;
+    .modal-enter-active, .modal-leave-active {
+        transition: all .1s ease-in-out;
     }
 
-    /*
-     * The following styles are auto-applied to elements with
-     * transition="modal" when their visibility is toggled
-     * by Vue.js.
-     *
-     * You can easily play with the modal transition by editing
-     * these styles.
-     */
-
-    .modal-enter {
-        opacity: 0;
-    }
-
+    .modal-enter,
     .modal-leave-active {
         opacity: 0;
     }
@@ -120,8 +100,6 @@
         -webkit-transform: scale(1.1);
         transform: scale(1.1);
     }
-
-
 
     .fade-enter-active, .fade-leave-active {
         transition: all .1s ease-in-out;

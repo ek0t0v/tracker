@@ -14,7 +14,7 @@
             <div class="dashboard-header-menu">
                 <button
                     class="dashboard-header-menu__button"
-                    @click="createTaskModalWindowOpened = true"
+                    @click="openCreateTaskModal"
                 >
                     <i class="fas fa-plus" />
                 </button>
@@ -36,25 +36,11 @@
                 </button>
             </div>
             <div
-                v-click-outside="hideAccountMenu"
                 class="dashboard-header-user"
                 style="background-image: url(classic.jpg);"
-                @click.self.prevent="showAccountMenu"
-            >
-                <transition name="fade">
-                    <account-menu
-                        v-show="accountMenuOpened"
-                        class="dashboard-header-account-menu"
-                    />
-                </transition>
-            </div>
+                @click="openAccountMenu"
+            />
         </div>
-        <app-modal
-            v-if="createTaskModalWindowOpened"
-            @on-close="createTaskModalWindowOpened = false"
-        >
-            <create-task-form slot="body" />
-        </app-modal>
     </div>
 </template>
 
@@ -62,27 +48,18 @@
     import AppDatepicker from '../AppDatepicker';
     import AccountMenu from '../Dashboard/AccountMenu';
     import CreateTaskForm from '../Task/CreateTaskForm';
-    import AppModal from '../AppModal';
     import moment from 'moment';
 
     export default {
         name: 'DashboardHeader',
         components: {
-            AppModal,
             AppDatepicker,
-            AccountMenu,
-            CreateTaskForm,
         },
         data() {
             return {
                 datepickerOpened: false,
                 selectedDate: this.date,
-                accountMenuOpened: false,
                 createTaskModalWindowOpened: false,
-                createTaskFormData: {
-                    name: '',
-                    repeatable: false,
-                },
             };
         },
         watch: {
@@ -109,14 +86,16 @@
             hideDatepicker() {
                 this.datepickerOpened = false;
             },
-            showAccountMenu() {
-                this.accountMenuOpened ? this.hideAccountMenu() : this.accountMenuOpened = true;
-            },
-            hideAccountMenu() {
-                this.accountMenuOpened = false;
-            },
             onDateChanged(date) {
                 this.selectedDate = date;
+            },
+            openCreateTaskModal() {
+                this.$modal.open(CreateTaskForm, {}, 'New task');
+            },
+            openAccountMenu(e) {
+                let coordinates = e.currentTarget.getBoundingClientRect();
+
+                this.$menu.open(AccountMenu, {},  coordinates.y + 40, coordinates.x);
             },
         }
     }

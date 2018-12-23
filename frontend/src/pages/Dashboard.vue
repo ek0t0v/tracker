@@ -1,5 +1,5 @@
 <template>
-    <div class="root">
+    <div class="dashboard">
         <div class="dashboard-header-wrapper">
             <DashboardHeader>{{ headerText }}</DashboardHeader>
         </div>
@@ -63,7 +63,7 @@
 <style lang="less" scoped>
     @import '../less/style';
 
-    .root {
+    .dashboard {
         .flex(column, nowrap, center, center);
         width: 100%;
     }

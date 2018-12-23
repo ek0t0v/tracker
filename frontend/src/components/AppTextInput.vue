@@ -12,7 +12,17 @@
             type="text"
             class="input__input"
             @change="onChange"
+            @blur="onBlur"
         />
+        <div class="input__errors">
+            <span
+                v-for="(error, index) in validationErrors"
+                :key="index"
+                class="input__error"
+            >
+                {{ error }}
+            </span>
+        </div>
     </div>
 </template>
 
@@ -29,6 +39,14 @@
                 default: '',
             },
             markLabelAsRequired: Boolean,
+            onBlur: {
+                type: Function,
+                default: () => { console.log('on blur'); },
+            },
+            validationErrors: {
+                type: Array,
+                default: () => [],
+            },
         },
         methods: {
             onChange(e) {
@@ -83,6 +101,19 @@
                 color: @blue_2;
             }
 
+        }
+
+        &__errors {
+            .flex(column, nowrap, flex-start, flex-start);
+        }
+
+        &__error {
+            .font(@primary-font, 13px, 400, #D60000);
+            margin: 0 0 2px 0;
+
+            &:last-child {
+                margin: 0;
+            }
         }
 
     }

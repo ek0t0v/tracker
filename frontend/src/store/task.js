@@ -20,6 +20,9 @@ export default {
                 .then(response => commit('load', response.data.items))
             ;
         },
+        create({ commit }, payload) {
+            commit('create', payload);
+        },
         setState({ commit }, payload) {
             api.put('/tasks/' + payload.id + '/' + moment(payload.forDate).format('YYYY-MM-DD') + '/state', {
                 state: payload.state,
@@ -36,6 +39,9 @@ export default {
                 task.forDate = new Date(Date.parse(task.forDate));
                 state.items.push(task);
             });
+        },
+        create(state, task) {
+            console.log(task);
         },
         setState(state, task) {
             state.items.forEach(item => {

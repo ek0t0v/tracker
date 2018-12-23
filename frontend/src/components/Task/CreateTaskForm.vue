@@ -6,11 +6,13 @@
         <div class="create-task-form__element">
             <app-text-input
                 :value="name"
-                :placeholder="'Do something'"
+                :placeholder="$t('name.placeholder')"
                 :mark-label-as-required="true"
+                :on-blur="validateName"
+                :validation-errors="validation.name"
                 @on-change="onNameChanged"
             >
-                Task name
+                {{ $t('name.label') }}
             </app-text-input>
         </div>
         <div class="create-task-form__element">
@@ -20,7 +22,7 @@
                 :mark-label-as-required="true"
                 @on-change="onStartChanged"
             >
-                Date
+                {{ $t('start.label') }}
             </app-date-input>
         </div>
         <div class="create-task-form__element">
@@ -28,7 +30,7 @@
                 :is-checked="isRepeatable"
                 @on-checked="isRepeatable = !isRepeatable"
             >
-                Repeatable
+                {{ $t('repeatable') }}
             </app-checkbox>
         </div>
         <div
@@ -45,7 +47,7 @@
         </div>
         <input
             type="submit"
-            value="Create new task"
+            :value="$t('submit')"
             class="common-button create-task-form__submit-button"
         />
     </form>
@@ -55,6 +57,8 @@
     import AppCheckbox from '../AppCheckbox';
     import AppTextInput from '../AppTextInput';
     import AppDateInput from '../AppDateInput';
+    import moment from 'moment';
+    import { mapActions } from 'vuex';
 
     export default {
         name: 'CreateTaskForm',
@@ -63,17 +67,64 @@
             AppTextInput,
             AppDateInput,
         },
+        i18n: {
+            messages: {
+                en: {
+                    name: {
+                        label: 'Task name',
+                        placeholder: 'Do something',
+                        validation: {
+                            empty: 'Enter task name.',
+                        },
+                    },
+                    start: {
+                        label: 'Date',
+                    },
+                    repeatable: 'Repeatable',
+                    submit: 'Create new task',
+                },
+                ru: {
+                    name: {
+                        label: 'Название задачи',
+                        placeholder: 'Сделать что-то',
+                        validation: {
+                            empty: 'Введите название задачи.',
+                        },
+                    },
+                    start: {
+                        label: 'Дата начала',
+                    },
+                    repeatable: 'Повтор',
+                    submit: 'Создать задачу',
+                },
+            },
+        },
         data() {
             return {
                 name: '',
-                start: null,
+                start: moment().format('YYYY-MM-DD'),
                 end: null, // сделать ограничение - end всегда должен быть больше start
                 isRepeatable: false,
+                validation: {
+                    name: [],
+                },
             };
         },
         methods: {
+            ...mapActions('task', [
+                'create',
+            ]),
             onNameChanged(name) {
                 this.name = name;
+            },
+            validateName() {
+                this.validation.name = [];
+
+                if (this.name === '') {
+                    this.validation.name = [
+                        this.$t('name.validation.empty'),
+                    ];
+                }
             },
             onStartChanged(start) {
                 this.start = start;
@@ -82,7 +133,11 @@
                 this.end = end;
             },
             onSubmit() {
-                console.log(this.name, this.start, this.end);
+                this.create({
+                    name: this.name,
+                    start: this.start,
+                    end: this.end,
+                });
             },
         },
     }
@@ -94,7 +149,7 @@
     .create-task-form {
 
         .flex(column, nowrap, flex-start, flex-start);
-        width: 100%;
+        width: 512px;
 
         &__element {
 

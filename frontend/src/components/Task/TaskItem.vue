@@ -9,40 +9,12 @@
     >
         <div class="task-item__column">
             <div
-                v-menu="menu"
                 class="task-item__menu-button"
                 @click="onMenuOpened"
             >
                 <span>
                     <img />
                 </span>
-                <transition name="fade">
-                    <CommonContextMenu v-show="menu">
-                        <CommonContextMenuItem
-                            :label="'Edit'"
-                            :icon-css-class="'far fa-edit'"
-                            @click="onEdit"
-                        />
-                        <CommonContextMenuItem
-                            :label="'Duplicate'"
-                            :icon-css-class="'far fa-clone'"
-                        />
-                        <CommonContextMenuItem
-                            :label="'Mark as important'"
-                            :icon-css-class="'far fa-star'"
-                        />
-                        <CommonContextMenuItem
-                            :label="'Create notification'"
-                            :icon-css-class="'far fa-bell'"
-                        />
-                        <CommonContextMenuDivider />
-                        <CommonContextMenuItem
-                            :label="'Remove'"
-                            :icon-css-class="'far fa-trash-alt'"
-                            :type="'danger'"
-                        />
-                    </CommonContextMenu>
-                </transition>
             </div>
             <div class="task-item__checkbox">
                 <div
@@ -57,9 +29,6 @@
                 </div>
             </div>
             <div class="task-item__name">{{ name }}</div>
-        </div>
-        <div class="task-item__column">
-
         </div>
         <div class="task-item__column">
             <div
@@ -80,19 +49,12 @@
 </template>
 
 <script>
-    import CommonContextMenu from '../Common/CommonContextMenu';
-    import CommonContextMenuItem from '../Common/CommonContextMenuItem';
-    import CommonContextMenuDivider from '../Common/CommonContextMenuDivider';
+    import TaskMenu from '../Task/TaskMenu';
     import { mapActions } from 'vuex';
     import moment from 'moment';
 
     export default {
         name: 'TaskItem',
-        components: {
-            CommonContextMenu,
-            CommonContextMenuItem,
-            CommonContextMenuDivider,
-        },
         props: {
             id: {
                 type: Number,
@@ -137,17 +99,11 @@
             return {
                 active: false,
                 done: false,
-                menu: {
-                    actions: [],
-                },
             };
         },
         computed: {
             forDateFormatted() {
                 return moment(this.forDate).format('MMM DD');
-            },
-            forDateTooltip() {
-                return 'From ' + moment(this.forDate).format('MMMM Do YYYY');
             },
         },
         methods: {
@@ -163,14 +119,13 @@
                     state: state,
                 });
             },
-            onEdit() {
-                this.$router.push('create-task');
-            },
             onMenuOpened(e) {
-                this.$contextMenu.open();
-                // console.log(this);
-                // контейнер с меню должен быть общий для всех меню
-                // компонент определяет содержимое меню
+                let coordinates = e.currentTarget.getBoundingClientRect();
+
+                this.$menu.open(TaskMenu, {
+                    id: this.id,
+                    name: this.name,
+                }, coordinates.y + 40, coordinates.x);
             },
         },
     }
@@ -258,7 +213,6 @@
                 .flex(row, nowrap, center, center);
                 width: 24px;
                 height: 24px;
-                /*display: block;*/
                 opacity: 0;
                 cursor: pointer;
                 border-radius: 3px;
@@ -279,7 +233,6 @@
                     display: block;
                     width: 8px;
                     height: 13px;
-                    /*background-color: #ddd;*/
                 }
 
             }

@@ -1,15 +1,15 @@
 <template>
-    <div class="common-context-menu-divider" />
+    <div class="menu-delimiter" />
 </template>
 
 <script>
     export default {
-        name: 'CommonContextMenuDivider',
+        name: 'AppMenuDelimiter',
     }
 </script>
 
 <style lang="less" scoped>
-    .common-context-menu-divider {
+    .menu-delimiter {
         width: 100%;
         height: 1px;
         margin: 8px 0;
