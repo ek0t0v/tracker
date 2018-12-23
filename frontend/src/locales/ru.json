@@ -9,7 +9,9 @@
         "text": {
             "today": "Сегодня",
             "yesterday": "Вчера",
-            "tomorrow": "Завтра"
+            "tomorrow": "Завтра",
+            "thisYearDateFormat": "D MMMM",
+            "anotherYearDateFormat": "D MMMM YYYY"
         }
     },
     "createTaskForm": {
@@ -32,7 +34,8 @@
         "submit": "Создать задачу"
     },
     "datepicker": {
-        "monthFormat": "MMMM"
+        "monthFormat": "MMMM YYYY",
+        "monthFormatForCurrentYear": "MMMM"
     },
     "accountMenu": {
         "settings": {

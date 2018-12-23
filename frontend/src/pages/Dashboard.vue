@@ -1,7 +1,7 @@
 <template>
     <div class="dashboard">
         <div class="dashboard-header-wrapper">
-            <DashboardHeader>{{ headerText }}</DashboardHeader>
+            <DashboardHeader :selected-date="start">{{ headerText }}</DashboardHeader>
         </div>
         <TaskList />
     </div>
@@ -30,40 +30,18 @@
                 let headerText;
 
                 if (moment(this.start).isSame(moment(), 'day')) {
-                    headerText = this.$t('headerText.today');
+                    headerText = this.$t('header.text.today');
                 } else if (moment(this.start).isSame(moment().subtract(1, 'days'), 'day')) {
-                    headerText = this.$t('headerText.yesterday');
+                    headerText = this.$t('header.text.yesterday');
                 } else if (moment(this.start).isSame(moment().add(1, 'days'), 'day')) {
-                    headerText = this.$t('headerText.tomorrow');
+                    headerText = this.$t('header.text.tomorrow');
                 } else if (moment(this.start).year() === moment().year()) {
-                    headerText = moment(this.start).format(this.$t('headerText.thisYearDateFormat'));
+                    headerText = moment(this.start).format(this.$t('header.text.thisYearDateFormat'));
                 } else {
-                    headerText = moment(this.start).format(this.$t('headerText.anotherYearDateFormat'));
+                    headerText = moment(this.start).format(this.$t('header.text.anotherYearDateFormat'));
                 }
 
                 return headerText;
-            },
-        },
-        i18n: {
-            messages: {
-                en: {
-                    headerText: {
-                        yesterday: 'Yesterday',
-                        today: 'Today',
-                        tomorrow: 'Tomorrow',
-                        thisYearDateFormat: 'MMMM Do',
-                        anotherYearDateFormat: 'MMMM Do YYYY',
-                    },
-                },
-                ru: {
-                    headerText: {
-                        yesterday: 'Вчера',
-                        today: 'Сегодня',
-                        tomorrow: 'Завтра',
-                        thisYearDateFormat: 'D MMMM',
-                        anotherYearDateFormat: 'D MMMM YYYY',
-                    },
-                },
             },
         },
         watch: {

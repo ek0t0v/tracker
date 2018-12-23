@@ -15,7 +15,6 @@
                 <i class="fas fa-angle-right" />
             </span>
         </div>
-
         <div class="datepicker-days">
             <div class="datepicker-days__weekdays">
                 <span
@@ -33,6 +32,7 @@
                     :class="{
                         'datepicker-days__day--disabled': day.month !== 0,
                         'datepicker-days__day--current': day.currentDay,
+                        'datepicker-days__day--today': day.today,
                     }"
                     class="datepicker-days__day"
                     @click="selectDate(day)"
@@ -63,7 +63,7 @@
                 default: 0,
                 validator: value => value > -1 && value < 7,
             },
-            date: {
+            date: { // todo: Позволить передавать null.
                 type: Date,
                 default: () => new Date(),
             },
@@ -83,13 +83,15 @@
         },
         computed: {
             currentMonthName() {
-                return moment(this.localDate).format(this.$t('datepicker.monthFormat'));
-            },
-            currentDay() {
-                return moment(this.localDate).day();
+                let localDateAsMoment = moment(this.localDate);
+                let format = localDateAsMoment.isSame(new Date(), 'year')
+                    ? this.$t('datepicker.monthFormatForCurrentYear')
+                    : this.$t('datepicker.monthFormat');
+
+                return localDateAsMoment.format(format);
             },
             days() {
-                let leftBias = moment(this.localDate).startOf('month').weekday() - this.weekStartIndex;
+                let leftBias = moment(this.localDate).startOf('month').isoWeekday() - this.weekStartIndex;
 
                 // Если месяц начинается с первого дня недели (понедельника, например), заполняет всю верхнюю строку днями из прошлого месяца.
                 if (leftBias === 0) {
@@ -105,14 +107,19 @@
                         day: daysInPreviewMonth - i,
                         month: -1,
                         currentDay: false,
+                        today: false,
                     });
                 }
+
+                let todayDay = this.getTodayDay();
+                let selectedDay = this.getSelectedDay();
 
                 for (let i = 1; i <= moment(this.localDate).daysInMonth(); i++) {
                     days.push({
                         day: i,
                         month: 0,
-                        currentDay: moment(this.localDate).date() === i, // надо определять не только по дню, но и дате в целом
+                        currentDay: selectedDay && selectedDay === i,
+                        today: todayDay && todayDay === i,
                     });
                 }
 
@@ -127,6 +134,7 @@
                         day: i,
                         month: 1,
                         currentDay: false,
+                        today: false,
                     });
                 }
 
@@ -161,6 +169,18 @@
             },
             previousMonth() {
                 this.localDate = moment(this.localDate).subtract(1, 'months');
+            },
+            getTodayDay() {
+                return moment(this.localDate).isSame(new Date(), 'month')
+                    ? moment(new Date()).date()
+                    : null;
+            },
+            getSelectedDay() {
+                let localDateAsMoment = moment(this.localDate);
+
+                return localDateAsMoment.isSame(this.date, 'day')
+                    ? localDateAsMoment.date()
+                    : null;
             },
         },
     }
@@ -224,6 +244,7 @@
             height: 34px;
             cursor: pointer;
             color: @blue_1;
+            border-radius: 3px;
             transition: .1s background-color ease-in-out;
 
             &:hover {
@@ -268,6 +289,7 @@
             height: 34px;
             cursor: pointer;
             color: @blue_1;
+            border-radius: 3px;
             transition: .1s all ease-in-out;
 
             &--disabled {
@@ -275,11 +297,16 @@
             }
 
             &--current {
-                color: #fff;
-                background-color: @blue_1;
+                color: #fff !important;
+                background-color: @blue_1 !important;
             }
 
-            &:hover:not(.datepicker-days__day--current) {
+            &--today {
+                color: @blue_1;
+                background-color: @blue_4;
+            }
+
+            &:hover:not(.datepicker-days__day--current):not(.datepicker-days__day--today) {
                 background-color: @blue_5;
             }
 

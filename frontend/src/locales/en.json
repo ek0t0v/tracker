@@ -9,7 +9,9 @@
         "text": {
             "today": "Today",
             "yesterday": "Yesterday",
-            "tomorrow": "Tomorrow"
+            "tomorrow": "Tomorrow",
+            "thisYearDateFormat": "MMMM Do",
+            "anotherYearDateFormat": "MMMM Do YYYY"
         }
     },
     "createTaskForm": {
@@ -32,7 +34,8 @@
         "submit": "Create new task"
     },
     "datepicker": {
-        "monthFormat": "MMMM"
+        "monthFormat": "MMMM YYYY",
+        "monthFormatForCurrentYear": "MMMM"
     },
     "accountMenu": {
         "settings": {

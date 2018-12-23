@@ -70,8 +70,8 @@
         data() {
             return {
                 name: '',
-                start: moment().format('YYYY-MM-DD'),
-                end: null, // сделать ограничение - end всегда должен быть больше start
+                start: new Date(),
+                end: new Date(), // сделать ограничение - end всегда должен быть больше start
                 isRepeatable: false,
                 validation: {
                     name: [],

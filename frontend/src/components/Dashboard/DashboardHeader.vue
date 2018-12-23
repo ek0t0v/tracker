@@ -29,6 +29,7 @@
                             v-show="datepickerOpened"
                             :mode="'single'"
                             :week-start-index="1"
+                            :date="localSelectedDate"
                             class="dashboard-header-datepicker"
                             @on-date-changed="onDateChanged"
                         />
@@ -55,10 +56,16 @@
         components: {
             AppDatepicker,
         },
+        props: {
+            selectedDate: {
+                type: Date,
+                default: new Date(),
+            },
+        },
         data() {
             return {
                 datepickerOpened: false,
-                selectedDate: this.date,
+                localSelectedDate: this.selectedDate,
                 createTaskModalWindowOpened: false,
             };
         },
@@ -78,6 +85,9 @@
 
                 this.$router.push(to);
             },
+        },
+        updated() {
+            this.localSelectedDate = this.selectedDate;
         },
         methods: {
             toggleDatepicker() {

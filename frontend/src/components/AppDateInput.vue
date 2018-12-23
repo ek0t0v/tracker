@@ -8,7 +8,7 @@
         </label>
         <input
             v-click-outside="hideDatepicker"
-            :value="value"
+            :value="formattedValue"
             :placeholder="placeholder"
             type="text"
             class="date-input__input"
@@ -21,6 +21,7 @@
                 v-show="isDatepickerOpened"
                 :mode="'single'"
                 :week-start-index="1"
+                :date="value"
                 class="date-input__datepicker"
                 @on-date-changed="onChangedFromDatepicker"
             />
@@ -39,8 +40,8 @@
         },
         props: {
             value: {
-                type: String,
-                default: '',
+                type: Date,
+                default: new Date(),
             },
             placeholder: {
                 type: String,
@@ -53,12 +54,17 @@
                 isDatepickerOpened: false,
             };
         },
+        computed: {
+            formattedValue() {
+                return moment(this.value).format('YYYY-MM-DD');
+            },
+        },
         methods: {
             onChange(e) {
                 this.$emit('on-change', e.target.value);
             },
             onChangedFromDatepicker(date) {
-                this.$emit('on-change', moment(date).format('YYYY-MM-DD'));
+                this.$emit('on-change', date);
             },
             showDatepicker() {
                 this.isDatepickerOpened ? this.hideDatepicker() : this.isDatepickerOpened = true;
