@@ -50,7 +50,7 @@
             },
         },
         mounted() {
-            this.$bus.on('dashboard-header:on-date-change', payload => {
+            this.$bus.on(this._uid + ':on-date-change', payload => {
                 let to = {
                     name: 'dashboard',
                 };
@@ -84,7 +84,7 @@
                     weekStartIndex: 1,
                     events: [
                         new Event('on-select', [
-                            'dashboard-header:on-date-change',
+                            this._uid + ':on-date-change',
                         ]),
                     ],
                 }, coordinates.y + 40, coordinates.x);

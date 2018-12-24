@@ -42,8 +42,7 @@
             },
         },
         mounted() {
-            // todo: Исправить - срабатывает 2 раза из-за того что имеем 2 компонента AppDateInput в родителе.
-            this.$bus.on('app-date-input:on-date-change', payload => {
+            this.$bus.on(this._uid + ':on-date-change', payload => {
                 this.$emit('on-change', payload.date);
             });
         },
@@ -57,7 +56,7 @@
                     weekStartIndex: 1,
                     events: [
                         new Event('on-select', [
-                            'app-date-input:on-date-change',
+                            this._uid + ':on-date-change',
                         ]),
                     ],
                 }, coordinates.y + 40, coordinates.x);

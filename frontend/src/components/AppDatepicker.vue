@@ -50,6 +50,7 @@
 <script>
     import moment from 'moment';
     import EventMixin from '../mixins/EventMixin';
+    import Event from '../classes/Event';
 
     export default {
         name: 'AppDatepicker',
@@ -89,6 +90,7 @@
             events: {
                 type: Array,
                 default: () => [],
+                validator: array => array.every(element => element instanceof Event),
             },
         },
         data() {
