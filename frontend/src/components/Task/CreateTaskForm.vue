@@ -20,7 +20,7 @@
                 :value="start"
                 :placeholder="$t('createTaskForm.start.placeholder')"
                 :mark-label-as-required="true"
-                @on-change="onStartChanged"
+                @on-change="onStartChange"
             >
                 {{ $t('createTaskForm.start.label') }}
             </app-date-input>
@@ -40,7 +40,7 @@
             <app-date-input
                 :value="end"
                 :placeholder="$t('createTaskForm.end.placeholder')"
-                @on-change="onEndChanged"
+                @on-change="onEndChange"
             >
                 {{ $t('createTaskForm.end.label') }}
             </app-date-input>
@@ -57,7 +57,6 @@
     import AppCheckbox from '../AppCheckbox';
     import AppTextInput from '../AppTextInput';
     import AppDateInput from '../AppDateInput';
-    import moment from 'moment';
     import { mapActions } from 'vuex';
 
     export default {
@@ -71,7 +70,7 @@
             return {
                 name: '',
                 start: new Date(),
-                end: new Date(), // сделать ограничение - end всегда должен быть больше start
+                end: null,
                 isRepeatable: false,
                 validation: {
                     name: [],
@@ -94,10 +93,10 @@
                     ];
                 }
             },
-            onStartChanged(start) {
+            onStartChange(start) {
                 this.start = start;
             },
-            onEndChanged(end) {
+            onEndChange(end) {
                 this.end = end;
             },
             onSubmit() {

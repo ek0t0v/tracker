@@ -8,8 +8,6 @@ function initialState() {
     return {};
 }
 
-// todo: Может быть стоит разместить здесь выбранную дату (selectedDate)?
-
 export default new Vuex.Store({
     modules: {
         task,

@@ -7,12 +7,11 @@
             <slot />
         </label>
         <input
-            v-click-outside="hideDatepicker"
             :value="formattedValue"
             :placeholder="placeholder"
             type="text"
             class="date-input__input"
-            @change="onChange"
+            readonly
             @click="openDatepickerMenu"
         />
         <i class="date-input__icon fas fa-calendar" />
@@ -21,6 +20,7 @@
 
 <script>
     import AppDatepicker from './AppDatepicker';
+    import Event from '../classes/Event';
     import moment from 'moment';
 
     export default {
@@ -28,7 +28,7 @@
         props: {
             value: {
                 type: Date,
-                default: new Date(),
+                default: null,
             },
             placeholder: {
                 type: String,
@@ -36,30 +36,30 @@
             },
             markLabelAsRequired: Boolean,
         },
-        data() {
-            return {
-                isDatepickerOpened: false,
-            };
-        },
         computed: {
             formattedValue() {
-                return moment(this.value).format('YYYY-MM-DD');
+                return this.value ? moment(this.value).format('YYYY-MM-DD') : '';
             },
         },
+        mounted() {
+            // todo: Исправить - срабатывает 2 раза из-за того что имеем 2 компонента AppDateInput в родителе.
+            this.$bus.on('app-date-input:on-date-change', payload => {
+                this.$emit('on-change', payload.date);
+            });
+        },
         methods: {
-            onChange(e) {
-                this.$emit('on-change', e.target.value);
-            },
-            onChangedFromDatepicker(date) {
-                this.$emit('on-change', date);
-            },
             openDatepickerMenu(e) {
                 let coordinates = e.currentTarget.getBoundingClientRect();
 
                 this.$menu.open(AppDatepicker, {
+                    initialDate: this.value,
                     mode: 'single',
                     weekStartIndex: 1,
-                    date: this.localSelectedDate,
+                    events: [
+                        new Event('on-select', [
+                            'app-date-input:on-date-change',
+                        ]),
+                    ],
                 }, coordinates.y + 40, coordinates.x);
             },
         },

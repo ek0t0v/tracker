@@ -30,4 +30,10 @@ class EventBus {
     }
 }
 
-export default new EventBus();
+const Bus = {
+    install(Vue) {
+        Vue.prototype.$bus = new EventBus();
+    },
+};
+
+export default Bus;

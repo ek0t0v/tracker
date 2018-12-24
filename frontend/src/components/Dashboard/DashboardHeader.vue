@@ -39,29 +39,23 @@
     import AccountMenu from '../Dashboard/AccountMenu';
     import CreateTaskForm from '../Task/CreateTaskForm';
     import moment from 'moment';
+    import Event from '../../classes/Event';
 
     export default {
         name: 'DashboardHeader',
         props: {
-            selectedDate: {
+            date: {
                 type: Date,
                 default: new Date(),
             },
         },
-        data() {
-            return {
-                datepickerOpened: false,
-                localSelectedDate: this.selectedDate,
-                createTaskModalWindowOpened: false,
-            };
-        },
-        watch: {
-            selectedDate(date) {
+        mounted() {
+            this.$bus.on('dashboard-header:on-date-change', payload => {
                 let to = {
                     name: 'dashboard',
                 };
 
-                date = moment(date);
+                let date = moment(payload.date);
 
                 if (!date.isSame(moment(), 'day')) {
                     to.query = {
@@ -70,21 +64,9 @@
                 }
 
                 this.$router.push(to);
-            },
-        },
-        updated() {
-            this.localSelectedDate = this.selectedDate;
+            });
         },
         methods: {
-            toggleDatepicker() {
-                this.datepickerOpened ? this.hideDatepicker() : this.datepickerOpened = true;
-            },
-            hideDatepicker() {
-                this.datepickerOpened = false;
-            },
-            onDateChanged(date) {
-                this.selectedDate = date;
-            },
             openCreateTaskModal() {
                 this.$modal.open(CreateTaskForm, {}, this.$t('modal.header.createTaskForm'));
             },
@@ -97,9 +79,14 @@
                 let coordinates = e.currentTarget.getBoundingClientRect();
 
                 this.$menu.open(AppDatepicker, {
+                    initialDate: this.date,
                     mode: 'single',
                     weekStartIndex: 1,
-                    date: this.localSelectedDate,
+                    events: [
+                        new Event('on-select', [
+                            'dashboard-header:on-date-change',
+                        ]),
+                    ],
                 }, coordinates.y + 40, coordinates.x);
             },
         }

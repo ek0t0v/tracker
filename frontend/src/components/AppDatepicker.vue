@@ -1,5 +1,8 @@
 <template>
-    <div class="datepicker" @click="onClick">
+    <div
+        class="datepicker"
+        @click="onClick"
+    >
         <div class="datepicker-navigation">
             <span
                 class="datepicker-navigation__button"
@@ -46,9 +49,13 @@
 
 <script>
     import moment from 'moment';
+    import EventMixin from '../mixins/EventMixin';
 
     export default {
         name: 'AppDatepicker',
+        mixins: [
+            EventMixin,
+        ],
         props: {
             mode: {
                 type: String,
@@ -63,9 +70,9 @@
                 default: 0,
                 validator: value => value > -1 && value < 7,
             },
-            date: { // todo: Позволить передавать null.
+            initialDate: {
                 type: Date,
-                default: () => new Date(),
+                default: null,
             },
             leftDateLimit: {
                 type: Date,
@@ -79,10 +86,15 @@
                 type: Boolean,
                 default: true,
             },
+            events: {
+                type: Array,
+                default: () => [],
+            },
         },
         data() {
             return {
-                localDate: this.date,
+                localDate: this.initialDate ? this.initialDate : new Date(),
+                selectedDateForDays: this.initialDate, // используется для определения текущего дня, когда строим массив дней (computed -> days)
             };
         },
         computed: {
@@ -165,8 +177,11 @@
                 date = moment(date).date(day.day);
 
                 this.localDate = date;
+                this.selectedDateForDays = date;
 
-                this.$emit('on-date-changed', this.localDate.toDate());
+                this.emitEventsByComponentEvent('on-select', {
+                    date: this.localDate.toDate(),
+                });
             },
             nextMonth() {
                 this.localDate = moment(this.localDate).add(1, 'months');
@@ -182,7 +197,7 @@
             getSelectedDay() {
                 let localDateAsMoment = moment(this.localDate);
 
-                return localDateAsMoment.isSame(this.date, 'day')
+                return localDateAsMoment.isSame(this.selectedDateForDays, 'day')
                     ? localDateAsMoment.date()
                     : null;
             },
@@ -206,11 +221,11 @@
         box-sizing: border-box;
         border-radius: 3px;
         background-color: #fff;
-        /*box-shadow: 0 0 0 1px rgba(29,44,76,.1), 0 4px 8px rgba(0,0,0,.15);*/
         z-index: 100000000;
         will-change: transform;
         position: relative;
 
+        // todo: Стрелка не должна быть здесь - перенести в компонент AppMenu.
         &:before,
         &:after {
             content: '';

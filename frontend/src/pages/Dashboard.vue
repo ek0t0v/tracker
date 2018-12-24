@@ -1,7 +1,7 @@
 <template>
     <div class="dashboard">
         <div class="dashboard-header-wrapper">
-            <DashboardHeader :selected-date="start">{{ headerText }}</DashboardHeader>
+            <DashboardHeader :date="start">{{ headerText }}</DashboardHeader>
         </div>
         <TaskList />
     </div>
