@@ -7,17 +7,17 @@ let RepeatTypeEnum = Object.freeze({
         value: 'week',
         translation: 'repeatTypeEnum.week',
     },
-    sequence: {
-        value: 'sequence',
-        translation: 'repeatTypeEnum.sequence',
-    },
-    workingDays: {
-        value: 'working-days',
-        translation: 'repeatTypeEnum.workingDays',
+    weekday: {
+        value: 'weekday',
+        translation: 'repeatTypeEnum.weekday',
     },
     weekend: {
         value: 'weekend',
         translation: 'repeatTypeEnum.weekend',
+    },
+    custom: {
+        value: 'custom',
+        translation: 'repeatTypeEnum.custom'
     },
 });
 

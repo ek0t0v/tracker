@@ -75,8 +75,8 @@
     "repeatTypeEnum": {
         "daily": "Daily",
         "week": "Week",
-        "sequence": "Sequence",
-        "workingDays": "Working days",
-        "weekend": "Weekend"
+        "weekday": "On weekdays",
+        "weekend": "On weekends",
+        "custom": "Custom"
     }
 }

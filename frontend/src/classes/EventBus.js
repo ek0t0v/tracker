@@ -30,4 +30,4 @@ class EventBus {
     }
 }
 
-export default new EventBus();
+export default EventBus;

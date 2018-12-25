@@ -32,8 +32,8 @@
         <!-- Repeatable -->
         <div class="create-task-form__element">
             <app-checkbox
-                :is-checked="isRepeatable"
-                @on-checked="isRepeatable = !isRepeatable"
+                :is-checked="repeatable"
+                @on-checked="repeatable = !repeatable"
             >
                 {{ $t('createTaskForm.repeatable') }}
             </app-checkbox>
@@ -41,7 +41,7 @@
 
         <!-- End -->
         <div
-            v-if="isRepeatable"
+            v-if="repeatable"
             class="create-task-form__element"
         >
             <app-date-input
@@ -55,7 +55,7 @@
 
         <!-- Repeat type -->
         <div
-            v-if="isRepeatable"
+            v-if="repeatable"
             class="create-task-form__element"
         >
             <app-dropdown
@@ -66,17 +66,15 @@
                 <app-dropdown-item
                     :value="repeatTypeEnum.daily"
                     :icon-css-class="'fas fa-calendar-day'"
+                    :disabled="true"
                 />
                 <app-dropdown-item
                     :value="repeatTypeEnum.week"
                     :icon-css-class="'fas fa-calendar-week'"
+                    :disabled="true"
                 />
                 <app-dropdown-item
-                    :value="repeatTypeEnum.sequence"
-                    :icon-css-class="'fas fa-table'"
-                />
-                <app-dropdown-item
-                    :value="repeatTypeEnum.workingDays"
+                    :value="repeatTypeEnum.weekday"
                     :icon-css-class="'fas fa-briefcase'"
                     :disabled="true"
                 />
@@ -84,6 +82,10 @@
                     :value="repeatTypeEnum.weekend"
                     :icon-css-class="'fas fa-couch'"
                     :disabled="true"
+                />
+                <app-dropdown-item
+                    :value="repeatTypeEnum.custom"
+                    :icon-css-class="'fas fa-table'"
                 />
             </app-dropdown>
         </div>
@@ -117,12 +119,13 @@
         },
         data() {
             return {
+                repeatTypeEnum: RepeatTypeEnum,
                 name: '',
                 start: new Date(),
                 end: null,
-                isRepeatable: false,
-                repeatTypeEnum: RepeatTypeEnum,
-                repeatType: RepeatTypeEnum.daily,
+                repeatable: false,
+                repeatType: RepeatTypeEnum.custom,
+                repeatValue: null,
                 validation: {
                     name: [],
                 },
@@ -158,6 +161,8 @@
                     name: this.name,
                     start: this.start,
                     end: this.end,
+                    repeatType: this.repeatType,
+                    repeatValue: this.repeatValue,
                 });
             },
         },
