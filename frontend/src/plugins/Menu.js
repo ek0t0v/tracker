@@ -1,4 +1,4 @@
-// todo: Продумать и реализовать проброс событий при закрытии меню (допустим, выбрали дату, компонент через $emit возвращает значение родителю).
+import * as deepmerge from 'deepmerge'
 
 const Menu = {
     install(Vue) {
@@ -10,6 +10,17 @@ const Menu = {
                         isVisible: false,
                         component: null,
                         props: {},
+                        config: {
+                            arrow: {
+                                enabled: true,
+                                position: 'top',
+                                bias: 0,
+                            },
+                            position: {
+                                top: 0,
+                                left: 0,
+                            },
+                        },
                         top: 0,
                         bottom: 0,
                     },
@@ -17,17 +28,30 @@ const Menu = {
                         isVisible: false,
                         component: null,
                         props: {},
+                        config: {
+                            arrow: {
+                                enabled: true,
+                                position: 'top',
+                                bias: 0,
+                            },
+                            position: {
+                                top: 0,
+                                left: 0,
+                            },
+                        },
                         top: 0,
                         bottom: 0,
                     },
                 };
             },
             methods: {
-                open(component, props, top, left) {
+                open(component, props, config) {
+                    config = deepmerge(this.first.config, config);
+
                     if (!this.isFirstCellIsSet) {
                         this.first.isVisible = true;
-                        this.first.top = top + 'px';
-                        this.first.left = left + 'px';
+                        this.first.top = config.position.top + 'px';
+                        this.first.left = config.position.left + 'px';
                         this.first.component = component;
                         this.first.props = props;
 
@@ -37,8 +61,8 @@ const Menu = {
                     }
 
                     this.second.isVisible = true;
-                    this.second.top = top + 'px';
-                    this.second.left = left + 'px';
+                    this.second.top = config.position.top + 'px';
+                    this.second.left = config.position.left + 'px';
                     this.second.component = component;
                     this.second.props = props;
                 },

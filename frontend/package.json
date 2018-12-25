@@ -36,6 +36,7 @@
   },
   "dependencies": {
     "axios": "^0.18.0",
+    "deepmerge": "^3.0.0",
     "es6-promise": "^4.2.5",
     "moment": "^2.22.2",
     "v-click-outside": "^2.0.2",

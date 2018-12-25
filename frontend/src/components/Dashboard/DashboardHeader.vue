@@ -73,7 +73,12 @@
             openAccountMenu(e) {
                 let coordinates = e.currentTarget.getBoundingClientRect();
 
-                this.$menu.open(AccountMenu, {}, coordinates.y + 40, coordinates.x);
+                this.$menu.open(AccountMenu, {}, {
+                    position: {
+                        top: coordinates.y + 40,
+                        left: coordinates.x,
+                    },
+                });
             },
             openDatepickerMenu(e) {
                 let coordinates = e.currentTarget.getBoundingClientRect();
@@ -87,7 +92,15 @@
                             this._uid + ':on-date-change',
                         ]),
                     ],
-                }, coordinates.y + 40, coordinates.x);
+                }, {
+                    arrow: {
+                        enabled: false,
+                    },
+                    position: {
+                        top: coordinates.y + 40,
+                        left: coordinates.x,
+                    }
+                });
             },
         }
     }

@@ -126,7 +126,12 @@
                 this.$menu.open(TaskMenu, {
                     id: this.id,
                     name: this.name,
-                }, coordinates.y + 40, coordinates.x);
+                }, {
+                    position: {
+                        top: coordinates.y + 40,
+                        left: coordinates.x,
+                    },
+                });
             },
         },
     }

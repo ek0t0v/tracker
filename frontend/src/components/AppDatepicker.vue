@@ -216,41 +216,11 @@
     @import '../less/style';
 
     .datepicker {
-
         .noselect;
         width: 286px;
         padding: 16px 24px;
         box-sizing: border-box;
-        border-radius: 3px;
         background-color: #fff;
-        z-index: 100000000;
-        will-change: transform;
-        position: relative;
-
-        // todo: Стрелка не должна быть здесь - перенести в компонент AppMenu.
-        &:before,
-        &:after {
-            content: '';
-            display: block;
-            position: absolute;
-            left: 133px;
-            width: 0;
-            height: 0;
-            border-style: solid;
-        }
-
-        &:after {
-            top: -27px;
-            border-color: transparent transparent #fff transparent;
-            border-width: 10px;
-        }
-
-        &:before {
-            top: -29px;
-            border-color: transparent transparent rgba(29, 44, 76, 0.1) transparent;
-            border-width: 10px;
-        }
-
     }
 
     .datepicker-navigation {

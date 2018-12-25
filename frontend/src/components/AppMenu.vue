@@ -58,12 +58,37 @@
     @import '../less/style';
 
     .menu {
+
         .noselect;
         padding: 8px 0;
         position: absolute;
         border-radius: 3px;
         background-color: #fff;
         box-shadow: 0 0 0 1px rgba(29,44,76,.1), 0 4px 8px rgba(0,0,0,.15);
+
+        &:before,
+        &:after {
+            content: '';
+            display: block;
+            position: absolute;
+            left: calc(50% - 10px);
+            width: 0;
+            height: 0;
+            border-style: solid;
+        }
+
+        &:after {
+            top: -19px;
+            border-color: transparent transparent #fff transparent;
+            border-width: 10px;
+        }
+
+        &:before {
+            top: -21px;
+            border-color: transparent transparent rgba(29, 44, 76, 0.1) transparent;
+            border-width: 10px;
+        }
+
     }
 
     .fade-enter-active, .fade-leave-active {
