@@ -218,7 +218,7 @@
     .datepicker {
         .noselect;
         width: 286px;
-        padding: 16px 24px;
+        padding: 24px;
         box-sizing: border-box;
         background-color: #fff;
     }

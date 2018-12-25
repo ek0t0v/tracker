@@ -36,5 +36,7 @@
 </script>
 
 <style lang="less" scoped>
-    .account-menu {}
+    .account-menu {
+        padding: 8px 0;
+    }
 </style>

@@ -71,19 +71,15 @@
                 this.$modal.open(CreateTaskForm, {}, this.$t('modal.header.createTaskForm'));
             },
             openAccountMenu(e) {
-                let coordinates = e.currentTarget.getBoundingClientRect();
-
-                this.$menu.open(AccountMenu, {}, {
+                this.$menu.open(e, AccountMenu, {}, {
                     position: {
-                        top: coordinates.y + 40,
-                        left: coordinates.x,
+                        top: 16,
+                        left: -32,
                     },
                 });
             },
             openDatepickerMenu(e) {
-                let coordinates = e.currentTarget.getBoundingClientRect();
-
-                this.$menu.open(AppDatepicker, {
+                this.$menu.open(e, AppDatepicker, {
                     initialDate: this.date,
                     mode: 'single',
                     weekStartIndex: 1,
@@ -93,13 +89,10 @@
                         ]),
                     ],
                 }, {
-                    arrow: {
-                        enabled: false,
-                    },
                     position: {
-                        top: coordinates.y + 40,
-                        left: coordinates.x,
-                    }
+                        top: 16,
+                        left: -123,
+                    },
                 });
             },
         }

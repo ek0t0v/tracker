@@ -65,5 +65,7 @@
 </script>
 
 <style lang="less" scoped>
-    .task-menu {}
+    .task-menu {
+        padding: 8px 0;
+    }
 </style>

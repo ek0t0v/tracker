@@ -1,59 +1,61 @@
 import * as deepmerge from 'deepmerge'
 
+const menuDefaultConfig = {
+    // appearsFrom: 'top',
+    // arrow: {
+    //     enabled: true,
+    //     position: 'top',
+    //     bias: 0,
+    // },
+    position: {
+        top: 0,
+        left: 0,
+    },
+};
+
 const Menu = {
     install(Vue) {
         Vue.prototype.$menu = new Vue({
             data() {
                 return {
                     isFirstCellIsSet: false,
+                    // openedBy: null,
                     first: {
                         isVisible: false,
                         component: null,
                         props: {},
-                        config: {
-                            arrow: {
-                                enabled: true,
-                                position: 'top',
-                                bias: 0,
-                            },
-                            position: {
-                                top: 0,
-                                left: 0,
-                            },
-                        },
-                        top: 0,
-                        bottom: 0,
+                        config: menuDefaultConfig,
+                        width: null,
+                        height: null,
                     },
                     second: {
                         isVisible: false,
                         component: null,
                         props: {},
-                        config: {
-                            arrow: {
-                                enabled: true,
-                                position: 'top',
-                                bias: 0,
-                            },
-                            position: {
-                                top: 0,
-                                left: 0,
-                            },
-                        },
-                        top: 0,
-                        bottom: 0,
+                        config: menuDefaultConfig,
+                        width: null,
+                        height: null,
                     },
                 };
             },
             methods: {
-                open(component, props, config) {
-                    config = deepmerge(this.first.config, config);
+                open(e, component, props, config) {
+                    // this.validateConfig(config);
+
+                    config = deepmerge(menuDefaultConfig, config);
+
+                    let rect = e.currentTarget.getBoundingClientRect();
+
+                    config.position = {
+                        top: rect.y + rect.height + config.position.top,
+                        left: rect.x + config.position.left,
+                    };
 
                     if (!this.isFirstCellIsSet) {
                         this.first.isVisible = true;
-                        this.first.top = config.position.top + 'px';
-                        this.first.left = config.position.left + 'px';
                         this.first.component = component;
                         this.first.props = props;
+                        this.first.config = config;
 
                         this.isFirstCellIsSet = true;
 
@@ -61,10 +63,9 @@ const Menu = {
                     }
 
                     this.second.isVisible = true;
-                    this.second.top = config.position.top + 'px';
-                    this.second.left = config.position.left + 'px';
                     this.second.component = component;
                     this.second.props = props;
+                    this.second.config = config;
                 },
                 closeFirstMenu() {
                     this.first.isVisible = false;
@@ -83,6 +84,29 @@ const Menu = {
                         this.second.component = null;
                         this.second.props = {};
                     }, 150);
+                },
+                validateConfig(config) {
+                    let appearsFromIsValid = [
+                        'top',
+                        'bottom',
+                        'left',
+                        'right',
+                    ].indexOf(config.appearsFrom) > -1;
+
+                    if (!appearsFromIsValid) {
+                        throw '[Menu config error] Valid values for \'appearsFrom\' is \'top\', \'bottom\', \'left\' or \'right\'.';
+                    }
+
+                    let arrowPositionIsValid = [
+                        'top',
+                        'bottom',
+                        'left',
+                        'right',
+                    ].indexOf(config.arrow.position) > -1;
+
+                    if (!arrowPositionIsValid) {
+                        throw '[Menu config error] Valid values for \'arrow.position\' is \'top\', \'bottom\', \'left\' or \'right\'.';
+                    }
                 },
             },
         });

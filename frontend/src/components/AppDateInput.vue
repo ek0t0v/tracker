@@ -48,9 +48,7 @@
         },
         methods: {
             openDatepickerMenu(e) {
-                let coordinates = e.currentTarget.getBoundingClientRect();
-
-                this.$menu.open(AppDatepicker, {
+                this.$menu.open(e, AppDatepicker, {
                     initialDate: this.value,
                     mode: 'single',
                     weekStartIndex: 1,
@@ -59,7 +57,12 @@
                             this._uid + ':on-date-change',
                         ]),
                     ],
-                }, coordinates.y + 40, coordinates.x);
+                }, {
+                    position: {
+                        top: 8,
+                        left: 0,
+                    },
+                });
             },
         },
     }

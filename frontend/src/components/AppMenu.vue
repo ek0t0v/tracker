@@ -4,7 +4,8 @@
             <div
                 v-show="this.$menu.first.isVisible"
                 class="menu"
-                :style="{ top: this.$menu.first.top, left: this.$menu.first.left }"
+                :class="'menu--appears-from-' + this.$menu.first.config.appearsFrom"
+                :style="{ top: this.$menu.first.config.position.top + 'px', left: this.$menu.first.config.position.left + 'px' }"
             >
                 <first-menu-component />
             </div>
@@ -13,7 +14,8 @@
             <div
                 v-show="this.$menu.second.isVisible"
                 class="menu"
-                :style="{ top: this.$menu.second.top, left: this.$menu.second.left }"
+                :class="'menu--appears-from-' + this.$menu.second.config.appearsFrom"
+                :style="{ top: this.$menu.second.config.position.top + 'px', left: this.$menu.second.config.position.left + 'px' }"
             >
                 <second-menu-component />
             </div>
@@ -23,11 +25,21 @@
 <script>
     import Vue from 'vue';
 
+    // function isElement(element) {
+    //     return element instanceof Element || element instanceof HTMLDocument;
+    // }
+    //
+    // let element = null;
+
     Vue.component('first-menu-component', {
         updated() {
             this.$menu.first.isVisible
                 ? document.addEventListener('click', this.$menu.closeFirstMenu)
                 : document.removeEventListener('click', this.$menu.closeFirstMenu);
+
+            // if (this.$menu.first.isVisible && isElement(this.$el)) {
+            //     element = this.$el;
+            // }
         },
         render(h) {
             return h(this.$menu.first.component, {
@@ -41,6 +53,10 @@
             this.$menu.second.isVisible
                 ? document.addEventListener('click', this.$menu.closeSecondMenu)
                 : document.removeEventListener('click', this.$menu.closeSecondMenu);
+
+            // if (this.$menu.second.isVisible && isElement(this.$el)) {
+            //     element = this.$el;
+            // }
         },
         render(h) {
             return h(this.$menu.second.component, {
@@ -51,6 +67,9 @@
 
     export default {
         name: 'AppMenu',
+        // updated() {
+        //     this.$menu.opendedBy = element;
+        // },
     }
 </script>
 
@@ -58,37 +77,11 @@
     @import '../less/style';
 
     .menu {
-
         .noselect;
-        padding: 8px 0;
         position: absolute;
         border-radius: 3px;
         background-color: #fff;
         box-shadow: 0 0 0 1px rgba(29,44,76,.1), 0 4px 8px rgba(0,0,0,.15);
-
-        &:before,
-        &:after {
-            content: '';
-            display: block;
-            position: absolute;
-            left: calc(50% - 10px);
-            width: 0;
-            height: 0;
-            border-style: solid;
-        }
-
-        &:after {
-            top: -19px;
-            border-color: transparent transparent #fff transparent;
-            border-width: 10px;
-        }
-
-        &:before {
-            top: -21px;
-            border-color: transparent transparent rgba(29, 44, 76, 0.1) transparent;
-            border-width: 10px;
-        }
-
     }
 
     .fade-enter-active, .fade-leave-active {

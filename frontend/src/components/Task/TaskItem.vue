@@ -121,15 +121,13 @@
                 });
             },
             onMenuOpened(e) {
-                let coordinates = e.currentTarget.getBoundingClientRect();
-
-                this.$menu.open(TaskMenu, {
+                this.$menu.open(e, TaskMenu, {
                     id: this.id,
                     name: this.name,
                 }, {
                     position: {
-                        top: coordinates.y + 40,
-                        left: coordinates.x,
+                        top: -101.5 - 12,
+                        left: -175 - 8,
                     },
                 });
             },
