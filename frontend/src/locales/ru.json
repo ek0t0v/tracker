@@ -31,6 +31,9 @@
             "placeholder": "2018-12-25"
         },
         "repeatable": "Повтор",
+        "repeatType": {
+            "label": "Тип повтора"
+        },
         "submit": "Создать задачу"
     },
     "datepicker": {
@@ -68,5 +71,12 @@
             "label": "Удалить",
             "iconCssClass": "fas fa-trash"
         }
+    },
+    "repeatTypeEnum": {
+        "daily": "Ежедневно",
+        "week": "Неделя",
+        "sequence": "Последовательность",
+        "workingDays": "По рабочим дням",
+        "weekend": "В выходные"
     }
 }

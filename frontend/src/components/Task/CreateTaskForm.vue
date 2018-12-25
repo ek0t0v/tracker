@@ -3,6 +3,7 @@
         class="create-task-form"
         @submit.prevent="onSubmit"
     >
+        <!-- Name -->
         <div class="create-task-form__element">
             <app-text-input
                 :value="name"
@@ -15,6 +16,8 @@
                 {{ $t('createTaskForm.name.label') }}
             </app-text-input>
         </div>
+
+        <!-- Start -->
         <div class="create-task-form__element">
             <app-date-input
                 :value="start"
@@ -25,6 +28,8 @@
                 {{ $t('createTaskForm.start.label') }}
             </app-date-input>
         </div>
+
+        <!-- Repeatable -->
         <div class="create-task-form__element">
             <app-checkbox
                 :is-checked="isRepeatable"
@@ -33,6 +38,8 @@
                 {{ $t('createTaskForm.repeatable') }}
             </app-checkbox>
         </div>
+
+        <!-- End -->
         <div
             v-if="isRepeatable"
             class="create-task-form__element"
@@ -45,6 +52,43 @@
                 {{ $t('createTaskForm.end.label') }}
             </app-date-input>
         </div>
+
+        <!-- Repeat type -->
+        <div
+            v-if="isRepeatable"
+            class="create-task-form__element"
+        >
+            <app-dropdown
+                :label="$t('createTaskForm.repeatType.label')"
+                :value="$t(repeatType.translation)"
+                @on-change="onRepeatTypeChange"
+            >
+                <app-dropdown-item
+                    :value="repeatTypeEnum.daily"
+                    :icon-css-class="'fas fa-calendar-day'"
+                />
+                <app-dropdown-item
+                    :value="repeatTypeEnum.week"
+                    :icon-css-class="'fas fa-calendar-week'"
+                />
+                <app-dropdown-item
+                    :value="repeatTypeEnum.sequence"
+                    :icon-css-class="'fas fa-table'"
+                />
+                <app-dropdown-item
+                    :value="repeatTypeEnum.workingDays"
+                    :icon-css-class="'fas fa-briefcase'"
+                    :disabled="true"
+                />
+                <app-dropdown-item
+                    :value="repeatTypeEnum.weekend"
+                    :icon-css-class="'fas fa-couch'"
+                    :disabled="true"
+                />
+            </app-dropdown>
+        </div>
+
+        <!-- Submit -->
         <input
             type="submit"
             :value="$t('createTaskForm.submit')"
@@ -58,10 +102,15 @@
     import AppTextInput from '../AppTextInput';
     import AppDateInput from '../AppDateInput';
     import { mapActions } from 'vuex';
+    import AppDropdown from '../AppDropdown';
+    import AppDropdownItem from '../AppDropdownItem';
+    import RepeatTypeEnum from '../../enums/RepeatTypeEnum';
 
     export default {
         name: 'CreateTaskForm',
         components: {
+            AppDropdownItem,
+            AppDropdown,
             AppCheckbox,
             AppTextInput,
             AppDateInput,
@@ -72,6 +121,8 @@
                 start: new Date(),
                 end: null,
                 isRepeatable: false,
+                repeatTypeEnum: RepeatTypeEnum,
+                repeatType: RepeatTypeEnum.daily,
                 validation: {
                     name: [],
                 },
@@ -98,6 +149,9 @@
             },
             onEndChange(end) {
                 this.end = end;
+            },
+            onRepeatTypeChange(repeatType) {
+                this.repeatType = repeatType;
             },
             onSubmit() {
                 this.create({

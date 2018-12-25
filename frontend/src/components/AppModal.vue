@@ -65,7 +65,7 @@
         margin: 0 auto;
         border-radius: 3px;
         box-shadow: 0 0 0 1px rgba(29,44,76,.1), 0 4px 8px rgba(0,0,0,.15);
-        overflow: hidden;
+        /*overflow: hidden;*/
 
         &__header {
 
@@ -81,6 +81,7 @@
         &__content {
             padding: 32px;
             background-color: #fff;
+            border-radius: 0 0 3px 3px;
         }
 
     }

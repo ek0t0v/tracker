@@ -31,6 +31,9 @@
             "placeholder": "2018-12-25"
         },
         "repeatable": "Repeatable",
+        "repeatType": {
+            "label": "Repeat type"
+        },
         "submit": "Create new task"
     },
     "datepicker": {
@@ -68,5 +71,12 @@
             "label": "Delete",
             "iconCssClass": "fas fa-trash"
         }
+    },
+    "repeatTypeEnum": {
+        "daily": "Daily",
+        "week": "Week",
+        "sequence": "Sequence",
+        "workingDays": "Working days",
+        "weekend": "Weekend"
     }
 }
