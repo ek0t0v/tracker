@@ -7,14 +7,12 @@ import store from './store';
 import Menu from './plugins/Menu';
 import Modal from './plugins/Modal';
 import EventBus from './plugins/EventBus';
-import ClickOutside from 'v-click-outside';
 import en from './locales/en';
 import ru from './locales/ru';
 import 'moment/locale/ru.js';
 
 Vue.use(VueRouter);
 Vue.use(VueI18n);
-Vue.use(ClickOutside);
 Vue.use(Modal);
 Vue.use(Menu);
 Vue.use(EventBus);

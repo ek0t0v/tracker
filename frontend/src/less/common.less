@@ -6,7 +6,6 @@
 .font-face('Source Sans Pro', '/fonts/SourceSansProRegular.ttf', 400);
 .font-face('Source Sans Pro', '/fonts/SourceSansProSemiBold.ttf', 600);
 .font-face('Source Sans Pro', '/fonts/SourceSansProBold.ttf', 700);
-.font-face('Source Sans Pro', '/fonts/SourceSansProExtraBold.ttf', 800);
 
 @primary-font: 'Source Sans Pro';
 
@@ -41,81 +40,4 @@
     padding: 12px 20px;
     background-color: @blue_1;
     border-radius: 3px;
-}
-
-.vue-tooltip {
-    .font(@primary-font, 15px, 400, #fff);
-    background-color: rgba(0,0,0,.75);
-    box-sizing: border-box;
-    max-width: 320px;
-    padding: 4px 8px;
-    border-radius: 3px;
-    z-index: 100;
-    box-shadow: 0 2px 4px rgba(0,0,0,.25);
-}
-.vue-tooltip.vue-tooltip-hidden {
-    transform:translateX(-100000px) !important;
-}
-.vue-tooltip .tooltip-content {
-    text-align: center;
-}
-.vue-tooltip .tooltip-arrow {
-    content: '';
-    width: 0;
-    height: 0;
-    border-style: solid;
-    position: absolute;
-    margin: 5px;
-}
-.vue-tooltip[x-placement^="top"] {
-    margin-bottom: 5px;
-}
-.vue-tooltip[x-placement^="top"] .tooltip-arrow {
-    border-width: 5px 5px 0 5px;
-    border-top-color: rgba(0,0,0,.75);
-    border-bottom-color: transparent !important;
-    border-left-color: transparent !important;
-    border-right-color: transparent !important;
-    bottom: -5px;
-    margin-top: 0;
-    margin-bottom: 0;
-}
-.vue-tooltip[x-placement^="bottom"] {
-    margin-top: 5px;
-}
-.vue-tooltip[x-placement^="bottom"] .tooltip-arrow{
-    border-width: 0 5px 5px 5px;
-    border-bottom-color: rgba(0,0,0,.75);
-    border-top-color: transparent !important;
-    border-left-color: transparent !important;
-    border-right-color: transparent !important;
-    top: -5px;
-    margin-top: 0;
-    margin-bottom: 0;
-}
-.vue-tooltip[x-placement^="right"]{
-    margin-left: 5px;
-}
-.vue-tooltip[x-placement^="right"] .tooltip-arrow{
-    border-width:5px 5px 5px 0;
-    border-right-color: rgba(0,0,0,.75);
-    border-top-color:transparent !important;
-    border-left-color:transparent !important;
-    border-bottom-color:transparent !important;
-    left:-5px;
-    margin-left:0;
-    margin-right:0
-}
-.vue-tooltip[x-placement^="left"]{
-    margin-right:5px
-}
-.vue-tooltip[x-placement^="left"] .tooltip-arrow{
-    border-width:5px 0 5px 5px;
-    border-left-color:rgba(0,0,0,.75);
-    border-top-color:transparent !important;
-    border-right-color:transparent !important;
-    border-bottom-color:transparent !important;
-    right:-5px;
-    margin-left:0;
-    margin-right:0
 }
