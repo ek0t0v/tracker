@@ -3,7 +3,7 @@
         <div
             v-show="this.$modal.isVisible"
             class="modal-wrapper"
-            @click.self.prevent="close"
+            @click.self.prevent="onClickOutside"
         >
             <transition name="fade">
                 <div
@@ -11,10 +11,17 @@
                     class="modal"
                 >
                     <div class="modal__header">
-                        <h1>{{ this.$modal.header }}</h1>
+                        <h1>{{ this.$modal.config.header }}</h1>
                     </div>
                     <div class="modal__content">
                         <current-modal-component />
+                    </div>
+                    <div
+                        v-if="this.$modal.config.closeButton"
+                        class="modal__close"
+                        @click="onClickCloseButton"
+                    >
+                        <i class="fas fa-times" />
                     </div>
                 </div>
             </transition>
@@ -37,7 +44,18 @@
     export default {
         name: 'AppModal',
         methods: {
-            close() {
+            onClickOutside() {
+                if (!this.$modal.config.closeOnClickOutside) {
+                    return;
+                }
+
+                this.$modal.close();
+            },
+            onClickCloseButton() {
+                if (!this.$modal.config.closeButton) {
+                    return;
+                }
+
                 this.$modal.close();
             },
         },
@@ -66,6 +84,7 @@
         border-radius: 3px;
         display: table; // В Firefox не работает fit-content, поэтому table.
         box-shadow: 0 0 0 1px rgba(29,44,76,.1), 0 4px 8px rgba(0,0,0,.15);
+        position: relative;
 
         &__header {
 
@@ -82,6 +101,30 @@
             padding: 32px;
             background-color: #fff;
             border-radius: 0 0 3px 3px;
+        }
+
+        &__close {
+
+            .flex(row, nowrap, center, center);
+            color: #fff;
+            width: 32px;
+            height: 32px;
+            position: absolute;
+            top: -8px;
+            right: -32px;
+            opacity: .5;
+            cursor: pointer;
+            transition: .1s opacity ease-in-out;
+
+            &:hover {
+                opacity: .75;
+            }
+
+            i {
+                font-size: 16px;
+                color: inherit;
+            }
+
         }
 
     }
@@ -107,10 +150,6 @@
 
     .fade-enter-active {
         animation: bounce-in .1s;
-    }
-
-    .bounce-leave-active {
-        animation: bounce-in .1s reverse;
     }
 
     .fade-enter, .fade-leave-to {

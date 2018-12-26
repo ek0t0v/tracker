@@ -1,4 +1,4 @@
-import * as deepmerge from 'deepmerge'
+import * as deepmerge from 'deepmerge';
 
 const menuDefaultConfig = {
     // appearsFrom: 'top',

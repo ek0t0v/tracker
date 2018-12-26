@@ -58,7 +58,9 @@
             onEdit() {
                 this.$modal.open(EditTaskForm, {
                     id: this.id,
-                }, this.name);
+                }, {
+                    header: this.name,
+                });
             },
         },
     }

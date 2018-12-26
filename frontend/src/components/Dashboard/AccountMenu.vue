@@ -29,7 +29,9 @@
         },
         methods: {
             openSettingsModal() {
-                this.$modal.open(SettingsForm, {}, this.$t('modal.header.settings'));
+                this.$modal.open(SettingsForm, {}, {
+                    header: this.$t('modal.header.settings'),
+                });
             },
         },
     }

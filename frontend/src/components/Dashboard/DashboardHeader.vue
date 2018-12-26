@@ -68,7 +68,9 @@
         },
         methods: {
             openCreateTaskModal() {
-                this.$modal.open(CreateTaskForm, {}, this.$t('modal.header.createTaskForm'));
+                this.$modal.open(CreateTaskForm, {}, {
+                    header: this.$t('modal.header.createTaskForm'),
+                });
             },
             openAccountMenu(e) {
                 this.$menu.open(e, AccountMenu, {}, {

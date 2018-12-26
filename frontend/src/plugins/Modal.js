@@ -1,23 +1,35 @@
+import * as deepmerge from 'deepmerge';
+
+const modalDefaultConfig = {
+    header: 'Placeholder',
+    closeButton: false,
+    closeOnClickOutside: true,
+};
+
 const Modal = {
     install(Vue) {
         Vue.prototype.$modal = new Vue({
             data() {
                 return {
                     isVisible: false,
-                    header: '',
                     component: null,
                     props: {},
+                    config: modalDefaultConfig,
                 };
             },
             methods: {
-                open(component, props, header) {
+                open(component, props, config) {
+                    config = config === undefined
+                        ? modalDefaultConfig
+                        : deepmerge(modalDefaultConfig, config);
+
                     document.body.style.overflow = 'hidden';
 
                     this.isVisible = true;
 
-                    this.header = header;
                     this.component = component;
                     this.props = props;
+                    this.config = config;
                 },
                 close() {
                     // todo: Сделать сброс прокрутки при закрытии окна (scrollTop?).
