@@ -61,15 +61,15 @@
             mode: {
                 type: String,
                 default: 'single',
-                validator: value => [
+                validator: v => [
                     'single',
                     'range',
-                ].indexOf(value) > -1,
+                ].indexOf(v) > -1,
             },
             weekStartIndex: {
                 type: Number,
                 default: 0,
-                validator: value => value > -1 && value < 7,
+                validator: v => v > -1 && v < 7,
             },
             initialDate: {
                 type: Date,
@@ -90,7 +90,7 @@
             events: {
                 type: Array,
                 default: () => [],
-                validator: array => array.every(element => element instanceof Event),
+                validator: v => v.every(item => item instanceof Event),
             },
         },
         data() {

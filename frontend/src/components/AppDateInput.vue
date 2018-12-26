@@ -6,15 +6,24 @@
         >
             <slot />
         </label>
-        <input
-            :value="formattedValue"
-            :placeholder="placeholder"
-            type="text"
-            class="date-input__input"
-            readonly
-            @click="openDatepickerMenu"
-        />
-        <i class="date-input__icon fas fa-calendar" />
+        <div class="date-input__content">
+            <input
+                :value="formattedValue"
+                :placeholder="placeholder"
+                type="text"
+                class="date-input__input"
+                readonly
+                @click="openDatepickerMenu"
+            />
+            <div
+                v-if="resettable"
+                class="date-input__reset"
+                @click="reset"
+            >
+                <i class="fas fa-times" />
+            </div>
+            <i class="date-input__icon fas fa-calendar" />
+        </div>
     </div>
 </template>
 
@@ -29,12 +38,19 @@
             value: {
                 type: Date,
                 default: null,
+                validator: v => v instanceof Date,
             },
             placeholder: {
                 type: String,
                 default: '',
+                validator: v => typeof v === 'string',
             },
             markLabelAsRequired: Boolean,
+            resettable: {
+                type: Boolean,
+                default: true,
+                validator: v => typeof v === 'boolean',
+            },
         },
         computed: {
             formattedValue() {
@@ -64,6 +80,9 @@
                     },
                 });
             },
+            reset() {
+                this.$emit('on-change', null);
+            },
         },
     }
 </script>
@@ -76,6 +95,10 @@
         .flex(column, nowrap, flex-start, flex-start);
         width: 100%;
         position: relative;
+
+        &:hover .date-input__reset {
+            opacity: 1;
+        }
 
         &__label {
 
@@ -95,11 +118,17 @@
 
         }
 
+        &__content {
+            width: 100%;
+            position: relative;
+        }
+
         &__input {
 
             .font(@primary-font, 18px, 400, @blue_1);
             width: 100%;
             padding: 8px 0 8px 26px;
+            box-sizing: border-box;
 
             &::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
                 color: @blue_2;
@@ -116,6 +145,31 @@
 
         }
 
+        &__reset {
+
+            .flex(row, nowrap, center, center);
+            width: 39px;
+            height: 39px;
+            position: absolute;
+            right: 0;
+            top: 0;
+            border-radius: 20px;
+            transition: .1s all ease-in-out;
+            color: #D60000;
+            cursor: pointer;
+            opacity: 0;
+
+            &:hover {
+                background-color: rgba(214, 0, 0, 0.05);
+            }
+
+            i {
+                color: inherit;
+                font-size: 12px;
+            }
+
+        }
+
         &__icon {
             .flex(row, nowrap, center, center);
             color: @blue_1;
@@ -127,37 +181,5 @@
             font-size: 18px;
         }
 
-        &__datepicker {
-            top: calc(39px + 24px + 10px);
-            left: -133px;
-        }
-
-    }
-
-    .fade-enter-active, .fade-leave-active {
-        transition: all .1s ease-in-out;
-    }
-
-    .fade-enter-active {
-        animation: bounce-in .1s;
-    }
-
-    .bounce-leave-active {
-        animation: bounce-in .1s reverse;
-    }
-
-    .fade-enter, .fade-leave-to {
-        transform-origin: top;
-        transform: scale(.9) translateY(-12px) translateY(-12px);
-        opacity: 0;
-    }
-
-    @keyframes bounce-in {
-        90% {
-            transform: scale(1.01) translateY(-12px);
-        }
-        100% {
-            transform: scale(1) translateY(-12px);
-        }
     }
 </style>

@@ -23,6 +23,7 @@
                 :value="start"
                 :placeholder="$t('createTaskForm.start.placeholder')"
                 :mark-label-as-required="true"
+                :resettable="false"
                 @on-change="onStartChange"
             >
                 {{ $t('createTaskForm.start.label') }}
@@ -149,7 +150,7 @@
                     [RepeatTypeEnum.month.value]: [],
                     [RepeatTypeEnum.weekday.value]: null,
                     [RepeatTypeEnum.weekend.value]: null,
-                    [RepeatTypeEnum.custom.value]: [1, 1, 0, 0],
+                    [RepeatTypeEnum.custom.value]: [1, 0, 0, 0],
                 },
                 validation: {
                     name: [],
@@ -188,7 +189,7 @@
                 this.create({
                     name: this.name,
                     start: this.start,
-                    end: this.end,
+                    end: this.repeatable ? this.end : null,
                     repeatType: this.repeatType,
                     repeatValue: this.repeatValues[this.repeatType.value],
                 });
