@@ -40,6 +40,11 @@
     export default {
         name: 'CustomRepeatTypeInput',
         props: {
+            value: {
+                type: Array,
+                default: () => [1, 0, 0, 0],
+                validator: v => v.every(item => item === 0 || item === 1),
+            },
             minCellsCount: {
                 type: Number,
                 default: 2,
@@ -53,11 +58,13 @@
         },
         data() {
             return {
-                cellsCount: 4,
-                value: [1, 0, 0, 0],
+                localValue: this.value,
             };
         },
         computed: {
+            cellsCount() {
+                return this.localValue.length;
+            },
             leftButtonDisabled() {
                 return this.cellsCount <= this.minCellsCount;
             },
@@ -67,25 +74,27 @@
         },
         methods: {
             increaseCellsCount() {
-                if (this.value.length >= this.maxCellsCount) {
+                if (this.localValue.length >= this.maxCellsCount) {
                     return;
                 }
 
-                this.value.push(0);
-                this.cellsCount++;
-            },
-            decreaseCellsCount() {
-                if (this.value.length <= this.minCellsCount) {
-                    return;
-                }
-
-                this.value.pop();
-                this.cellsCount--;
-            },
-            toggleCell(index) {
-                this.value.splice(index, 1, this.value[index] === 0 ? 1 : 0);
+                this.localValue.push(0);
 
                 this.$emit('on-change', this.value);
+            },
+            decreaseCellsCount() {
+                if (this.localValue.length <= this.minCellsCount) {
+                    return;
+                }
+
+                this.localValue.pop();
+
+                this.$emit('on-change', this.localValue);
+            },
+            toggleCell(index) {
+                this.localValue.splice(index, 1, this.localValue[index] === 0 ? 1 : 0);
+
+                this.$emit('on-change', this.localValue);
             },
             isCellActive(index) {
                 return this.value[index] === 1;
