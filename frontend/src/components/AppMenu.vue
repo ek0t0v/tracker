@@ -4,7 +4,6 @@
             <div
                 v-show="this.$menu.first.isVisible"
                 class="menu"
-                :class="'menu--appears-from-' + this.$menu.first.config.appearsFrom"
                 :style="{ top: this.$menu.first.config.position.top + 'px', left: this.$menu.first.config.position.left + 'px' }"
             >
                 <first-menu-component />
@@ -14,7 +13,6 @@
             <div
                 v-show="this.$menu.second.isVisible"
                 class="menu"
-                :class="'menu--appears-from-' + this.$menu.second.config.appearsFrom"
                 :style="{ top: this.$menu.second.config.position.top + 'px', left: this.$menu.second.config.position.left + 'px' }"
             >
                 <second-menu-component />
@@ -82,6 +80,7 @@
         border-radius: 3px;
         background-color: #fff;
         box-shadow: 0 0 0 1px rgba(29,44,76,.1), 0 4px 8px rgba(0,0,0,.15);
+        overflow: hidden;
     }
 
     .fade-enter-active, .fade-leave-active {

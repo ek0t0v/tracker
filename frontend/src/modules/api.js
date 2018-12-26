@@ -32,7 +32,8 @@ api.interceptors.response.use(response => response, error => {
                 httpRetryQueue.retryAll();
             })
             .catch(error => {
-                store.dispatch('user/userLogout');
+                // todo: Была какая-то ошибка после очистки localStorage - посмотреть/поправить.
+                // store.dispatch('user/userLogout');
 
                 return Promise.reject(error);
             })

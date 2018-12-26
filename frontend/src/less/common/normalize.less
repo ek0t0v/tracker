@@ -153,6 +153,10 @@ textarea {
   margin: 0;
 }
 
+input {
+  background-color: unset; // Reset for Firefox.
+}
+
 //  * Address `overflow` set to `hidden` in IE 8/9/10/11.
 button { overflow: visible;}
 
@@ -187,6 +191,10 @@ input {
     border: 0;
     padding: 0;
   }
+}
+
+button:active {
+  padding: 0; // Reset for Firefox.
 }
 
 //  * Address Firefox 4+ setting `line-height` on `input` using `!important` in the UA stylesheet.

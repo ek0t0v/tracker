@@ -7,6 +7,10 @@ let RepeatTypeEnum = Object.freeze({
         value: 'week',
         translation: 'repeatTypeEnum.week',
     },
+    month: {
+        value: 'month',
+        translation: 'repeatTypeEnum.month',
+    },
     weekday: {
         value: 'weekday',
         translation: 'repeatTypeEnum.weekday',

@@ -75,6 +75,7 @@
     "repeatTypeEnum": {
         "daily": "Daily",
         "week": "Week",
+        "month": "Month",
         "weekday": "On weekdays",
         "weekend": "On weekends",
         "custom": "Custom"

@@ -64,8 +64,8 @@
         width: fit-content;
         margin: 0 auto;
         border-radius: 3px;
+        display: table; // В Firefox не работает fit-content, поэтому table.
         box-shadow: 0 0 0 1px rgba(29,44,76,.1), 0 4px 8px rgba(0,0,0,.15);
-        /*overflow: hidden;*/
 
         &__header {
 

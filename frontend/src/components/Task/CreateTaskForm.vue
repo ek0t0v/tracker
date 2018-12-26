@@ -61,16 +61,21 @@
             <app-dropdown
                 :label="$t('createTaskForm.repeatType.label')"
                 :value="$t(repeatType.translation)"
+                :mark-label-as-required="true"
                 @on-change="onRepeatTypeChange"
             >
                 <app-dropdown-item
                     :value="repeatTypeEnum.daily"
                     :icon-css-class="'fas fa-calendar-day'"
-                    :disabled="true"
                 />
                 <app-dropdown-item
                     :value="repeatTypeEnum.week"
                     :icon-css-class="'fas fa-calendar-week'"
+                    :disabled="true"
+                />
+                <app-dropdown-item
+                    :value="repeatTypeEnum.month"
+                    :icon-css-class="'fas fa-calendar'"
                     :disabled="true"
                 />
                 <app-dropdown-item
@@ -90,6 +95,18 @@
             </app-dropdown>
         </div>
 
+        <!-- Repeat type input -->
+        <div
+            v-if="repeatable && currentRepeatTypeInputComponent"
+            class="create-task-form__element"
+        >
+            <component
+                :is="currentRepeatTypeInputComponent"
+                v-if="currentRepeatTypeInputComponent"
+                @on-change="onRepeatTypeValueChange"
+            />
+        </div>
+
         <!-- Submit -->
         <input
             type="submit"
@@ -107,6 +124,7 @@
     import AppDropdown from '../AppDropdown';
     import AppDropdownItem from '../AppDropdownItem';
     import RepeatTypeEnum from '../../enums/RepeatTypeEnum';
+    import CustomRepeatTypeInput from '../Task/CustomRepeatTypeInput';
 
     export default {
         name: 'CreateTaskForm',
@@ -130,6 +148,24 @@
                     name: [],
                 },
             };
+        },
+        computed: {
+            currentRepeatTypeInputComponent() {
+                this.resetRepeatValue();
+
+                switch (this.repeatType) {
+                    case this.repeatTypeEnum.daily:
+                        return false;
+                    case this.repeatTypeEnum.week:
+                        return false;
+                    case this.repeatTypeEnum.weekday:
+                        return false;
+                    case this.repeatTypeEnum.weekend:
+                        return false;
+                    case this.repeatTypeEnum.custom:
+                        return CustomRepeatTypeInput;
+                }
+            },
         },
         methods: {
             ...mapActions('task', [
@@ -156,6 +192,9 @@
             onRepeatTypeChange(repeatType) {
                 this.repeatType = repeatType;
             },
+            onRepeatTypeValueChange(repeatValue) {
+                this.repeatValue = repeatValue;
+            },
             onSubmit() {
                 this.create({
                     name: this.name,
@@ -164,6 +203,9 @@
                     repeatType: this.repeatType,
                     repeatValue: this.repeatValue,
                 });
+            },
+            resetRepeatValue() {
+                this.repeatValue = null;
             },
         },
     }
