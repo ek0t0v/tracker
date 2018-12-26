@@ -13,6 +13,7 @@ doctrine:
             collate: utf8_unicode_ci
         types:
             task_change_state: App\Doctrine\DBAL\Type\TaskChangeStateType
+            task_repeat_type: App\Doctrine\DBAL\Type\TaskRepeatTypeType
     orm:
         auto_generate_proxy_classes: '%kernel.debug%'
         naming_strategy: doctrine.orm.naming_strategy.underscore

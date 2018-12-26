@@ -178,7 +178,10 @@ CREATE TABLE public.tasks (
     end_date date,
     schedule text,
     updated_at timestamp(0) without time zone NOT NULL,
-    created_at timestamp(0) without time zone NOT NULL
+    created_at timestamp(0) without time zone NOT NULL,
+    repeat_type character varying(255) DEFAULT NULL::character varying,
+    repeat_value text,
+    CONSTRAINT tasks_repeat_type_check CHECK (((repeat_type)::text = ANY ((ARRAY['daily'::character varying, 'week'::character varying, 'month'::character varying, 'weekday'::character varying, 'weekend'::character varying, 'custom'::character varying])::text[])))
 );
 
 
@@ -189,6 +192,20 @@ ALTER TABLE public.tasks OWNER TO symfony;
 --
 
 COMMENT ON COLUMN public.tasks.schedule IS '(DC2Type:array)';
+
+
+--
+-- Name: COLUMN tasks.repeat_type; Type: COMMENT; Schema: public; Owner: symfony
+--
+
+COMMENT ON COLUMN public.tasks.repeat_type IS '(DC2Type:task_repeat_type)';
+
+
+--
+-- Name: COLUMN tasks.repeat_value; Type: COMMENT; Schema: public; Owner: symfony
+--
+
+COMMENT ON COLUMN public.tasks.repeat_value IS '(DC2Type:array)';
 
 
 --
@@ -246,6 +263,7 @@ ALTER TABLE public.users_id_seq OWNER TO symfony;
 COPY public.migration_versions (version) FROM stdin;
 20181207055216
 20181211112352
+20181226174727
 \.
 
 
@@ -278,13 +296,13 @@ COPY public.task_timings (id, task_id, started_at, ended_at) FROM stdin;
 --
 
 COPY public.task_transfers (id, task_id, transfer_to, for_date, created_at) FROM stdin;
-1	1	2018-11-04	2018-11-03	2018-12-11 11:25:13
-2	1	2018-11-08	2018-11-06	2018-12-11 11:25:13
-3	1	2018-11-09	2018-11-06	2018-12-11 11:25:13
-4	1	2018-12-07	2018-11-29	2018-12-11 11:25:13
-5	3	2018-11-23	2018-11-22	2018-12-11 11:25:13
-6	4	2018-11-10	2018-11-07	2018-12-11 11:25:13
-7	4	2018-11-08	2018-11-07	2018-12-11 11:25:13
+1	1	2018-11-04	2018-11-03	2018-12-26 17:51:06
+2	1	2018-11-08	2018-11-06	2018-12-26 17:51:06
+3	1	2018-11-09	2018-11-06	2018-12-26 17:51:06
+4	1	2018-12-07	2018-11-29	2018-12-26 17:51:06
+5	3	2018-11-23	2018-11-22	2018-12-26 17:51:06
+6	4	2018-11-10	2018-11-07	2018-12-26 17:51:06
+7	4	2018-11-08	2018-11-07	2018-12-26 17:51:06
 \.
 
 
@@ -292,12 +310,12 @@ COPY public.task_transfers (id, task_id, transfer_to, for_date, created_at) FROM
 -- Data for Name: tasks; Type: TABLE DATA; Schema: public; Owner: symfony
 --
 
-COPY public.tasks (id, user_id, name, start_date, end_date, schedule, updated_at, created_at) FROM stdin;
-1	1	Exercises	2018-11-01	2018-12-01	a:4:{i:0;i:1;i:1;i:1;i:2;i:1;i:3;i:0;}	2018-12-11 11:25:13	2018-12-11 11:25:13
-2	1	Work	2018-10-29	\N	a:7:{i:0;i:1;i:1;i:1;i:2;i:1;i:3;i:1;i:4;i:1;i:5;i:0;i:6;i:0;}	2018-12-11 11:25:13	2018-12-11 11:25:13
-3	1	Reading	2018-11-19	\N	a:1:{i:0;i:1;}	2018-12-11 11:25:13	2018-12-11 11:25:13
-4	1	Single task 1	2018-11-07	\N	N;	2018-12-11 11:25:13	2018-12-11 11:25:13
-5	1	Single task 2	2018-12-01	\N	N;	2018-12-11 11:25:13	2018-12-11 11:25:13
+COPY public.tasks (id, user_id, name, start_date, end_date, schedule, updated_at, created_at, repeat_type, repeat_value) FROM stdin;
+1	1	Exercises	2018-11-01	2018-12-01	a:4:{i:0;i:1;i:1;i:1;i:2;i:1;i:3;i:0;}	2018-12-26 17:51:06	2018-12-26 17:51:06	\N	N;
+2	1	Work	2018-10-29	\N	a:7:{i:0;i:1;i:1;i:1;i:2;i:1;i:3;i:1;i:4;i:1;i:5;i:0;i:6;i:0;}	2018-12-26 17:51:06	2018-12-26 17:51:06	\N	N;
+3	1	Reading	2018-11-19	\N	a:1:{i:0;i:1;}	2018-12-26 17:51:06	2018-12-26 17:51:06	\N	N;
+4	1	Single task 1	2018-11-07	\N	N;	2018-12-26 17:51:06	2018-12-26 17:51:06	\N	N;
+5	1	Single task 2	2018-12-01	\N	N;	2018-12-26 17:51:06	2018-12-26 17:51:06	\N	N;
 \.
 
 
@@ -306,8 +324,8 @@ COPY public.tasks (id, user_id, name, start_date, end_date, schedule, updated_at
 --
 
 COPY public.users (id, email, email_canonical, username, password, roles, enabled, last_login, password_requested_at, created_at) FROM stdin;
-1	test_user_1@mail.ru	test_user_1@mail.ru	test_user_1	$2y$13$VPscWz7hyTZp4ICUVpI1ieqxqVy0TKJuDZ2pR7GNoKsAkwtGLt3fK	[]	t	\N	\N	2018-12-11 11:25:12
-2	test_user_2@mail.ru	test_user_2@mail.ru	test_user_2	$2y$13$z9AtX2Pb4O.D8qfBrxn.IOin6G4IIliZo36ACvB.kwsnAjrzXMI3i	[]	t	\N	\N	2018-12-11 11:25:13
+1	test_user_1@mail.ru	test_user_1@mail.ru	test_user_1	$2y$13$l2o5LF.QfzhuFVTOXvAtxuPpwP5zzJGxZ08r4rK8Kh/6JyHQ7lmZW	[]	t	\N	\N	2018-12-26 17:51:05
+2	test_user_2@mail.ru	test_user_2@mail.ru	test_user_2	$2y$13$RAXxrfme7j/HL6YOFRJMA.c.22u6OPFCi.jE8pbVI5rjndWOuP.4C	[]	t	\N	\N	2018-12-26 17:51:06
 \.
 
 

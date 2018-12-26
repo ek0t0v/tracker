@@ -54,6 +54,20 @@ class Task
     private $endDate;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="repeat_type", type="task_repeat_type", nullable=true)
+     */
+    private $repeatType;
+
+    /**
+     * @var int[]|null
+     *
+     * @ORM\Column(name="repeat_value", type="array", nullable=true)
+     */
+    private $repeatValue;
+
+    /**
      * @var int[]|null
      *
      * @ORM\Column(name="schedule", type="array", nullable=true)
@@ -169,6 +183,46 @@ class Task
     public function setEndDate(?\DateTime $endDate): self
     {
         $this->endDate = $endDate;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getRepeatType()
+    {
+        return $this->repeatType;
+    }
+
+    /**
+     * @param $repeatType
+     *
+     * @return Task
+     */
+    public function setRepeatType($repeatType): self
+    {
+        $this->repeatType = $repeatType;
+
+        return $this;
+    }
+
+    /**
+     * @return array|null
+     */
+    public function getRepeatValue(): ?array
+    {
+        return $this->repeatValue;
+    }
+
+    /**
+     * @param array|null $repeatValue
+     *
+     * @return Task
+     */
+    public function setRepeatValue(?array $repeatValue): self
+    {
+        $this->repeatValue = $repeatValue;
 
         return $this;
     }
