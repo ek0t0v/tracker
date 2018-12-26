@@ -18,6 +18,6 @@
     @import '../../less/style';
 
     .edit-task-form {
-        width: 512px;
+        width: 360px;
     }
 </style>

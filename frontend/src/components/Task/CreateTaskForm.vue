@@ -204,7 +204,7 @@
     .create-task-form {
 
         .flex(column, nowrap, flex-start, flex-start);
-        width: 512px;
+        width: 360px;
 
         &__element {
 

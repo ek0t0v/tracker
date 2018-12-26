@@ -10,7 +10,6 @@
 
 <style lang="less" scoped>
     .settings-form {
-        width: 512px;
-        height: 1000px;
+        width: 360px;
     }
 </style>
