@@ -150,6 +150,7 @@
             };
         },
         computed: {
+            // todo: Может не использовать динамические компоненты, а разместить по-отдельности, с v-if?
             currentRepeatTypeInputComponent() {
                 this.resetRepeatValue();
 

@@ -54,7 +54,7 @@
         .flex(column, nowrap, flex-start, flex-start);
         width: 100%;
         position: relative;
-        z-index: 100;
+        z-index: 1000;
 
         &__label {
 

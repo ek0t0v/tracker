@@ -81,6 +81,7 @@
         background-color: #fff;
         box-shadow: 0 0 0 1px rgba(29,44,76,.1), 0 4px 8px rgba(0,0,0,.15);
         overflow: hidden;
+        z-index: 1000;
     }
 
     .fade-enter-active, .fade-leave-active {

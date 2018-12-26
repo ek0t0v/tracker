@@ -5,20 +5,21 @@
                 <div class="custom-repeat-type-input__button-pads" />
                 <button
                     class="custom-repeat-type-input__button custom-repeat-type-input__button--decrease"
-                    @click="decreaseCellsCount"
+                    :class="{ 'custom-repeat-type-input__button--disabled': leftButtonDisabled }"
+                    @click.prevent="decreaseCellsCount"
                 >
                     <i class="fas fa-minus" />
                 </button>
                 <button
                     class="custom-repeat-type-input__button custom-repeat-type-input__button--increase"
-                    @click="increaseCellsCount"
+                    :class="{ 'custom-repeat-type-input__button--disabled': rightButtonDisabled }"
+                    @click.prevent="increaseCellsCount"
                 >
                     <i class="fas fa-plus" />
                 </button>
             </div>
             <div class="custom-repeat-type-input__cells-wrapper">
                 <div style="height: 28px;" />
-
                 <div class="custom-repeat-type-input__cells">
                     <div
                         v-for="(cell, index) in cellsCount"
@@ -38,27 +39,51 @@
 <script>
     export default {
         name: 'CustomRepeatTypeInput',
+        props: {
+            minCellsCount: {
+                type: Number,
+                default: 2,
+                validator: v => typeof v === 'number' && v > 1,
+            },
+            maxCellsCount: {
+                type: Number,
+                default: 32,
+                validator: v => typeof v === 'number',
+            },
+        },
         data() {
             return {
-                cellsCount: 2,
-                value: [1,0],
+                cellsCount: 4,
+                value: [1, 0, 0, 0],
             };
+        },
+        computed: {
+            leftButtonDisabled() {
+                return this.cellsCount <= this.minCellsCount;
+            },
+            rightButtonDisabled() {
+                return this.cellsCount >= this.maxCellsCount;
+            },
         },
         methods: {
             increaseCellsCount() {
+                if (this.value.length >= this.maxCellsCount) {
+                    return;
+                }
+
                 this.value.push(0);
                 this.cellsCount++;
             },
             decreaseCellsCount() {
-                if (this.value.length > 1) {
-                    this.value.pop();
-                    this.cellsCount--;
+                if (this.value.length <= this.minCellsCount) {
+                    return;
                 }
+
+                this.value.pop();
+                this.cellsCount--;
             },
             toggleCell(index) {
-                let newValue = this.value[index] === 0 ? 1 : 0;
-
-                this.value.splice(index, 1, newValue);
+                this.value.splice(index, 1, this.value[index] === 0 ? 1 : 0);
 
                 this.$emit('on-change', this.value);
             },
@@ -167,13 +192,27 @@
             .flex(row, nowrap, center, center);
             width: 28px;
             height: 28px;
-            color: @blue_1;
             border-radius: 3px;
             background-color: @blue_1;
             position: absolute;
             top: 0;
             cursor: pointer;
             z-index: 1;
+            color: #fff;
+            transition: all .1s ease-in-out;
+
+            &--disabled {
+
+                color: @blue_1;
+                background-color: @blue_5;
+                cursor: default;
+                filter: grayscale(100%);
+
+                i {
+                    opacity: .25;
+                }
+
+            }
 
             &--increase {
                 right: 0;
@@ -184,7 +223,7 @@
             }
 
             i {
-                color: #fff;
+                color: inherit;
                 font-size: 8px;
             }
 
