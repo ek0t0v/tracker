@@ -18,7 +18,7 @@ Vue.use(Menu);
 Vue.use(EventBus);
 
 const i18n = new VueI18n({
-    locale: 'ru',
+    locale: 'en',
     fallbackLocale: 'en',
     messages: {
         en,

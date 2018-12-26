@@ -20,6 +20,12 @@
             AppMenu,
         },
         created() {
+            if (this.$i18n.locale === 'ru') {
+                moment.updateLocale('ru', {
+                    monthsShort: ['янв', 'фев', 'мар', 'апр', 'мая', 'июн', 'июл', 'авг', 'сен', 'окт', 'ноя', 'дек'],
+                });
+            }
+
             moment.locale(this.$i18n.locale);
         },
     }

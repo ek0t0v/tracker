@@ -104,7 +104,7 @@
         },
         computed: {
             forDateFormatted() {
-                return moment(this.forDate).format('MMM DD');
+                return moment(this.forDate).format(this.$t('taskItem.forDateFormat'));
             },
         },
         methods: {

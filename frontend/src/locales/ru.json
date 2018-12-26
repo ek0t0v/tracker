@@ -50,6 +50,9 @@
             "iconCssClass": "fas fa-sign-out-alt"
         }
     },
+    "taskItem": {
+        "forDateFormat": "DD MMM"
+    },
     "taskMenu": {
         "edit": {
             "label": "Редактировать",
