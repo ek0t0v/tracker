@@ -17,14 +17,18 @@
             {{ $t('taskMenu.transfer.label') }}
         </app-menu-item>
         <app-menu-item
+            :icon-css-class="$t('taskMenu.cancel.iconCssClass')"
+        >
+            {{ $t('taskMenu.cancel.label') }}
+        </app-menu-item>
+        <app-menu-item
             :icon-css-class="$t('taskMenu.markAsImportant.iconCssClass')"
-            :is-disabled="true"
         >
             {{ $t('taskMenu.markAsImportant.label') }}
         </app-menu-item>
         <app-menu-delimiter />
         <app-menu-item
-            :type="'danger'"
+            :color="'red'"
             :icon-css-class="$t('taskMenu.delete.iconCssClass')"
             :close-menu-on-click="false"
         >

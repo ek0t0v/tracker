@@ -126,7 +126,7 @@
                     name: this.name,
                 }, {
                     position: {
-                        top: -101.5 - 12,
+                        top: -106.5 - 12,
                         left: -175 - 8,
                     },
                 });

@@ -63,6 +63,10 @@
             "label": "Transfer",
             "iconCssClass": "fas fa-share"
         },
+        "cancel": {
+            "label": "Cancel",
+            "iconCssClass": "fas fa-calendar-times"
+        },
         "markAsImportant": {
             "label": "Mark as important",
             "iconCssClass": "fas fa-star"

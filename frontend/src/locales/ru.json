@@ -63,6 +63,10 @@
             "label": "Перенести",
             "iconCssClass": "fas fa-share"
         },
+        "cancel": {
+            "label": "Отменить",
+            "iconCssClass": "fas fa-calendar-times"
+        },
         "markAsImportant": {
             "label": "Пометить как важную",
             "iconCssClass": "fas fa-star"

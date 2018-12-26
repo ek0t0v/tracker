@@ -3,7 +3,9 @@
         class="menu-item"
         :class="{
             'menu-item--disabled': isDisabled,
-            'menu-item--danger': type === 'danger'
+            'menu-item--red': color === 'red',
+            'menu-item--yellow': color === 'yellow',
+            'menu-item--green': color === 'green',
         }"
         @click="onClick"
     >
@@ -24,13 +26,15 @@
                 type: String,
                 default: '',
             },
-            type: {
+            color: {
                 type: String,
                 default: 'default',
-                validator: value => [
+                validator: v => [
                     'default',
-                    'danger',
-                ].indexOf(value) !== -1,
+                    'red',
+                    'yellow',
+                    'green',
+                ].indexOf(v) !== -1,
             },
             isDisabled: Boolean,
             closeMenuOnClick: {
@@ -69,12 +73,32 @@
             filter: grayscale(100%);
         }
 
-        &--danger {
+        &--red {
 
             color: #D60000;
 
             &:hover:not(.menu-item--disabled) {
                 background-color: rgba(214,0,0,.05);
+            }
+
+        }
+
+        &--yellow {
+
+            color: #dfab01;
+
+            &:hover:not(.menu-item--disabled) {
+                background-color: rgba(223,171,1,.05);
+            }
+
+        }
+
+        &--green {
+
+            color: #0f7b6c;
+
+            &:hover:not(.menu-item--disabled) {
+                background-color: rgba(15,123,108,.05);
             }
 
         }

@@ -8,8 +8,8 @@
         </app-menu-item>
         <app-menu-delimiter />
         <app-menu-item
+            :color="'red'"
             :icon-css-class="$t('accountMenu.logout.iconCssClass')"
-            :type="'danger'"
         >
             {{ $t('accountMenu.logout.label') }}
         </app-menu-item>
