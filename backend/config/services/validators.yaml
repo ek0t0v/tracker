@@ -13,6 +13,10 @@ services:
         class: App\Validator\TaskScheduleValidator
         tags:
             - { name: validator.constraint_validator, alias: task_schedule }
+    task_repeat_value:
+        class: App\Validator\TaskRepeatValueValidator
+        tags:
+            - { name: validator.constraint_validator, alias: task_repeat_value }
     not_blank_if_not_null:
         class: App\Validator\NotBlankIfNotNullValidator
         tags:

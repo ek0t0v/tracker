@@ -4,6 +4,7 @@ namespace App\Request\Task;
 
 use App\Http\RequestDtoInterface;
 use App\Validator\Constraints\NotBlankIfNotNull;
+use App\Validator\Constraints\TaskRepeatValue;
 use App\Validator\Constraints\TaskSchedule;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -36,6 +37,22 @@ class CreateTaskRequest implements RequestDtoInterface
      * @Assert\Date
      */
     public $end;
+
+    /**
+     * @var string|null
+     *
+     * @NotBlankIfNotNull
+     * @Assert\Choice(callback={"App\Doctrine\DBAL\Type\TaskRepeatTypeType", "getChoices"})
+     */
+    public $repeatType;
+
+    /**
+     * @var array|null
+     *
+     * @Assert\Type("array")
+     * @TaskRepeatValue
+     */
+    public $repeatValue;
 
     /**
      * @var array|null

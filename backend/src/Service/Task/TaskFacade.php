@@ -31,9 +31,9 @@ class TaskFacade
     private $getOverdueService;
 
     /**
-     * @var CreateTaskService
+     * @var CreateService
      */
-    private $createTaskService;
+    private $createService;
 
     /**
      * @var StateService
@@ -57,7 +57,7 @@ class TaskFacade
      * @param GetByDateService      $getByDateService
      * @param GetByDyDateOldService $getByDateOldService
      * @param GetOverdueService     $getOverdueService
-     * @param CreateTaskService     $createTaskService
+     * @param CreateService         $createService
      * @param StateService          $stateService
      * @param PositionService       $positionService
      * @param TransferService       $transferService
@@ -67,7 +67,7 @@ class TaskFacade
         GetByDateService $getByDateService,
         GetByDyDateOldService $getByDateOldService,
         GetOverdueService $getOverdueService,
-        CreateTaskService $createTaskService,
+        CreateService $createService,
         StateService $stateService,
         PositionService $positionService,
         TransferService $transferService
@@ -76,7 +76,7 @@ class TaskFacade
         $this->getByDateService = $getByDateService;
         $this->getByDateOldService = $getByDateOldService;
         $this->getOverdueService = $getOverdueService;
-        $this->createTaskService = $createTaskService;
+        $this->createService = $createService;
         $this->stateService = $stateService;
         $this->positionService = $positionService;
         $this->transferService = $transferService;
@@ -123,13 +123,15 @@ class TaskFacade
      * @param string         $name
      * @param \DateTime      $startDate
      * @param \DateTime|null $endDate
+     * @param string|null    $repeatType
+     * @param array|null     $repeatValue
      * @param array|null     $schedule
      *
      * @return TaskDto
      */
-    public function createTask(string $name, \DateTime $startDate, \DateTime $endDate = null, array $schedule = null): TaskDto
+    public function createTask(string $name, \DateTime $startDate, \DateTime $endDate = null, string $repeatType = null, array $repeatValue = null, array $schedule = null): TaskDto
     {
-        $task = $this->createTaskService->create($name, $startDate, $endDate, $schedule);
+        $task = $this->createService->create($name, $startDate, $endDate, $repeatType, $repeatValue, $schedule);
 
         return $this->dtoService->create($task, $startDate);
     }

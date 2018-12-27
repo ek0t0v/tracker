@@ -26,6 +26,8 @@ class DtoService
         $dto->start = $task->getStartDate();
         $dto->end = $task->getEndDate();
         $dto->forDate = $forDate;
+        $dto->repeatType = $task->getRepeatType();
+        $dto->repeatValue = $task->getRepeatValue();
         $dto->schedule = $task->getSchedule();
         $dto->state = TaskChangeStateType::IN_PROGRESS;
 

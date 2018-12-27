@@ -46,11 +46,15 @@ class TaskDto
 
     /**
      * @var string|null
+     *
+     * @Groups({"api"})
      */
     public $repeatType = null;
 
     /**
      * @var int[]|null
+     *
+     * @Groups({"api"})
      */
     public $repeatValue = null;
 

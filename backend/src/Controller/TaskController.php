@@ -67,7 +67,7 @@ class TaskController extends ApiController
         $start = new \DateTime($request->start);
         $end = !is_null($request->end) ? new \DateTime($request->end) : null;
 
-        $task = $taskFacade->createTask($request->name, $start, $end, $request->schedule);
+        $task = $taskFacade->createTask($request->name, $start, $end, $request->repeatType, $request->repeatValue, $request->schedule);
 
         return $this->apiResponse($task, ['api'], Response::HTTP_CREATED);
     }

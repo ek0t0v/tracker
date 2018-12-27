@@ -8,9 +8,9 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 /**
- * Class CreateTaskService.
+ * Class CreateService.
  */
-class CreateTaskService
+class CreateService
 {
     /**
      * @var EntityManagerInterface
@@ -23,7 +23,7 @@ class CreateTaskService
     private $tokenStorage;
 
     /**
-     * CreateTaskService constructor.
+     * CreateService constructor.
      *
      * @param EntityManagerInterface $em
      * @param TokenStorageInterface  $tokenStorage
@@ -38,11 +38,13 @@ class CreateTaskService
      * @param string         $name
      * @param \DateTime      $startDate
      * @param \DateTime|null $endDate
+     * @param string|null    $repeatType
+     * @param array|null     $repeatValue
      * @param array|null     $schedule
      *
      * @return Task
      */
-    public function create(string $name, \DateTime $startDate, \DateTime $endDate = null, array $schedule = null): Task
+    public function create(string $name, \DateTime $startDate, \DateTime $endDate = null, string $repeatType = null, array $repeatValue = null, array $schedule = null): Task
     {
         /**
          * @var User $user
@@ -54,6 +56,8 @@ class CreateTaskService
         $task->setName($name);
         $task->setStartDate($startDate);
         $task->setEndDate($endDate);
+        $task->setRepeatType($repeatType);
+        $task->setRepeatValue($repeatValue);
         $task->setSchedule($schedule);
 
         $this->em->persist($task);
