@@ -45,16 +45,27 @@ class UserSettings
      */
     private $locale;
 
+    /**
+     * @return int|null
+     */
     public function getId(): ?int
     {
         return $this->id;
     }
 
+    /**
+     * @return null|string
+     */
     public function getTimezone(): ?string
     {
         return $this->timezone;
     }
 
+    /**
+     * @param string $timezone
+     *
+     * @return UserSettings
+     */
     public function setTimezone(string $timezone): self
     {
         $this->timezone = $timezone;
@@ -62,11 +73,19 @@ class UserSettings
         return $this;
     }
 
+    /**
+     * @return null|string
+     */
     public function getLocale(): ?string
     {
         return $this->locale;
     }
 
+    /**
+     * @param string $locale
+     *
+     * @return UserSettings
+     */
     public function setLocale(string $locale): self
     {
         $this->locale = $locale;
@@ -74,11 +93,19 @@ class UserSettings
         return $this;
     }
 
+    /**
+     * @return User|null
+     */
     public function getUser(): ?User
     {
         return $this->user;
     }
 
+    /**
+     * @param User|null $user
+     *
+     * @return UserSettings
+     */
     public function setUser(?User $user): self
     {
         $this->user = $user;
