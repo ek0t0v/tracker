@@ -8,6 +8,7 @@ use App\Request\Task\UpdateTaskStateRequest;
 use App\Request\Task\CreateTaskRequest;
 use App\Request\Task\GetTasksRequest;
 use App\Request\Task\TransferTaskRequest;
+use App\Service\Task\TaskFacade;
 use App\Service\Task\TaskService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -43,31 +44,31 @@ class TaskController extends ApiController
     }
 
     /**
-     * @param TaskService $taskService
+     * @param TaskFacade $taskFacade
      *
      * @return JsonResponse
      *
      * @Route("/overdue", name="api_tasks_get_overdue_tasks", methods={"GET"})
      */
-    public function getOverdueTasks(TaskService $taskService)
+    public function getOverdueTasks(TaskFacade $taskFacade)
     {
-        return $this->apiResponse($taskService->getOverdueTasks(), ['api']);
+        return $this->apiResponse($taskFacade->getOverdueTasks(), ['api']);
     }
 
     /**
      * @param CreateTaskRequest $request
-     * @param TaskService       $taskService
+     * @param TaskFacade        $taskFacade
      *
      * @return JsonResponse
      *
      * @Route(name="api_tasks_create_task", methods={"POST"})
      */
-    public function createTask(CreateTaskRequest $request, TaskService $taskService): JsonResponse
+    public function createTask(CreateTaskRequest $request, TaskFacade $taskFacade): JsonResponse
     {
         $start = new \DateTime($request->start);
         $end = !is_null($request->end) ? new \DateTime($request->end) : null;
 
-        $task = $taskService->createTask($request->name, $start, $end, $request->schedule);
+        $task = $taskFacade->createTask($request->name, $start, $end, $request->schedule);
 
         return $this->apiResponse($task, ['api'], Response::HTTP_CREATED);
     }
@@ -95,7 +96,7 @@ class TaskController extends ApiController
      * @param Task                   $task
      * @param \DateTime              $forDate
      * @param UpdateTaskStateRequest $request
-     * @param TaskService            $taskService
+     * @param TaskFacade             $taskFacade
      *
      * @return JsonResponse
      *
@@ -103,9 +104,9 @@ class TaskController extends ApiController
      * @ParamConverter("task", converter="scheduled_task_by_user")
      * @ParamConverter("forDate", options={"format": "Y-m-d"})
      */
-    public function updateTaskState(Task $task, \DateTime $forDate, UpdateTaskStateRequest $request, TaskService $taskService): JsonResponse
+    public function updateTaskState(Task $task, \DateTime $forDate, UpdateTaskStateRequest $request, TaskFacade $taskFacade): JsonResponse
     {
-        $task = $taskService->updateTaskState($task, $forDate, $request->state);
+        $task = $taskFacade->updateTaskState($task, $forDate, $request->state);
 
         return $this->apiResponse($task, ['api']);
     }
@@ -114,7 +115,7 @@ class TaskController extends ApiController
      * @param Task                      $task
      * @param \DateTime                 $forDate
      * @param UpdateTaskPositionRequest $request
-     * @param TaskService               $taskService
+     * @param TaskFacade                $taskFacade
      *
      * @return JsonResponse
      *
@@ -122,9 +123,9 @@ class TaskController extends ApiController
      * @ParamConverter("task", converter="scheduled_task_by_user")
      * @ParamConverter("forDate", options={"format": "Y-m-d"})
      */
-    public function updateTaskPosition(Task $task, \DateTime $forDate, UpdateTaskPositionRequest $request, TaskService $taskService): JsonResponse
+    public function updateTaskPosition(Task $task, \DateTime $forDate, UpdateTaskPositionRequest $request, TaskFacade $taskFacade): JsonResponse
     {
-        $task = $taskService->updateTaskPosition($task, $forDate, $request->position);
+        $task = $taskFacade->updateTaskPosition($task, $forDate, $request->position);
 
         return $this->apiResponse($task, ['api']);
     }
