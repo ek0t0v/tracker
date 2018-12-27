@@ -36,9 +36,14 @@ class TaskFacade
     private $createTaskService;
 
     /**
-     * @var ChangeService
+     * @var StateService
      */
-    private $changeService;
+    private $stateService;
+
+    /**
+     * @var PositionService
+     */
+    private $positionService;
 
     /**
      * @var TransferService
@@ -53,7 +58,8 @@ class TaskFacade
      * @param GetByDyDateOldService $getByDateOldService
      * @param GetOverdueService     $getOverdueService
      * @param CreateTaskService     $createTaskService
-     * @param ChangeService         $changeService
+     * @param StateService          $stateService
+     * @param PositionService       $positionService
      * @param TransferService       $transferService
      */
     public function __construct(
@@ -62,7 +68,8 @@ class TaskFacade
         GetByDyDateOldService $getByDateOldService,
         GetOverdueService $getOverdueService,
         CreateTaskService $createTaskService,
-        ChangeService $changeService,
+        StateService $stateService,
+        PositionService $positionService,
         TransferService $transferService
     ) {
         $this->dtoService = $dtoService;
@@ -70,7 +77,8 @@ class TaskFacade
         $this->getByDateOldService = $getByDateOldService;
         $this->getOverdueService = $getOverdueService;
         $this->createTaskService = $createTaskService;
-        $this->changeService = $changeService;
+        $this->stateService = $stateService;
+        $this->positionService = $positionService;
         $this->transferService = $transferService;
     }
 
@@ -149,7 +157,7 @@ class TaskFacade
      */
     public function updateTaskState(Task $task, \DateTime $forDate, string $state): TaskDto
     {
-        $this->changeService->updateState($task, $forDate, $state);
+        $this->stateService->update($task, $forDate, $state);
 
         $dto = $this->dtoService->create($task, $forDate);
         $dto->state = $state;
@@ -166,7 +174,7 @@ class TaskFacade
      */
     public function updateTaskPosition(Task $task, \DateTime $forDate, int $position): TaskDto
     {
-        $this->changeService->updatePosition($task, $forDate, $position);
+        $this->positionService->update($task, $forDate, $position);
 
         $dto = $this->dtoService->create($task, $forDate);
         $dto->position = $position;

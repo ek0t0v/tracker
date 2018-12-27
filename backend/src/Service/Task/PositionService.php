@@ -10,9 +10,9 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 /**
- * Class ChangeService.
+ * Class PositionService.
  */
-class ChangeService
+class PositionService
 {
     /**
      * @var EntityManagerInterface
@@ -25,7 +25,7 @@ class ChangeService
     private $tokenStorage;
 
     /**
-     * ChangeService constructor.
+     * PositionService constructor.
      *
      * @param EntityManagerInterface $em
      * @param TokenStorageInterface  $tokenStorage
@@ -39,39 +39,6 @@ class ChangeService
     }
 
     /**
-     * @param Task      $task
-     * @param \DateTime $forDate
-     * @param string    $state
-     *
-     * @return TaskChange
-     */
-    public function updateState(Task $task, \DateTime $forDate, string $state): TaskChange
-    {
-        /**
-         * @var TaskChangeRepository $taskChangeRepository
-         */
-        $taskChangeRepository = $this->em->getRepository(TaskChange::class);
-        $change = $taskChangeRepository->findOneBy([
-            'task' => $task,
-            'forDate' => $forDate,
-        ]);
-
-        if (!$change) {
-            $change = new TaskChange();
-            $change->setTask($task);
-            $change->setForDate($forDate);
-            $change->setState($state);
-        } else {
-            $change->setState($state);
-        }
-
-        $this->em->persist($change);
-        $this->em->flush();
-
-        return $change;
-    }
-
-    /**
      * @todo Оптимизировать UPDATE-запросы (сейчас выполняются по одному).
      *
      * @param Task      $task
@@ -80,7 +47,7 @@ class ChangeService
      *
      * @return TaskChange
      */
-    public function updatePosition(Task $task, \DateTime $forDate, int $position): TaskChange
+    public function update(Task $task, \DateTime $forDate, int $position): TaskChange
     {
         /**
          * @var TaskChangeRepository $taskChangeRepository
