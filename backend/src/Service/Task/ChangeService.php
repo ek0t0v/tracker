@@ -4,6 +4,7 @@ namespace App\Service\Task;
 
 use App\Entity\Task;
 use App\Entity\TaskChange;
+use App\Entity\User;
 use App\Repository\TaskChangeRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
@@ -24,7 +25,7 @@ class ChangeService
     private $tokenStorage;
 
     /**
-     * TaskService constructor.
+     * ChangeService constructor.
      *
      * @param EntityManagerInterface $em
      * @param TokenStorageInterface  $tokenStorage
@@ -85,20 +86,25 @@ class ChangeService
          * @var TaskChangeRepository $taskChangeRepository
          */
         $taskChangeRepository = $this->em->getRepository(TaskChange::class);
-        $changes = $taskChangeRepository->findByForDate($forDate, $this->tokenStorage->getToken()->getUser());
 
-        $currentChangeExists = false;
+        /**
+         * @var User $user
+         */
+        $user = $this->tokenStorage->getToken()->getUser();
+
+        $changes = $taskChangeRepository->findByForDate($forDate, $user);
+        $currentChange = null;
 
         /**
          * @var TaskChange $change
          */
         foreach ($changes as $change) {
             if ($change->getTask() === $task) {
-                $currentChangeExists = true;
+                $currentChange = $change;
 
-                $change->setPosition($position);
+                $currentChange->setPosition($position);
 
-                $this->em->persist($change);
+                $this->em->persist($currentChange);
 
                 continue;
             }
@@ -110,7 +116,7 @@ class ChangeService
             }
         }
 
-        if (!$currentChangeExists) {
+        if (is_null($currentChange)) {
             $currentChange = new TaskChange();
             $currentChange->setTask($task);
             $currentChange->setForDate($forDate);

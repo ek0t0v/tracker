@@ -21,6 +21,11 @@ class TaskFacade
     private $getByDateService;
 
     /**
+     * @var GetByDyDateOldService
+     */
+    private $getByDateOldService;
+
+    /**
      * @var GetOverdueService
      */
     private $getOverdueService;
@@ -36,26 +41,37 @@ class TaskFacade
     private $changeService;
 
     /**
+     * @var TransferService
+     */
+    private $transferService;
+
+    /**
      * TaskFacade constructor.
      *
-     * @param DtoService        $dtoService
-     * @param GetByDateService  $getByDateService
-     * @param GetOverdueService $getOverdueService
-     * @param CreateTaskService $createTaskService
-     * @param ChangeService     $changeService
+     * @param DtoService            $dtoService
+     * @param GetByDateService      $getByDateService
+     * @param GetByDyDateOldService $getByDateOldService
+     * @param GetOverdueService     $getOverdueService
+     * @param CreateTaskService     $createTaskService
+     * @param ChangeService         $changeService
+     * @param TransferService       $transferService
      */
     public function __construct(
         DtoService $dtoService,
         GetByDateService $getByDateService,
+        GetByDyDateOldService $getByDateOldService,
         GetOverdueService $getOverdueService,
         CreateTaskService $createTaskService,
-        ChangeService $changeService
+        ChangeService $changeService,
+        TransferService $transferService
     ) {
         $this->dtoService = $dtoService;
         $this->getByDateService = $getByDateService;
+        $this->getByDateOldService = $getByDateOldService;
         $this->getOverdueService = $getOverdueService;
         $this->createTaskService = $createTaskService;
         $this->changeService = $changeService;
+        $this->transferService = $transferService;
     }
 
     /**
@@ -65,13 +81,7 @@ class TaskFacade
      */
     public function getTasksByDate(\DateTime $date): array
     {
-        $result = [];
-
-        foreach ($this->getByDateService->getByDate($date) as $task) {
-            $result[] = $this->dtoService->create($task);
-        }
-
-        return $result;
+        return $this->getByDateOldService->getTasksByDate($date);
     }
 
     /**
@@ -84,6 +94,7 @@ class TaskFacade
      */
     public function getTasksByDateRange(\DateTime $start, \DateTime $end): array
     {
+        return $this->getByDateOldService->getTasksByDateRange($start, $end);
     }
 
     /**
@@ -116,8 +127,6 @@ class TaskFacade
     }
 
     /**
-     * @todo Сделать ограничения на перемещение задач, например, нельзя перемещать готовые/отмененные задачи.
-     *
      * @param Task      $task
      * @param \DateTime $forDate
      * @param \DateTime $to
@@ -126,6 +135,9 @@ class TaskFacade
      */
     public function transferTask(Task $task, \DateTime $forDate, \DateTime $to): TaskDto
     {
+        $this->transferService->transfer($task, $forDate, $to);
+
+        return $this->dtoService->create($task, $task->getStartDate());
     }
 
     /**

@@ -4,15 +4,14 @@ namespace App\Service\Task;
 
 use App\Dto\ApiResponse\TaskDto;
 use App\Entity\Task;
-use App\Entity\TaskTransfer;
 use App\Repository\TaskRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 /**
- * Class TaskService.
+ * Class GetByDyDateOldService.
  */
-class TaskService
+class GetByDyDateOldService
 {
     /**
      * @var EntityManagerInterface
@@ -27,23 +26,23 @@ class TaskService
     /**
      * @var DtoService
      */
-    private $taskDtoService;
+    private $dtoService;
 
     /**
      * TaskService constructor.
      *
      * @param EntityManagerInterface $em
      * @param TokenStorageInterface  $tokenStorage
-     * @param DtoService             $taskDtoService
+     * @param DtoService             $dtoService
      */
     public function __construct(
         EntityManagerInterface $em,
         TokenStorageInterface $tokenStorage,
-        DtoService $taskDtoService
+        DtoService $dtoService
     ) {
         $this->em = $em;
         $this->tokenStorage = $tokenStorage;
-        $this->taskDtoService = $taskDtoService;
+        $this->dtoService = $dtoService;
     }
 
     /**
@@ -63,7 +62,7 @@ class TaskService
         $dto = [];
 
         foreach ($resultsForDate as $result) {
-            $dto[] = $this->taskDtoService->create($result['task'], $result['forDate'], $date);
+            $dto[] = $this->dtoService->create($result['task'], $result['forDate'], $date);
         }
 
         return $this->sortByPosition($dto);
@@ -97,7 +96,7 @@ class TaskService
             $dtoByDate = [];
 
             foreach ($this->getActualTasksByDate($tasks, $date) as $result) {
-                $dtoByDate[] = $this->taskDtoService->create($result['task'], $result['forDate'], $date);
+                $dtoByDate[] = $this->dtoService->create($result['task'], $result['forDate'], $date);
             }
 
             foreach ($this->sortByPosition($dtoByDate) as $item) {
@@ -106,29 +105,6 @@ class TaskService
         }
 
         return $dto;
-    }
-
-    /**
-     * @todo Сделать ограничения на перемещение задач, например, нельзя перемещать готовые/отмененные задачи.
-     *
-     * @param Task      $task
-     * @param \DateTime $forDate
-     * @param \DateTime $to
-     *
-     * @return TaskDto
-     */
-    public function transferTask(Task $task, \DateTime $forDate, \DateTime $to): TaskDto
-    {
-        $transfer = new TaskTransfer();
-        $transfer->setTask($task);
-        $transfer->setForDate($forDate);
-        $transfer->setTransferTo($to);
-
-        $this->em->persist($transfer);
-
-        $this->em->flush();
-
-        return $this->taskDtoService->create($task, $task->getStartDate());
     }
 
     /**

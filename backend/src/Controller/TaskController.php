@@ -9,7 +9,6 @@ use App\Request\Task\CreateTaskRequest;
 use App\Request\Task\GetTasksRequest;
 use App\Request\Task\TransferTaskRequest;
 use App\Service\Task\TaskFacade;
-use App\Service\Task\TaskService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -24,7 +23,7 @@ class TaskController extends ApiController
 {
     /**
      * @param GetTasksRequest $request
-     * @param TaskService     $taskService
+     * @param TaskFacade      $taskFacade
      *
      * @throws \Exception
      *
@@ -32,11 +31,11 @@ class TaskController extends ApiController
      *
      * @Route(name="api_tasks_get_tasks", methods={"GET"})
      */
-    public function getTasks(GetTasksRequest $request, TaskService $taskService): JsonResponse
+    public function getTasks(GetTasksRequest $request, TaskFacade $taskFacade): JsonResponse
     {
         $tasks = is_null($request->end)
-            ? $taskService->getTasksByDate(new \DateTime($request->start))
-            : $taskService->getTasksByDateRange(new \DateTime($request->start), new \DateTime($request->end));
+            ? $taskFacade->getTasksByDate(new \DateTime($request->start))
+            : $taskFacade->getTasksByDateRange(new \DateTime($request->start), new \DateTime($request->end));
 
         return $this->apiResponse([
             'items' => $tasks,
@@ -77,7 +76,7 @@ class TaskController extends ApiController
      * @param Task                $task
      * @param \DateTime           $forDate
      * @param TransferTaskRequest $request
-     * @param TaskService         $taskService
+     * @param TaskFacade          $taskFacade
      *
      * @return JsonResponse
      *
@@ -85,9 +84,9 @@ class TaskController extends ApiController
      * @ParamConverter("task", converter="scheduled_task_by_user")
      * @ParamConverter("forDate", options={"format": "Y-m-d"})
      */
-    public function transferTask(Task $task, \DateTime $forDate, TransferTaskRequest $request, TaskService $taskService): JsonResponse
+    public function transferTask(Task $task, \DateTime $forDate, TransferTaskRequest $request, TaskFacade $taskFacade): JsonResponse
     {
-        $task = $taskService->transferTask($task, $forDate, new \DateTime($request->to));
+        $task = $taskFacade->transferTask($task, $forDate, new \DateTime($request->to));
 
         return $this->apiResponse($task, ['api']);
     }
