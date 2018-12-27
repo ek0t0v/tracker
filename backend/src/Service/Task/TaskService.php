@@ -3,12 +3,12 @@
 namespace App\Service\Task;
 
 use App\Doctrine\DBAL\Type\TaskChangeStateType;
+use App\Dto\ApiResponse\TaskDto;
 use App\Entity\Task;
 use App\Entity\TaskChange;
 use App\Entity\TaskTransfer;
 use App\Repository\TaskChangeRepository;
 use App\Repository\TaskRepository;
-use App\Response\Task\TaskDto;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
@@ -28,7 +28,7 @@ class TaskService
     private $tokenStorage;
 
     /**
-     * @var TaskDtoService
+     * @var DtoService
      */
     private $taskDtoService;
 
@@ -37,12 +37,12 @@ class TaskService
      *
      * @param EntityManagerInterface $em
      * @param TokenStorageInterface  $tokenStorage
-     * @param TaskDtoService         $taskDtoService
+     * @param DtoService             $taskDtoService
      */
     public function __construct(
         EntityManagerInterface $em,
         TokenStorageInterface $tokenStorage,
-        TaskDtoService $taskDtoService
+        DtoService $taskDtoService
     ) {
         $this->em = $em;
         $this->tokenStorage = $tokenStorage;

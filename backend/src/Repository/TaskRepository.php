@@ -27,6 +27,27 @@ class TaskRepository extends ServiceEntityRepository
     }
 
     /**
+     * @param User $user
+     *
+     * @return mixed
+     */
+    public function findAllByUser(User $user)
+    {
+        return $this->createQueryBuilder('task')
+            ->addSelect('transfer')
+            ->addSelect('change')
+            ->andWhere('task.user = :user')
+            ->leftJoin('task.changes', 'change')
+            ->leftJoin('task.transfers', 'transfer')
+            ->orderBy('task.id', 'desc')
+            ->addOrderBy('transfer.id', 'asc')
+            ->setParameter('user', $user)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    /**
      * @param \DateTime $start
      * @param User      $user
      *

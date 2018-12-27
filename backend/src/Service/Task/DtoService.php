@@ -3,13 +3,13 @@
 namespace App\Service\Task;
 
 use App\Doctrine\DBAL\Type\TaskChangeStateType;
+use App\Dto\ApiResponse\TaskDto;
 use App\Entity\Task;
-use App\Response\Task\TaskDto;
 
 /**
- * Class TaskDtoService.
+ * Class DtoService.
  */
-class TaskDtoService
+class DtoService
 {
     /**
      * @param Task           $task

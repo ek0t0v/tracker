@@ -4,7 +4,7 @@ namespace App\Tests;
 
 use App\Entity\Task;
 use App\Entity\TaskChange;
-use App\Service\Task\TaskDtoService;
+use App\Service\Task\DtoService;
 use Codeception\Exception\ModuleException;
 use Codeception\Test\Unit;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -20,7 +20,7 @@ class TaskDtoServiceTest extends Unit
     protected $tester;
 
     /**
-     * @var TaskDtoService
+     * @var DtoService
      */
     private $taskDtoService;
 
@@ -29,7 +29,7 @@ class TaskDtoServiceTest extends Unit
      */
     protected function _before()
     {
-        $this->taskDtoService = $this->tester->getSymfonyService(TaskDtoService::class);
+        $this->taskDtoService = $this->tester->getSymfonyService(DtoService::class);
     }
 
     /**

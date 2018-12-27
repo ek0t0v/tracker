@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Response\Task;
+namespace App\Dto\ApiResponse;
 
 use Symfony\Component\Serializer\Annotation\Groups;
 
