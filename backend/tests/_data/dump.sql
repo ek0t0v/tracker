@@ -223,6 +223,34 @@ CREATE SEQUENCE public.tasks_id_seq
 ALTER TABLE public.tasks_id_seq OWNER TO symfony;
 
 --
+-- Name: user_settings; Type: TABLE; Schema: public; Owner: symfony
+--
+
+CREATE TABLE public.user_settings (
+    id integer NOT NULL,
+    user_id integer,
+    timezone text NOT NULL,
+    locale text NOT NULL
+);
+
+
+ALTER TABLE public.user_settings OWNER TO symfony;
+
+--
+-- Name: user_settings_id_seq; Type: SEQUENCE; Schema: public; Owner: symfony
+--
+
+CREATE SEQUENCE public.user_settings_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.user_settings_id_seq OWNER TO symfony;
+
+--
 -- Name: users; Type: TABLE; Schema: public; Owner: symfony
 --
 
@@ -264,6 +292,7 @@ COPY public.migration_versions (version) FROM stdin;
 20181207055216
 20181211112352
 20181226174727
+20181227045818
 \.
 
 
@@ -272,6 +301,7 @@ COPY public.migration_versions (version) FROM stdin;
 --
 
 COPY public.refresh_tokens (id, refresh_token, username, valid) FROM stdin;
+1	d6df8aae645bb18a161b232579c9c13ef2be11e8f32351d32bcc27f31cdb0596e917e193fb5048377b1652cbe264ed4ab6937ece461ad7c9e2a5c9dc22f63e36	test_user_1@mail.ru	2019-01-25 18:56:47
 \.
 
 
@@ -320,6 +350,14 @@ COPY public.tasks (id, user_id, name, start_date, end_date, schedule, updated_at
 
 
 --
+-- Data for Name: user_settings; Type: TABLE DATA; Schema: public; Owner: symfony
+--
+
+COPY public.user_settings (id, user_id, timezone, locale) FROM stdin;
+\.
+
+
+--
 -- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: symfony
 --
 
@@ -333,7 +371,7 @@ COPY public.users (id, email, email_canonical, username, password, roles, enable
 -- Name: refresh_tokens_id_seq; Type: SEQUENCE SET; Schema: public; Owner: symfony
 --
 
-SELECT pg_catalog.setval('public.refresh_tokens_id_seq', 1, false);
+SELECT pg_catalog.setval('public.refresh_tokens_id_seq', 1, true);
 
 
 --
@@ -362,6 +400,13 @@ SELECT pg_catalog.setval('public.task_transfers_id_seq', 7, true);
 --
 
 SELECT pg_catalog.setval('public.tasks_id_seq', 5, true);
+
+
+--
+-- Name: user_settings_id_seq; Type: SEQUENCE SET; Schema: public; Owner: symfony
+--
+
+SELECT pg_catalog.setval('public.user_settings_id_seq', 1, false);
 
 
 --
@@ -420,6 +465,14 @@ ALTER TABLE ONLY public.tasks
 
 
 --
+-- Name: user_settings user_settings_pkey; Type: CONSTRAINT; Schema: public; Owner: symfony
+--
+
+ALTER TABLE ONLY public.user_settings
+    ADD CONSTRAINT user_settings_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: users users_pkey; Type: CONSTRAINT; Schema: public; Owner: symfony
 --
 
@@ -446,6 +499,13 @@ CREATE INDEX idx_3fc192d78db60186 ON public.task_changes USING btree (task_id);
 --
 
 CREATE INDEX idx_50586597a76ed395 ON public.tasks USING btree (user_id);
+
+
+--
+-- Name: idx_5c844c5a76ed395; Type: INDEX; Schema: public; Owner: symfony
+--
+
+CREATE INDEX idx_5c844c5a76ed395 ON public.user_settings USING btree (user_id);
 
 
 --
@@ -477,6 +537,13 @@ CREATE UNIQUE INDEX uniq_3fc192d78db60186792b56ef ON public.task_changes USING b
 
 
 --
+-- Name: uniq_5c844c5bf396750a76ed395; Type: INDEX; Schema: public; Owner: symfony
+--
+
+CREATE UNIQUE INDEX uniq_5c844c5bf396750a76ed395 ON public.user_settings USING btree (id, user_id);
+
+
+--
 -- Name: uniq_9bace7e1c74f2195; Type: INDEX; Schema: public; Owner: symfony
 --
 
@@ -505,6 +572,14 @@ ALTER TABLE ONLY public.task_changes
 
 ALTER TABLE ONLY public.tasks
     ADD CONSTRAINT fk_50586597a76ed395 FOREIGN KEY (user_id) REFERENCES public.users(id);
+
+
+--
+-- Name: user_settings fk_5c844c5a76ed395; Type: FK CONSTRAINT; Schema: public; Owner: symfony
+--
+
+ALTER TABLE ONLY public.user_settings
+    ADD CONSTRAINT fk_5c844c5a76ed395 FOREIGN KEY (user_id) REFERENCES public.users(id);
 
 
 --

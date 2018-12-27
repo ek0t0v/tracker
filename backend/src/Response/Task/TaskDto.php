@@ -45,6 +45,16 @@ class TaskDto
     public $end = null;
 
     /**
+     * @var string|null
+     */
+    public $repeatType = null;
+
+    /**
+     * @var int[]|null
+     */
+    public $repeatValue = null;
+
+    /**
      * @var \DateTime
      *
      * @Groups({"api"})

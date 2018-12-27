@@ -32,6 +32,7 @@
             <div class="task-item__name">{{ name }}</div>
         </div>
         <div class="task-item__column">
+            <!-- todo: Поправить отступы и все такое. -->
             <div
                 v-if="transfers.length > 0"
                 class="task-item-for-date"
