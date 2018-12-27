@@ -91,6 +91,13 @@ class User implements UserInterface, JWTUserInterface
     private $createdAt;
 
     /**
+     * @var UserSettings
+     *
+     * @ORM\OneToOne(targetEntity="UserSettings", mappedBy="user")
+     */
+    private $settings;
+
+    /**
      * User constructor.
      *
      * @param string $username
@@ -312,6 +319,32 @@ class User implements UserInterface, JWTUserInterface
     public function setCreatedAt(\DateTime $createdAt): self
     {
         $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    /**
+     * @return UserSettings|null
+     */
+    public function getSettings(): ?UserSettings
+    {
+        return $this->settings;
+    }
+
+    /**
+     * @param UserSettings|null $settings
+     *
+     * @return User
+     */
+    public function setSettings(?UserSettings $settings): self
+    {
+        $this->settings = $settings;
+
+        // set (or unset) the owning side of the relation if necessary
+        $newUser = null === $settings ? null : $this;
+        if ($newUser !== $settings->getUser()) {
+            $settings->setUser($newUser);
+        }
 
         return $this;
     }

@@ -26,7 +26,7 @@ class UserSettings
     /**
      * @var User
      *
-     * @ORM\ManyToOne(targetEntity="User")
+     * @ORM\OneToOne(targetEntity="User", mappedBy="settings")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
     private $user;

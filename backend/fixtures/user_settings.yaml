@@ -1,0 +1,9 @@
+App\Entity\UserSettings:
+    user_settings_1:
+        user: '@test_user_1'
+        timezone: 'Europe/Moscow'
+        locale: 'ru'
+    user_settings_2:
+        user: '@test_user_2'
+        timezone: 'Europe/Moscow'
+        locale: 'ru'

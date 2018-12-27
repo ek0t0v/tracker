@@ -293,6 +293,7 @@ COPY public.migration_versions (version) FROM stdin;
 20181211112352
 20181226174727
 20181227045818
+20181227102828
 \.
 
 
@@ -301,7 +302,6 @@ COPY public.migration_versions (version) FROM stdin;
 --
 
 COPY public.refresh_tokens (id, refresh_token, username, valid) FROM stdin;
-1	d6df8aae645bb18a161b232579c9c13ef2be11e8f32351d32bcc27f31cdb0596e917e193fb5048377b1652cbe264ed4ab6937ece461ad7c9e2a5c9dc22f63e36	test_user_1@mail.ru	2019-01-25 18:56:47
 \.
 
 
@@ -326,13 +326,13 @@ COPY public.task_timings (id, task_id, started_at, ended_at) FROM stdin;
 --
 
 COPY public.task_transfers (id, task_id, transfer_to, for_date, created_at) FROM stdin;
-1	1	2018-11-04	2018-11-03	2018-12-26 17:51:06
-2	1	2018-11-08	2018-11-06	2018-12-26 17:51:06
-3	1	2018-11-09	2018-11-06	2018-12-26 17:51:06
-4	1	2018-12-07	2018-11-29	2018-12-26 17:51:06
-5	3	2018-11-23	2018-11-22	2018-12-26 17:51:06
-6	4	2018-11-10	2018-11-07	2018-12-26 17:51:06
-7	4	2018-11-08	2018-11-07	2018-12-26 17:51:06
+1	1	2018-11-04	2018-11-03	2018-12-27 10:43:49
+2	1	2018-11-08	2018-11-06	2018-12-27 10:43:49
+3	1	2018-11-09	2018-11-06	2018-12-27 10:43:49
+4	1	2018-12-07	2018-11-29	2018-12-27 10:43:49
+5	3	2018-11-23	2018-11-22	2018-12-27 10:43:49
+6	4	2018-11-10	2018-11-07	2018-12-27 10:43:49
+7	4	2018-11-08	2018-11-07	2018-12-27 10:43:49
 \.
 
 
@@ -341,11 +341,11 @@ COPY public.task_transfers (id, task_id, transfer_to, for_date, created_at) FROM
 --
 
 COPY public.tasks (id, user_id, name, start_date, end_date, schedule, updated_at, created_at, repeat_type, repeat_value) FROM stdin;
-1	1	Exercises	2018-11-01	2018-12-01	a:4:{i:0;i:1;i:1;i:1;i:2;i:1;i:3;i:0;}	2018-12-26 17:51:06	2018-12-26 17:51:06	\N	N;
-2	1	Work	2018-10-29	\N	a:7:{i:0;i:1;i:1;i:1;i:2;i:1;i:3;i:1;i:4;i:1;i:5;i:0;i:6;i:0;}	2018-12-26 17:51:06	2018-12-26 17:51:06	\N	N;
-3	1	Reading	2018-11-19	\N	a:1:{i:0;i:1;}	2018-12-26 17:51:06	2018-12-26 17:51:06	\N	N;
-4	1	Single task 1	2018-11-07	\N	N;	2018-12-26 17:51:06	2018-12-26 17:51:06	\N	N;
-5	1	Single task 2	2018-12-01	\N	N;	2018-12-26 17:51:06	2018-12-26 17:51:06	\N	N;
+1	1	Exercises	2018-11-01	2018-12-01	a:4:{i:0;i:1;i:1;i:1;i:2;i:1;i:3;i:0;}	2018-12-27 10:43:49	2018-12-27 10:43:49	\N	N;
+2	1	Work	2018-10-29	\N	a:7:{i:0;i:1;i:1;i:1;i:2;i:1;i:3;i:1;i:4;i:1;i:5;i:0;i:6;i:0;}	2018-12-27 10:43:49	2018-12-27 10:43:49	\N	N;
+3	1	Reading	2018-11-19	\N	a:1:{i:0;i:1;}	2018-12-27 10:43:49	2018-12-27 10:43:49	\N	N;
+4	1	Single task 1	2018-11-07	\N	N;	2018-12-27 10:43:49	2018-12-27 10:43:49	\N	N;
+5	1	Single task 2	2018-12-01	\N	N;	2018-12-27 10:43:49	2018-12-27 10:43:49	\N	N;
 \.
 
 
@@ -354,6 +354,8 @@ COPY public.tasks (id, user_id, name, start_date, end_date, schedule, updated_at
 --
 
 COPY public.user_settings (id, user_id, timezone, locale) FROM stdin;
+1	1	Europe/Moscow	ru
+2	2	Europe/Moscow	ru
 \.
 
 
@@ -362,8 +364,8 @@ COPY public.user_settings (id, user_id, timezone, locale) FROM stdin;
 --
 
 COPY public.users (id, email, email_canonical, username, password, roles, enabled, last_login, password_requested_at, created_at) FROM stdin;
-1	test_user_1@mail.ru	test_user_1@mail.ru	test_user_1	$2y$13$l2o5LF.QfzhuFVTOXvAtxuPpwP5zzJGxZ08r4rK8Kh/6JyHQ7lmZW	[]	t	\N	\N	2018-12-26 17:51:05
-2	test_user_2@mail.ru	test_user_2@mail.ru	test_user_2	$2y$13$RAXxrfme7j/HL6YOFRJMA.c.22u6OPFCi.jE8pbVI5rjndWOuP.4C	[]	t	\N	\N	2018-12-26 17:51:06
+1	test_user_1@mail.ru	test_user_1@mail.ru	test_user_1	$2y$13$PPdmLR5ZeYAsFZtMJtKxpOPi5012vV5N2VoP9U6CtVB8SF3R7Nt/W	[]	t	\N	\N	2018-12-27 10:43:48
+2	test_user_2@mail.ru	test_user_2@mail.ru	test_user_2	$2y$13$A/LPbgNltBCnyuC9mirr2e2SJb2MA/aOa3mW.uyjwCF.yQSy94sry	[]	t	\N	\N	2018-12-27 10:43:49
 \.
 
 
@@ -371,7 +373,7 @@ COPY public.users (id, email, email_canonical, username, password, roles, enable
 -- Name: refresh_tokens_id_seq; Type: SEQUENCE SET; Schema: public; Owner: symfony
 --
 
-SELECT pg_catalog.setval('public.refresh_tokens_id_seq', 1, true);
+SELECT pg_catalog.setval('public.refresh_tokens_id_seq', 1, false);
 
 
 --
@@ -406,7 +408,7 @@ SELECT pg_catalog.setval('public.tasks_id_seq', 5, true);
 -- Name: user_settings_id_seq; Type: SEQUENCE SET; Schema: public; Owner: symfony
 --
 
-SELECT pg_catalog.setval('public.user_settings_id_seq', 1, false);
+SELECT pg_catalog.setval('public.user_settings_id_seq', 2, true);
 
 
 --
@@ -502,13 +504,6 @@ CREATE INDEX idx_50586597a76ed395 ON public.tasks USING btree (user_id);
 
 
 --
--- Name: idx_5c844c5a76ed395; Type: INDEX; Schema: public; Owner: symfony
---
-
-CREATE INDEX idx_5c844c5a76ed395 ON public.user_settings USING btree (user_id);
-
-
---
 -- Name: idx_ff00f4498db60186; Type: INDEX; Schema: public; Owner: symfony
 --
 
@@ -534,6 +529,13 @@ CREATE UNIQUE INDEX uniq_1483a5e9e7927c74 ON public.users USING btree (email);
 --
 
 CREATE UNIQUE INDEX uniq_3fc192d78db60186792b56ef ON public.task_changes USING btree (task_id, for_date);
+
+
+--
+-- Name: uniq_5c844c5a76ed395; Type: INDEX; Schema: public; Owner: symfony
+--
+
+CREATE UNIQUE INDEX uniq_5c844c5a76ed395 ON public.user_settings USING btree (user_id);
 
 
 --
