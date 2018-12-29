@@ -57,13 +57,14 @@ class Context
     /**
      * Не учитывает часовые пояса - какую дату передали, по такой и определяет.
      *
-     * @param \DateTime $date
-     * @param null      $schedule
+     * @param \DateTime  $date
+     * @param \DateTime  $start
+     * @param array|null $schedule
      *
      * @return bool
      */
-    public function isScheduled(\DateTime $date, $schedule = null): bool
+    public function isScheduled(\DateTime $date, \DateTime $start, array $schedule = null): bool
     {
-        return $this->strategy->isScheduled($date, $schedule);
+        return $this->strategy->isScheduled($date, $start, $schedule);
     }
 }

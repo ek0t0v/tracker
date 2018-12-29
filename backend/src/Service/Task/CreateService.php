@@ -58,7 +58,6 @@ class CreateService
         $task->setEndDate($endDate);
         $task->setRepeatType($repeatType);
         $task->setRepeatValue($repeatValue);
-        $task->setSchedule($schedule);
 
         $this->em->persist($task);
 

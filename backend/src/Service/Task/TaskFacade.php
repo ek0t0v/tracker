@@ -89,7 +89,7 @@ class TaskFacade
      */
     public function getTasksByDate(\DateTime $date): array
     {
-        return $this->getByDateOldService->getTasksByDate($date);
+        return $this->getByDateService->getByDate($date);
     }
 
     /**
@@ -102,7 +102,7 @@ class TaskFacade
      */
     public function getTasksByDateRange(\DateTime $start, \DateTime $end): array
     {
-        return $this->getByDateOldService->getTasksByDateRange($start, $end);
+        return $this->getByDateService->getByDateRange($start, $end);
     }
 
     /**
@@ -129,8 +129,14 @@ class TaskFacade
      *
      * @return TaskDto
      */
-    public function createTask(string $name, \DateTime $startDate, \DateTime $endDate = null, string $repeatType = null, array $repeatValue = null, array $schedule = null): TaskDto
-    {
+    public function createTask(
+        string $name,
+        \DateTime $startDate,
+        \DateTime $endDate = null,
+        string $repeatType = null,
+        array $repeatValue = null,
+        array $schedule = null
+    ): TaskDto {
         $task = $this->createService->create($name, $startDate, $endDate, $repeatType, $repeatValue, $schedule);
 
         return $this->dtoService->create($task, $startDate);

@@ -59,13 +59,12 @@ class GetByDateService
         $user = $this->tokenStorage->getToken()->getUser();
         $allTasks = $this->repository->findAllByUser($user);
 
-        $date = $this->updateTimezoneByUser($user, $date);
+        $date = $this->getDateWithUserTimezone($date);
 
         $tasksWithoutTransfers = $this->getActualTasksWithoutTransfers($date, $allTasks);
+        $transferredToDateTasks = $this->getTransferredToDateTasks($date, $allTasks);
 
-        // добавить задачи, которые были перенесены на $date
-
-        return [];
+        return array_merge($tasksWithoutTransfers, $transferredToDateTasks);
     }
 
     /**
@@ -84,8 +83,8 @@ class GetByDateService
         $user = $this->tokenStorage->getToken()->getUser();
         $allTasks = $this->repository->findAllByUser($user);
 
-        $start = $this->updateTimezoneByUser($user, $start);
-        $end = $this->updateTimezoneByUser($user, $end);
+        $start = $this->getDateWithUserTimezone($start);
+        $end = $this->getDateWithUserTimezone($end);
 
         // Увеличивает на 1 секунду, чтобы период включал в себя последний день.
         $end->setTime(0, 0, 1);
@@ -93,21 +92,21 @@ class GetByDateService
 
         foreach (array_reverse(iterator_to_array($period)) as $date) {
             $tasksWithoutTransfers = $this->getActualTasksWithoutTransfers($date, $allTasks);
-
-            // добавляем задачи, которые были перенесены на $date
+            $transferredToDateTasks = $this->getTransferredToDateTasks($date, $allTasks);
         }
 
         return [];
     }
 
     /**
-     * @param User      $user
      * @param \DateTime $date
      *
      * @return \DateTime
      */
-    private function updateTimezoneByUser(User $user, \DateTime $date): \DateTime
+    private function getDateWithUserTimezone(\DateTime $date): \DateTime
     {
+        $user = $this->tokenStorage->getToken()->getUser();
+
         return $date->setTimezone(new \DateTimeZone($user->getSettings()->getTimezone()));
     }
 
@@ -122,7 +121,8 @@ class GetByDateService
         $result = [];
 
         foreach ($tasks as $task) {
-            $actualTransfers = array_filter($task->getTransfers(), function (TaskTransfer $transfer) use ($date) {
+            $transfers = $task->getTransfers()->toArray();
+            $actualTransfers = array_filter($transfers, function (TaskTransfer $transfer) use ($date) {
                 return $transfer->getForDate() == $date;
             });
 
@@ -131,14 +131,60 @@ class GetByDateService
             }
 
             if (is_null($task->getRepeatType()) && $task->getStartDate() == $date) {
-                $result[] = $task;
+                $result[] = [
+                    'task' => $task->getName(),
+                    'forDate' => $date,
+                ];
             }
 
-            if ($task->getRepeatType()) {
+            if ($task->getRepeatType() && $task->getStartDate() <= $date && (is_null($task->getEndDate()) || $task->getEndDate() >= $date)) {
                 $this->scheduleContext->setContextByTaskRepeatType($task->getRepeatType());
 
-                if ($this->scheduleContext->isScheduled($date)) {
-                    $result[] = $task;
+                if ($this->scheduleContext->isScheduled($date, $task->getStartDate(), $task->getRepeatValue())) {
+                    $result[] = [
+                        'task' => $task->getName(),
+                        'forDate' => $date,
+                    ];
+                }
+            }
+        }
+
+        return $result;
+    }
+
+    /**
+     * @param \DateTime $date
+     * @param array     $tasks
+     *
+     * @return array
+     */
+    private function getTransferredToDateTasks(\DateTime $date, array $tasks): array
+    {
+        $timezone = new \DateTimeZone($this->tokenStorage->getToken()->getUser()->getSettings()->getTimezone());
+        $result = [];
+
+        foreach ($tasks as $task) {
+            $transfersHash = [];
+
+            /**
+             * @var TaskTransfer $transfer
+             */
+            foreach ($task->getTransfers() as $transfer) {
+                $transfersHashKey = $transfer->getForDate()->setTimezone($timezone);
+
+                $transfersHash[$transfersHashKey->format('Y-m-d')] = [
+                    'forDate' => $transfersHashKey,
+                    'to' => $transfer->getTransferTo()->setTimezone($timezone),
+                ];
+            }
+
+            foreach ($transfersHash as $transfer) {
+                // Задача перенесена на сегодня откуда-нибудь (но не с сегодняшнего дня) - добавляем задачу.
+                if ($transfer['to'] == $date) {
+                    $result[] = [
+                        'task' => $task->getName(),
+                        'forDate' => $transfer['forDate'],
+                    ];
                 }
             }
         }

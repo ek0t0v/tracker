@@ -4,17 +4,29 @@ App\Entity\Task:
         name: Exercises
         startDate: <dateTimeBetween(2018-11-01, 2018-11-01)>
         endDate: <dateTimeBetween(2018-12-01, 2018-12-01)>
-        schedule: [1, 1, 1, 0]
+        repeatType: custom
+        repeatValue: [1, 1, 1, 0]
     task_work:
         user: '@test_user_1'
         name: Work
         startDate: <dateTimeBetween(2018-10-29, 2018-10-29)>
-        schedule: [1, 1, 1, 1, 1, 0, 0]
+        repeatType: weekday
+    task_cleaning:
+        user: '@test_user_1'
+        name: Cleaning
+        startDate: <dateTimeBetween(2018-11-01, 2018-11-01)>
+        repeatType: weekend
+    task_shopping:
+        user: '@test_user_1'
+        name: Shopping
+        startDate: <dateTimeBetween(2018-11-01, 2018-11-01)>
+        repeatType: week
+        repeatValue: [0, 0, 0, 0, 0, 1, 0]
     task_reading:
         user: '@test_user_1'
         name: Reading
         startDate: <dateTimeBetween(2018-11-19, 2018-11-19)>
-        schedule: [1]
+        repeatType: daily
     task_single_1:
         user: '@test_user_1'
         name: Single task 1

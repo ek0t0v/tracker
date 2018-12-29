@@ -74,8 +74,6 @@ class TaskDto
 
     /**
      * @var bool
-     *
-     * @Groups({"api"})
      */
     public $isTransferred = false;
 

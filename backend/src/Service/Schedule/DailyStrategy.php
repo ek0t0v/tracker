@@ -10,7 +10,7 @@ class DailyStrategy implements Strategy
     /**
      * {@inheritdoc}
      */
-    public function isScheduled(\DateTime $date, $schedule = null): bool
+    public function isScheduled(\DateTime $date, \DateTime $start, array $schedule = null): bool
     {
         return true;
     }

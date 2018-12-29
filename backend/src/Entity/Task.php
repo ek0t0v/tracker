@@ -68,13 +68,6 @@ class Task
     private $repeatValue;
 
     /**
-     * @var int[]|null
-     *
-     * @ORM\Column(name="schedule", type="array", nullable=true)
-     */
-    private $schedule;
-
-    /**
      * @var ArrayCollection|TaskChange[]
      *
      * @ORM\OneToMany(targetEntity="TaskChange", mappedBy="task")
@@ -225,55 +218,6 @@ class Task
         $this->repeatValue = $repeatValue;
 
         return $this;
-    }
-
-    /**
-     * @return array|null
-     */
-    public function getSchedule(): ?array
-    {
-        return $this->schedule;
-    }
-
-    /**
-     * @param array|null $schedule
-     *
-     * @return Task
-     */
-    public function setSchedule(?array $schedule): self
-    {
-        $this->schedule = $schedule;
-
-        return $this;
-    }
-
-    /**
-     * @param \DateTime $date
-     *
-     * @return bool
-     */
-    public function isScheduled(\DateTime $date): bool
-    {
-        if ($this->getStartDate() > $date || (!is_null($this->getEndDate()) && $this->getEndDate() < $date)) {
-            return false;
-        }
-
-        if (is_null($this->getSchedule())) {
-            return $date == $this->getStartDate();
-        }
-
-        $daysDiff = $date->diff($this->getStartDate())->days;
-        $scheduleArraySize = count($this->getSchedule());
-
-        if (0 === $daysDiff) {
-            $i = 0;
-        } elseif ($daysDiff < $scheduleArraySize) {
-            $i = $daysDiff;
-        } else {
-            $i = $daysDiff % $scheduleArraySize;
-        }
-
-        return 1 === $this->getSchedule()[$i];
     }
 
     /**

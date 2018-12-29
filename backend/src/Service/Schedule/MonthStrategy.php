@@ -10,8 +10,8 @@ class MonthStrategy implements Strategy
     /**
      * {@inheritdoc}
      */
-    public function isScheduled(\DateTime $date, $schedule = null): bool
+    public function isScheduled(\DateTime $date, \DateTime $start, array $schedule = null): bool
     {
-        // TODO: Implement isScheduled() method.
+        return false;
     }
 }
