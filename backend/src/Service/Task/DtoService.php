@@ -28,7 +28,6 @@ class DtoService
         $dto->forDate = $forDate;
         $dto->repeatType = $task->getRepeatType();
         $dto->repeatValue = $task->getRepeatValue();
-        $dto->schedule = $task->getSchedule();
         $dto->state = TaskChangeStateType::IN_PROGRESS;
 
         foreach ($task->getTransfers() as $transfer) {

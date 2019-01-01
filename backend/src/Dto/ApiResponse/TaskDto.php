@@ -74,15 +74,10 @@ class TaskDto
 
     /**
      * @var bool
+     *
+     * todo: Наверное стоит удалить
      */
     public $isTransferred = false;
-
-    /**
-     * @var array|null
-     *
-     * @Groups({"api"})
-     */
-    public $schedule = null;
 
     /**
      * @var int|null

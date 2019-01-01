@@ -30,12 +30,12 @@ App\Entity\TaskTransfer:
         transferTo: <dateTimeBetween(2018-11-23, 2018-11-23)>
         forDate: <dateTimeBetween(2018-11-22, 2018-11-22)>
     # перенос одноразовой задачи с 7 ноября на 10
-    transfer_singe_1_task_1:
+    transfer_single_1_task_1:
         task: '@task_single_1'
         transferTo: <dateTimeBetween(2018-11-10, 2018-11-10)>
         forDate: <dateTimeBetween(2018-11-07, 2018-11-07)>
     # перенос уже перенесенной задачи с 10 ноября на 8 (т.е. "перенос в прошлое", назад)
-    transfer_singe_1_task_2:
+    transfer_single_1_task_2:
         task: '@task_single_1'
         transferTo: <dateTimeBetween(2018-11-08, 2018-11-08)>
         forDate: <dateTimeBetween(2018-11-07, 2018-11-07)>

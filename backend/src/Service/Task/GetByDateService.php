@@ -90,12 +90,19 @@ class GetByDateService
         $end->setTime(0, 0, 1);
         $period = new \DatePeriod($start, new \DateInterval('P1D'), $end);
 
+        $result = [];
+
+        /**
+         * @var \DateTime $date
+         */
         foreach (array_reverse(iterator_to_array($period)) as $date) {
             $tasksWithoutTransfers = $this->getActualTasksWithoutTransfers($date, $allTasks);
             $transferredToDateTasks = $this->getTransferredToDateTasks($date, $allTasks);
+
+            $result[$date->format('Y-m-d')] = array_merge($tasksWithoutTransfers, $transferredToDateTasks);
         }
 
-        return [];
+        return $result;
     }
 
     /**
@@ -132,7 +139,7 @@ class GetByDateService
 
             if (is_null($task->getRepeatType()) && $task->getStartDate() == $date) {
                 $result[] = [
-                    'task' => $task->getName(),
+                    'task' => $task,
                     'forDate' => $date,
                 ];
             }
@@ -142,7 +149,7 @@ class GetByDateService
 
                 if ($this->scheduleContext->isScheduled($date, $task->getStartDate(), $task->getRepeatValue())) {
                     $result[] = [
-                        'task' => $task->getName(),
+                        'task' => $task,
                         'forDate' => $date,
                     ];
                 }
@@ -182,7 +189,7 @@ class GetByDateService
                 // Задача перенесена на сегодня откуда-нибудь (но не с сегодняшнего дня) - добавляем задачу.
                 if ($transfer['to'] == $date) {
                     $result[] = [
-                        'task' => $task->getName(),
+                        'task' => $task,
                         'forDate' => $transfer['forDate'],
                     ];
                 }
