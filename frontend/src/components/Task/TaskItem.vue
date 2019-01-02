@@ -41,7 +41,7 @@
                 <span class="task-item-for-date__date">{{ forDateFormatted }}</span>
             </div>
             <div
-                v-if="schedule"
+                v-if="repeatType"
                 class="task-item-repeatable"
             >
                 <i class="task-item-repeatable__icon fas fa-redo-alt" />
@@ -92,9 +92,13 @@
                 type: Array,
                 default: () => [],
             },
-            schedule: {
+            repeatType: {
+                type: String,
+                default: null,
+            },
+            repeatValue: {
                 type: Array,
-                default: () => [],
+                default: null,
             },
         },
         data() {

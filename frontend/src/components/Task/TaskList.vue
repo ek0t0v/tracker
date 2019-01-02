@@ -15,7 +15,8 @@
             :state="item.state"
             :is-transferred="item.isTransferred"
             :transfers="item.transfers"
-            :schedule="item.schedule"
+            :repeat-type="item.repeatType"
+            :repeat-value="item.repeatValue"
         />
     </div>
 </template>

@@ -3,6 +3,7 @@
 namespace App\Request\ParamConverter;
 
 use App\Entity\Task;
+use App\Service\Schedule\Context;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\ParamConverterInterface;
 use Symfony\Bridge\Doctrine\ManagerRegistry;
@@ -26,15 +27,25 @@ class ScheduledTaskByUserParamConverter implements ParamConverterInterface
     private $tokenStorage;
 
     /**
+     * @var Context
+     */
+    private $scheduleContext;
+
+    /**
      * TaskByUserParamConverter constructor.
      *
      * @param ManagerRegistry|null  $registry
      * @param TokenStorageInterface $tokenStorage
+     * @param Context               $scheduleContext
      */
-    public function __construct(ManagerRegistry $registry = null, TokenStorageInterface $tokenStorage)
-    {
+    public function __construct(
+        ManagerRegistry $registry = null,
+        TokenStorageInterface $tokenStorage,
+        Context $scheduleContext
+    ) {
         $this->registry = $registry;
         $this->tokenStorage = $tokenStorage;
+        $this->scheduleContext = $scheduleContext;
     }
 
     /**
@@ -46,7 +57,7 @@ class ScheduledTaskByUserParamConverter implements ParamConverterInterface
             throw new \InvalidArgumentException('Route attribute is missing.');
         }
 
-        if (\DateTime::createFromFormat('Y-m-d', $request->attributes->get('forDate')) === false) {
+        if (false === \DateTime::createFromFormat('Y-m-d', $request->attributes->get('forDate'))) {
             throw new \InvalidArgumentException('forDate route attribute is invalid.');
         }
 
@@ -58,7 +69,11 @@ class ScheduledTaskByUserParamConverter implements ParamConverterInterface
 
         $forDate = new \DateTime($request->attributes->get('forDate'));
 
-        if (is_null($task) || !($task instanceof Task) || !$task->isScheduled($forDate)) {
+        $this->scheduleContext->setContextByTaskRepeatType($task->getRepeatType());
+
+        $isScheduled = $this->scheduleContext->isScheduled($forDate, $task->getStartDate());
+
+        if (is_null($task) || !($task instanceof Task) || !$isScheduled) {
             throw new NotFoundHttpException(sprintf('%s object not found.', $configuration->getClass()));
         }
 
