@@ -56,6 +56,7 @@ export default {
             });
         },
         create(state, task) {
+            // todo: Добавлять в нужный день, если task.start === сегодня, то добавляем.
             state.items.unshift(task);
         },
         setState(state, task) {
