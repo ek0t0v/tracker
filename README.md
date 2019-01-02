@@ -36,28 +36,3 @@ Pass phrase can be taken from `backend/.env` or set your own pass phrase, do not
 - `docker-compose exec php php vendor/bin/phpstan analyze -l 4 src` run PHPStan
 
 ## Notes
-
-### Задачи
-
-- у каждой задачи будет 2 поля которые касаются графиков - repeat_type и repeat_value
-- возможные значения repeat_type: single, daily, week, weekday, weekend, custom
-- repeat_value может быть null, например, single/daily/weekday/weekend не требует значения (хотя weekday и weekend могут зависеть от пользовательских настроек)
-- isScheduled метод задачи будет зависеть от repeat_type
-
-Примерная схема получения задач:
-
-```php
-$tasksHash = [];
-
-foreach ($dates as $date) {
-    foreach ($tasks as $task) {
-        if ($task->isScheduled($date) && !$task->isTransferredFrom($date)) {
-            $tasksHash[$date][] = $task;
-        }
-        
-        foreach ($task->getTransferredTo($date) as $transferredTask) {
-            $tasksHash[$date][] = $transferredTask;
-        }
-    }
-}
-```
