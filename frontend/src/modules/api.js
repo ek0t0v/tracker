@@ -1,5 +1,4 @@
 import axios from 'axios';
-import store from '../store';
 import httpRetryQueue from './http-retry-queue';
 
 export const api = axios.create({

@@ -21,7 +21,22 @@ export default {
             ;
         },
         create({ commit }, payload) {
-            commit('create', payload);
+            return api.post('/tasks', {
+                name: payload.name,
+                start: moment.utc(payload.start).format('YYYY-MM-DD'),
+                end: payload.end ? moment.utc(payload.end).format('YYYY-MM-DD') : null,
+                repeatType: payload.repeatType ? payload.repeatType.value : null,
+                repeatValue: payload.repeatValue,
+            })
+                .then(response => {
+                    let task = response.data;
+                    task.forDate = new Date(task.forDate);
+                    task.start = new Date(task.start);
+                    task.end = task.end ? new Date(task.end) : null;
+
+                    commit('create', task);
+                })
+            ;
         },
         setState({ commit }, payload) {
             api.put('/tasks/' + payload.id + '/' + moment(payload.forDate).format('YYYY-MM-DD') + '/state', {
@@ -36,12 +51,12 @@ export default {
             state.items = [];
 
             tasks.forEach(task => {
-                task.forDate = new Date(Date.parse(task.forDate));
+                task.forDate = new Date(task.forDate);
                 state.items.push(task);
             });
         },
         create(state, task) {
-            console.log(task);
+            state.items.unshift(task);
         },
         setState(state, task) {
             state.items.forEach(item => {

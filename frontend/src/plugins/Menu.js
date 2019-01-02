@@ -1,12 +1,6 @@
 import * as deepmerge from 'deepmerge';
 
 const menuDefaultConfig = {
-    // appearsFrom: 'top',
-    // arrow: {
-    //     enabled: true,
-    //     position: 'top',
-    //     bias: 0,
-    // },
     position: {
         top: 0,
         left: 0,
@@ -19,7 +13,6 @@ const Menu = {
             data() {
                 return {
                     isFirstCellIsSet: false,
-                    // openedBy: null,
                     first: {
                         isVisible: false,
                         component: null,
@@ -40,12 +33,11 @@ const Menu = {
             },
             methods: {
                 open(e, component, props, config) {
-                    // this.validateConfig(config);
-
                     config = deepmerge(menuDefaultConfig, config);
 
                     let rect = e.currentTarget.getBoundingClientRect();
 
+                    // todo: Ширина меню зависит от локали, учесть это для смещения.
                     config.position = {
                         top: rect.y + rect.height + config.position.top,
                         left: rect.x + config.position.left,
@@ -84,29 +76,6 @@ const Menu = {
                         this.second.component = null;
                         this.second.props = {};
                     }, 150);
-                },
-                validateConfig(config) {
-                    let appearsFromIsValid = [
-                        'top',
-                        'bottom',
-                        'left',
-                        'right',
-                    ].indexOf(config.appearsFrom) > -1;
-
-                    if (!appearsFromIsValid) {
-                        throw '[Menu config error] Valid values for \'appearsFrom\' is \'top\', \'bottom\', \'left\' or \'right\'.';
-                    }
-
-                    let arrowPositionIsValid = [
-                        'top',
-                        'bottom',
-                        'left',
-                        'right',
-                    ].indexOf(config.arrow.position) > -1;
-
-                    if (!arrowPositionIsValid) {
-                        throw '[Menu config error] Valid values for \'arrow.position\' is \'top\', \'bottom\', \'left\' or \'right\'.';
-                    }
                 },
             },
         });

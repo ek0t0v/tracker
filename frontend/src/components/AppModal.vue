@@ -88,11 +88,14 @@
 
         &__header {
 
+            width: 360px;
             padding: 32px;
             background-color: rgba(82,89,117,.9);
 
             h1 {
+                .text-clip;
                 .font(@primary-font, 20px, 700, #fff);
+                padding: unset;
             }
 
         }

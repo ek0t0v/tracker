@@ -190,9 +190,10 @@
                     name: this.name,
                     start: this.start,
                     end: this.repeatable ? this.end : null,
-                    repeatType: this.repeatType,
-                    repeatValue: this.repeatValues[this.repeatType.value],
-                });
+                    repeatType: this.repeatable ? this.repeatType : null,
+                    repeatValue: this.repeatable ? this.repeatValues[this.repeatType.value] : null,
+                })
+                    .then(() => this.$modal.close());
             },
         },
     }

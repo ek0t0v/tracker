@@ -69,9 +69,12 @@ class ScheduledTaskByUserParamConverter implements ParamConverterInterface
 
         $forDate = new \DateTime($request->attributes->get('forDate'));
 
-        $this->scheduleContext->setContextByTaskRepeatType($task->getRepeatType());
-
-        $isScheduled = $this->scheduleContext->isScheduled($forDate, $task->getStartDate());
+        if (is_null($task->getRepeatType())) {
+            $isScheduled = $task->getStartDate() == $forDate;
+        } else {
+            $this->scheduleContext->setContextByTaskRepeatType($task->getRepeatType());
+            $isScheduled = $this->scheduleContext->isScheduled($forDate, $task->getStartDate(), $task->getRepeatValue());
+        }
 
         if (is_null($task) || !($task instanceof Task) || !$isScheduled) {
             throw new NotFoundHttpException(sprintf('%s object not found.', $configuration->getClass()));
