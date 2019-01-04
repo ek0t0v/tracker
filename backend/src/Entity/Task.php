@@ -70,7 +70,7 @@ class Task
     /**
      * @var ArrayCollection|TaskChange[]
      *
-     * @ORM\OneToMany(targetEntity="TaskChange", mappedBy="task")
+     * @ORM\OneToMany(targetEntity="TaskChange", mappedBy="task", orphanRemoval=true)
      */
     private $changes;
 

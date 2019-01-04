@@ -73,13 +73,6 @@ class TaskDto
     public $transfers = [];
 
     /**
-     * @var bool
-     *
-     * todo: Наверное стоит удалить
-     */
-    public $isTransferred = false;
-
-    /**
      * @var int|null
      *
      * @Groups({"api"})

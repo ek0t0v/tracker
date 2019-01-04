@@ -29,7 +29,6 @@
     </transition>
 </template>
 
-
 <script>
     import Vue from 'vue';
 
@@ -91,6 +90,10 @@
             width: 360px;
             padding: 32px;
             background-color: rgba(82,89,117,.9);
+
+            &--red {
+                background-color: rgba(200,70,70,.9);
+            }
 
             h1 {
                 .text-clip;

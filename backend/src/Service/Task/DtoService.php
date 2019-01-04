@@ -36,10 +36,6 @@ class DtoService
             }
         }
 
-        if (!is_null($start) && count($dto->transfers) > 0 && $dto->transfers[count($dto->transfers) - 1] != $start) {
-            $dto->isTransferred = true;
-        }
-
         foreach ($task->getChanges() as $change) {
             if ($change->getForDate() != $forDate) {
                 continue;

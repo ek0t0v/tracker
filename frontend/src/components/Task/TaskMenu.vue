@@ -2,7 +2,7 @@
     <div class="task-menu">
         <app-menu-item
             :icon-css-class="$t('taskMenu.edit.iconCssClass')"
-            @click.native="onEdit"
+            @click.native="editTask"
         >
             {{ $t('taskMenu.edit.label') }}
         </app-menu-item>
@@ -18,6 +18,7 @@
         </app-menu-item>
         <app-menu-item
             :icon-css-class="$t('taskMenu.cancel.iconCssClass')"
+            @click.native="cancelTask"
         >
             {{ $t('taskMenu.cancel.label') }}
         </app-menu-item>
@@ -30,7 +31,7 @@
         <app-menu-item
             :color="'red'"
             :icon-css-class="$t('taskMenu.delete.iconCssClass')"
-            :close-menu-on-click="false"
+            @click.native="removeTask"
         >
             {{ $t('taskMenu.delete.label') }}
         </app-menu-item>
@@ -41,6 +42,8 @@
     import AppMenuItem from '../AppMenuItem';
     import AppMenuDelimiter from '../AppMenuDelimiter';
     import EditTaskForm from '../Task/EditTaskForm';
+    import AppConfirmModal from '../AppConfirmModal';
+    import { mapActions } from 'vuex';
 
     export default {
         name: 'TaskMenu',
@@ -49,6 +52,10 @@
             AppMenuDelimiter,
         },
         props: {
+            task: {
+                type: Object,
+                default: null,
+            },
             id: {
                 type: Number,
                 default: null,
@@ -59,11 +66,37 @@
             },
         },
         methods: {
-            onEdit() {
+            ...mapActions('task', [
+                'setState',
+                'remove',
+            ]),
+            editTask() {
                 this.$modal.open(EditTaskForm, {
-                    id: this.id,
+                    id: this.task.id,
                 }, {
-                    header: this.name,
+                    header: this.task.name,
+                });
+            },
+            cancelTask() {
+                this.$modal.open(AppConfirmModal, {
+                    action: this.setState,
+                    payload: {
+                        id: this.task.id,
+                        forDate: this.task.forDate,
+                        state: 'cancelled',
+                    },
+                }, {
+                    header: 'Отменить задачу',
+                });
+            },
+            removeTask() {
+                this.$modal.open(AppConfirmModal, {
+                    action: this.remove,
+                    payload: {
+                        id: this.task.id,
+                    },
+                }, {
+                    header: 'Удалить задачу',
                 });
             },
         },

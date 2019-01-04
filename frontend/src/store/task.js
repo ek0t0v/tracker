@@ -1,9 +1,10 @@
+import Vue from 'vue';
 import api from '../modules/api';
 import moment from 'moment';
 
 function initialState() {
     return {
-        items: [],
+        items: {},
     };
 }
 
@@ -11,16 +12,41 @@ export default {
     namespaced: true,
     state: initialState,
     getters: {
-        items: state => state.items,
-        count: state => state.items.length,
+        items: (state, getters, rootState, rootGetters) => {
+            let forDate = moment(rootGetters.date).format('YYYY-MM-DD');
+
+            if (!state.items.hasOwnProperty(forDate)) {
+                return [];
+            }
+
+            return state.items[forDate];
+        },
+        count: (state, getters, rootState, rootGetters) => {
+            let forDate = moment(rootGetters.date).format('YYYY-MM-DD');
+
+            if (!state.items.hasOwnProperty(forDate)) {
+                return 0;
+            }
+
+            return state.items[forDate].length;
+        },
     },
     actions: {
         load({ commit }, start) {
-            return api.get('/tasks?start=' + moment(start).format('YYYY-MM-DD'))
-                .then(response => commit('load', response.data.items))
+            let forDate = moment(start).format('YYYY-MM-DD');
+
+            if (this.state.task.items.hasOwnProperty(forDate)) {
+                return;
+            }
+
+            return api.get('/tasks?start=' + forDate)
+                .then(response => commit('load', {
+                    forDate: moment.utc(forDate).format('YYYY-MM-DD'),
+                    items: response.data.items,
+                }))
             ;
         },
-        create({ commit }, payload) {
+        create({ commit, dispatch, rootState }, payload) {
             return api.post('/tasks', {
                 name: payload.name,
                 start: moment.utc(payload.start).format('YYYY-MM-DD'),
@@ -28,13 +54,17 @@ export default {
                 repeatType: payload.repeatType ? payload.repeatType.value : null,
                 repeatValue: payload.repeatValue,
             })
-                .then(response => {
-                    let task = response.data;
-                    task.forDate = new Date(task.forDate);
-                    task.start = new Date(task.start);
-                    task.end = task.end ? new Date(task.end) : null;
-
-                    commit('create', task);
+                .then(() => {
+                    commit('reset');
+                    dispatch('load', rootState.date);
+                })
+            ;
+        },
+        remove({ commit, dispatch, rootState }, payload) {
+            api.delete('/tasks/' + payload.id)
+                .then(() => {
+                    commit('reset');
+                    dispatch('load', rootState.date);
                 })
             ;
         },
@@ -47,23 +77,27 @@ export default {
         }
     },
     mutations: {
-        load(state, tasks) {
-            state.items = [];
-
-            tasks.forEach(task => {
+        load(state, payload) {
+            payload.items.forEach(task => {
                 task.forDate = new Date(task.forDate);
-                state.items.push(task);
             });
-        },
-        create(state, task) {
-            // todo: Добавлять в нужный день, если task.start === сегодня, то добавляем.
-            state.items.unshift(task);
+
+            Vue.set(state.items, payload.forDate, payload.items);
         },
         setState(state, task) {
-            state.items.forEach(item => {
+            let forDate = moment(task.forDate).format('YYYY-MM-DD');
+
+            state.items[forDate].forEach(item => {
                 if (item.id === task.id && item.forDate === task.forDate) {
                     item.state = task.state;
                 }
+            });
+        },
+        reset(state) {
+            const s = initialState();
+
+            Object.keys(s).forEach(key => {
+                state[key] = s[key]
             });
         },
     },

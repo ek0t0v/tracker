@@ -46,13 +46,22 @@
         },
         watch: {
             start() {
+                this.setDate({
+                    date: this.start,
+                });
                 this.load(this.start);
             },
         },
         mounted() {
+            this.setDate({
+                date: this.start,
+            });
             this.load(this.start);
         },
         methods: {
+            ...mapActions({
+                setDate: 'setDate',
+            }),
             ...mapActions('task', {
                 load: 'load',
             }),

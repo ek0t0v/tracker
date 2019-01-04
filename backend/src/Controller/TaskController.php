@@ -73,6 +73,23 @@ class TaskController extends ApiController
     }
 
     /**
+     * @param Task $task
+     *
+     * @return JsonResponse
+     *
+     * @Route("/{id}", name="api_tasks_remove_task", methods={"DELETE"})
+     * @ParamConverter("task", class="App:Task")
+     */
+    public function removeTask(Task $task): JsonResponse
+    {
+        $em = $this->get('doctrine')->getManager();
+        $em->remove($task);
+        $em->flush();
+
+        return $this->apiResponse($task, ['api']);
+    }
+
+    /**
      * @param Task                $task
      * @param \DateTime           $forDate
      * @param TransferTaskRequest $request

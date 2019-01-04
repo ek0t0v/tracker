@@ -4,6 +4,7 @@
         :class="{
             'task-item--active': active,
             'task-item--done': state === 'done',
+            'task-item--cancelled': state === 'cancelled',
             'task-item--transferred': isTransferred,
         }"
     >
@@ -21,7 +22,8 @@
                 <div
                     class="checkbox"
                     :class="{
-                        'checkbox--checked': state === 'done',
+                        'checkbox--done': state === 'done',
+                        'checkbox--cancelled': state === 'cancelled',
                         'checkbox--active': active,
                     }"
                     @click="onChecked"
@@ -127,8 +129,7 @@
             },
             onMenuOpened(e) {
                 this.$menu.open(e, TaskMenu, {
-                    id: this.id,
-                    name: this.name,
+                    task: this,
                 }, {
                     position: {
                         top: -106.5 - 12,
@@ -198,9 +199,18 @@
         }
 
         &--done {
-
+            opacity: .25;
             .task-item__name {
-                opacity: .3;
+
+                text-decoration: line-through;
+            }
+
+        }
+
+        &--cancelled {
+            opacity: .25;
+            .task-item__name {
+
                 text-decoration: line-through;
             }
 
@@ -296,15 +306,19 @@
         border: 2px solid @blue_2;
         cursor: pointer;
 
-        &--checked {
+        &--done {
 
-            border-color: @blue_3;
+            //border-color: @blue_3;
 
             span {
                 opacity: 1 !important;
-                background-color: @blue_3;
+                background-color: @blue_2;
             }
 
+        }
+
+        &--cancelled {
+            //border-color: @blue_3;
         }
 
         &--active {
