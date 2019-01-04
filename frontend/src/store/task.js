@@ -15,25 +15,21 @@ export default {
         items: (state, getters, rootState, rootGetters) => {
             let forDate = moment(rootGetters.date).format('YYYY-MM-DD');
 
-            if (!state.items.hasOwnProperty(forDate)) {
-                return [];
-            }
-
-            return state.items[forDate];
+            return state.items.hasOwnProperty(forDate)
+                ? state.items[forDate]
+                : [];
         },
         count: (state, getters, rootState, rootGetters) => {
             let forDate = moment(rootGetters.date).format('YYYY-MM-DD');
 
-            if (!state.items.hasOwnProperty(forDate)) {
-                return 0;
-            }
-
-            return state.items[forDate].length;
+            return state.items.hasOwnProperty(forDate)
+                ? state.items[forDate].length
+                : 0;
         },
     },
     actions: {
-        load({ commit }, start) {
-            let forDate = moment(start).format('YYYY-MM-DD');
+        load({ commit }, payload) {
+            let forDate = moment(payload.start).format('YYYY-MM-DD');
 
             if (this.state.task.items.hasOwnProperty(forDate)) {
                 return;
@@ -69,7 +65,7 @@ export default {
             ;
         },
         setState({ commit }, payload) {
-            api.put('/tasks/' + payload.id + '/' + moment(payload.forDate).format('YYYY-MM-DD') + '/state', {
+            api.put('/tasks/' + payload.id + '/' + moment.utc(payload.forDate).format('YYYY-MM-DD') + '/state', {
                 state: payload.state,
             })
                 .then(() => commit('setState', payload))

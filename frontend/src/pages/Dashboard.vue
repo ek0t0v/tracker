@@ -49,14 +49,18 @@
                 this.setDate({
                     date: this.start,
                 });
-                this.load(this.start);
+                this.load({
+                    start: this.start,
+                });
             },
         },
         mounted() {
             this.setDate({
                 date: this.start,
             });
-            this.load(this.start);
+            this.load({
+                start: this.start,
+            });
         },
         methods: {
             ...mapActions({
