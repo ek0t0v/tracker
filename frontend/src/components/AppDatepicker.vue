@@ -166,17 +166,15 @@
         },
         methods: {
             selectDate(day) {
-                let date;
+                let date = moment(this.localDate).add(day.month, 'months');
+                let dateWithActualTime = new Date();
 
-                if (day.month === -1) {
-                    date = moment(this.localDate).subtract(1, 'months');
-                } else if (day.month === 0) {
-                    date = moment(this.localDate);
-                } else if (day.month === 1) {
-                    date = moment(this.localDate).add(1, 'months');
-                }
-
-                date = moment(date).date(day.day);
+                date
+                    .date(day.day)
+                    .hours(dateWithActualTime.getHours())
+                    .minutes(dateWithActualTime.getMinutes())
+                    .seconds(dateWithActualTime.getSeconds())
+                ;
 
                 this.localDate = date;
                 this.selectedDateForDays = date;

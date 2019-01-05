@@ -35,9 +35,9 @@ export default {
                 return;
             }
 
-            return api.get('/tasks?start=' + forDate)
+            return api.get('/tasks?start=' + moment.utc(payload.start).format('YYYY-MM-DD'))
                 .then(response => commit('load', {
-                    forDate: moment.utc(forDate).format('YYYY-MM-DD'),
+                    key: forDate,
                     items: response.data.items,
                 }))
             ;
@@ -75,10 +75,12 @@ export default {
     mutations: {
         load(state, payload) {
             payload.items.forEach(task => {
+                task.start = new Date(task.start);
+                task.end = task.end ? new Date(task.end) : null;
                 task.forDate = new Date(task.forDate);
             });
 
-            Vue.set(state.items, payload.forDate, payload.items);
+            Vue.set(state.items, payload.key, payload.items);
         },
         setState(state, task) {
             let forDate = moment(task.forDate).format('YYYY-MM-DD');

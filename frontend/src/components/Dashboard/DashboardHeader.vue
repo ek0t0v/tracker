@@ -6,9 +6,7 @@
             </div>
         </div>
         <div class="dashboard-header__column">
-            <div class="dashboard-header-header">
-                <slot />
-            </div>
+            <div class="dashboard-header-header">{{ headerText }}</div>
         </div>
         <div class="dashboard-header__column">
             <div class="dashboard-header-menu">
@@ -40,33 +38,44 @@
     import CreateTaskForm from '../Task/CreateTaskForm';
     import moment from 'moment';
     import Event from '../../classes/Event';
+    import { mapGetters, mapActions } from 'vuex';
 
     export default {
         name: 'DashboardHeader',
-        props: {
-            date: {
-                type: Date,
-                default: new Date(),
+        computed: {
+            ...mapGetters([
+                'date',
+            ]),
+            headerText() {
+                let headerText;
+                let dateAsMoment = moment(this.date);
+
+                if (dateAsMoment.isSame(moment(), 'day')) {
+                    headerText = this.$t('header.text.today');
+                } else if (dateAsMoment.isSame(moment().subtract(1, 'days'), 'day')) {
+                    headerText = this.$t('header.text.yesterday');
+                } else if (dateAsMoment.isSame(moment().add(1, 'days'), 'day')) {
+                    headerText = this.$t('header.text.tomorrow');
+                } else if (dateAsMoment.year() === moment().year()) {
+                    headerText = dateAsMoment.format(this.$t('header.text.thisYearDateFormat'));
+                } else {
+                    headerText = dateAsMoment.format(this.$t('header.text.anotherYearDateFormat'));
+                }
+
+                return headerText;
             },
         },
         mounted() {
             this.$bus.on(this._uid + ':on-date-change', payload => {
-                let to = {
-                    name: 'dashboard',
-                };
-
-                let date = moment(payload.date);
-
-                if (!date.isSame(moment(), 'day')) {
-                    to.query = {
-                        start: date.format('YYYY-MM-DD'),
-                    };
-                }
-
-                this.$router.push(to);
+                this.setDate({
+                    date: payload.date,
+                });
             });
         },
         methods: {
+            ...mapActions([
+                'setDate',
+            ]),
             openCreateTaskModal() {
                 this.$modal.open(CreateTaskForm, {}, {
                     header: this.$t('modal.header.createTaskForm'),

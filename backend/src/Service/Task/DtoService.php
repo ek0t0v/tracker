@@ -5,12 +5,28 @@ namespace App\Service\Task;
 use App\Doctrine\DBAL\Type\TaskChangeStateType;
 use App\Dto\ApiResponse\TaskDto;
 use App\Entity\Task;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 /**
  * Class DtoService.
  */
 class DtoService
 {
+    /**
+     * @var TokenStorageInterface
+     */
+    private $tokenStorage;
+
+    /**
+     * DtoService constructor.
+     *
+     * @param TokenStorageInterface $tokenStorage
+     */
+    public function __construct(TokenStorageInterface $tokenStorage)
+    {
+        $this->tokenStorage = $tokenStorage;
+    }
+
     /**
      * @param Task           $task
      * @param \DateTime      $forDate
@@ -24,7 +40,7 @@ class DtoService
         $dto->id = $task->getId();
         $dto->name = $task->getName();
         $dto->start = $task->getStartDate();
-        $dto->end = $task->getEndDate();
+        $dto->end = !is_null($task->getEndDate()) ? $task->getEndDate() : null;
         $dto->forDate = $forDate;
         $dto->repeatType = $task->getRepeatType();
         $dto->repeatValue = $task->getRepeatValue();

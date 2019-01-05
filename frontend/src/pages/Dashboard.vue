@@ -1,7 +1,7 @@
 <template>
     <div class="dashboard">
         <div class="dashboard-header-wrapper">
-            <DashboardHeader :date="start">{{ headerText }}</DashboardHeader>
+            <DashboardHeader />
         </div>
         <TaskList />
     </div>
@@ -10,8 +10,7 @@
 <script>
     import DashboardHeader from '../components/Dashboard/DashboardHeader';
     import TaskList from '../components/Task/TaskList';
-    import { mapActions } from 'vuex';
-    import moment from 'moment';
+    import { mapGetters, mapActions } from 'vuex';
 
     export default {
         name: 'Dashboard',
@@ -19,47 +18,27 @@
             DashboardHeader,
             TaskList,
         },
-        props: {
-            start: {
-                type: Date,
-                default: null,
-            },
-        },
         computed: {
-            headerText() {
-                let headerText;
-
-                if (moment(this.start).isSame(moment(), 'day')) {
-                    headerText = this.$t('header.text.today');
-                } else if (moment(this.start).isSame(moment().subtract(1, 'days'), 'day')) {
-                    headerText = this.$t('header.text.yesterday');
-                } else if (moment(this.start).isSame(moment().add(1, 'days'), 'day')) {
-                    headerText = this.$t('header.text.tomorrow');
-                } else if (moment(this.start).year() === moment().year()) {
-                    headerText = moment(this.start).format(this.$t('header.text.thisYearDateFormat'));
-                } else {
-                    headerText = moment(this.start).format(this.$t('header.text.anotherYearDateFormat'));
-                }
-
-                return headerText;
-            },
+            ...mapGetters([
+                'date',
+            ]),
         },
         watch: {
-            start() {
+            date() {
                 this.setDate({
-                    date: this.start,
+                    date: this.date,
                 });
                 this.load({
-                    start: this.start,
+                    start: this.date,
                 });
             },
         },
         mounted() {
             this.setDate({
-                date: this.start,
+                date: this.date,
             });
             this.load({
-                start: this.start,
+                start: this.date,
             });
         },
         methods: {

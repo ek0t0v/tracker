@@ -1,6 +1,7 @@
 import Vuex from 'vuex';
 import Vue from 'vue';
 import task from './task';
+import { getPayload } from '../modules/jwt';
 
 Vue.use(Vuex);
 
@@ -17,10 +18,11 @@ export default new Vuex.Store({
     state: initialState,
     getters: {
         date: state => state.date,
+        timezone: () => getPayload(localStorage.getItem('accessToken')).timezone,
     },
     actions: {
         setDate({ commit }, payload) {
-            commit('setDate', payload.date)
+            commit('setDate', payload.date);
         },
     },
     mutations: {

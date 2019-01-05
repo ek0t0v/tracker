@@ -59,8 +59,6 @@ class GetByDateService
         $user = $this->tokenStorage->getToken()->getUser();
         $allTasks = $this->repository->findAllByUser($user);
 
-        $date = $this->getDateWithUserTimezone($date);
-
         $tasksWithoutTransfers = $this->getActualTasksWithoutTransfers($date, $allTasks);
         $transferredToDateTasks = $this->getTransferredToDateTasks($date, $allTasks);
 
@@ -83,9 +81,6 @@ class GetByDateService
         $user = $this->tokenStorage->getToken()->getUser();
         $allTasks = $this->repository->findAllByUser($user);
 
-        $start = $this->getDateWithUserTimezone($start);
-        $end = $this->getDateWithUserTimezone($end);
-
         // Увеличивает на 1 секунду, чтобы период включал в себя последний день.
         $end->setTime(0, 0, 1);
         $period = new \DatePeriod($start, new \DateInterval('P1D'), $end);
@@ -103,18 +98,6 @@ class GetByDateService
         }
 
         return $result;
-    }
-
-    /**
-     * @param \DateTime $date
-     *
-     * @return \DateTime
-     */
-    private function getDateWithUserTimezone(\DateTime $date): \DateTime
-    {
-        $user = $this->tokenStorage->getToken()->getUser();
-
-        return $date->setTimezone(new \DateTimeZone($user->getSettings()->getTimezone()));
     }
 
     /**
