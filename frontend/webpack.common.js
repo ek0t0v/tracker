@@ -10,7 +10,6 @@ module.exports = {
         path: path.resolve(__dirname, 'public/dist'),
         publicPath: '/dist/',
         filename: '[name].js',
-        chunkFilename: '[name].js',
     },
     module: {
         rules: [
@@ -63,6 +62,14 @@ module.exports = {
     optimization: {
         splitChunks: {
             chunks: 'all',
+            cacheGroups: {
+                vendor: {
+                    chunks: 'all',
+                    name: 'vendor',
+                    test: /[\\/]node_modules[\\/]/,
+                    enforce: true
+                },
+            },
         },
     },
 };
