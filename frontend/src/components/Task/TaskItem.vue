@@ -136,7 +136,6 @@
         data() {
             return {
                 active: false,
-                done: false,
                 timer: {
                     start: null,
                     time: null,
@@ -162,7 +161,7 @@
                 }
             },
 
-            // todo: Останавливаем таймер и сохраняем время, если задача помечается как done или cancelled.
+            // todo: Останавливать таймер и сохранять время, если задача помечается как done или cancelled.
         },
         methods: {
             ...mapActions('task', {
