@@ -301,7 +301,11 @@
             }
 
             .task-item__name {
-                text-decoration: line-through;
+
+                &:before {
+                    width: 100%;
+                }
+
             }
 
         }
@@ -370,8 +374,21 @@
         }
 
         &__name {
+
             .font(@primary-font, 16px, 400, @blue_1);
-            line-height: 16px;
+            position: relative;
+
+            &:before {
+                content: '';
+                top: calc(50% + 1px);
+                height: 1px;
+                width: 0%;
+                left: 0;
+                position: absolute;
+                background-color: @blue_1;
+                transition: .1s all ease-in-out;
+            }
+
         }
 
     }
