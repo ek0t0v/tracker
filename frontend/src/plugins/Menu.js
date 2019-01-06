@@ -7,6 +7,8 @@ const menuDefaultConfig = {
     },
 };
 
+// todo: Посмотреть в сторону функциональных компонентов - может быть они как-то помогут сделать меню и модальные окна удобнее?
+
 const Menu = {
     install(Vue) {
         Vue.prototype.$menu = new Vue({
