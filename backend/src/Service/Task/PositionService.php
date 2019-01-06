@@ -39,7 +39,7 @@ class PositionService
     }
 
     /**
-     * @todo Оптимизировать UPDATE-запросы (сейчас выполняются по одному).
+     * todo: Оптимизировать UPDATE-запросы (сейчас выполняются по одному).
      *
      * @param Task      $task
      * @param \DateTime $forDate
