@@ -33,8 +33,8 @@
         <!-- Repeatable -->
         <div class="create-task-form__element">
             <app-checkbox
-                :is-checked="repeatable"
-                @on-checked="repeatable = !repeatable"
+                :checked="repeatable"
+                @toggle="repeatable = !repeatable"
             >
                 {{ $t('createTaskForm.repeatable') }}
             </app-checkbox>

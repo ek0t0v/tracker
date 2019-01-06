@@ -1,5 +1,6 @@
 <template>
     <div
+        ref="task"
         class="task-item"
         :class="{
             'task-item--active': active,
@@ -18,16 +19,10 @@
                     </span>
                 </div>
                 <div class="task-item__checkbox">
-                    <!-- todo: Использовать компонент AppCheckbox. -->
-                    <div
-                        class="checkbox"
-                        :class="{
-                            'checkbox--done': state === 'done',
-                        }"
-                        @click="onChecked"
-                    >
-                        <span />
-                    </div>
+                    <app-checkbox
+                        :checked="state === 'done'"
+                        @toggle="onStateCheckboxToggle"
+                    />
                 </div>
                 <div class="task-item__name">{{ name }}</div>
             </div>
@@ -79,6 +74,7 @@
 
 <script>
     import TaskMenu from '../Task/TaskMenu';
+    import AppCheckbox from '../AppCheckbox';
     import { mapActions } from 'vuex';
     import moment from 'moment';
 
@@ -86,6 +82,9 @@
 
     export default {
         name: 'TaskItem',
+        components: {
+            AppCheckbox,
+        },
         props: {
             id: {
                 type: Number,
@@ -152,16 +151,16 @@
             },
         },
         watch: {
-            taskIdWithActiveTimer(id) {
+            taskIdWithActiveTimer(v) {
                 // Останавливает таймер, если он уже работает, но был запущен
                 // таймер для другой задачи.
 
-                if (this.active && this.id !== id) {
+                if (this.active && this.id !== v) {
                     this.stopTimer();
                 }
             },
-
             // todo: Останавливать таймер и сохранять время, если задача помечается как done или cancelled.
+            // todo: Когда таймер работает, при переходе на другой день таймер не должен перескакивать на другие задачи.
         },
         methods: {
             ...mapActions('task', {
@@ -170,13 +169,11 @@
             ...mapActions('timing', {
                 saveTiming: 'save',
             }),
-            onChecked() {
-                let state = this.state === 'in_progress' ? 'done' : 'in_progress';
-
+            onStateCheckboxToggle() {
                 this.setState({
                     id: this.id,
                     forDate: this.forDate,
-                    state: state,
+                    state: this.state === 'in_progress' ? 'done' : 'in_progress',
                 });
             },
             onMenuOpened(e) {
@@ -255,6 +252,7 @@
         width: 100%;
         height: 40px;
         position: relative;
+        transition: .1s all ease-in-out;
 
         &:hover {
 
@@ -402,34 +400,6 @@
         &__icon {
             font-size: 12px;
             color: @blue_2;
-        }
-
-    }
-
-    .checkbox {
-
-        .flex(row, nowrap, center, center);
-        width: 14px;
-        height: 14px;
-        border-radius: 3px;
-        border: 2px solid @blue_2;
-        cursor: pointer;
-
-        &--done {
-
-            span {
-                opacity: 1 !important;
-                background-color: @blue_2;
-            }
-
-        }
-
-        span {
-            width: 10px;
-            height: 10px;
-            border-radius: 1px;
-            display: block;
-            opacity: 0;
         }
 
     }

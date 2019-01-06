@@ -1,15 +1,18 @@
 <template>
     <div
         class="checkbox"
-        @click="onChecked"
+        @click="onToggle"
     >
         <div
             class="checkbox__check"
-            :class="{ 'checkbox__check--checked': isChecked }"
+            :class="{ 'checkbox__check--checked': checked }"
         >
             <span />
         </div>
-        <div class="checkbox__label">
+        <div
+            v-if="this.$slots.default"
+            class="checkbox__label"
+        >
             <slot />
         </div>
     </div>
@@ -19,11 +22,11 @@
     export default {
         name: 'AppCheckbox',
         props: {
-            isChecked: Boolean,
+            checked: Boolean,
         },
         methods: {
-            onChecked() {
-                this.$emit('on-checked');
+            onToggle() {
+                this.$emit('toggle');
             },
         },
     }
