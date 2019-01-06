@@ -13,7 +13,6 @@
             :name="item.name"
             :for-date="item.forDate"
             :state="item.state"
-            :is-transferred="item.isTransferred"
             :transfers="item.transfers"
             :repeat-type="item.repeatType"
             :repeat-value="item.repeatValue"

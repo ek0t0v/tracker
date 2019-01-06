@@ -5,64 +5,73 @@
             'task-item--active': active,
             'task-item--done': state === 'done',
             'task-item--cancelled': state === 'cancelled',
-            'task-item--transferred': isTransferred,
         }"
     >
-        <div class="task-item__column">
-            <div
-                class="task-item__menu-button"
-                @click="onMenuOpened"
-            >
-                <span>
-                    <img />
-                </span>
-            </div>
-            <div class="task-item__checkbox">
-                <!-- todo: Использовать компонент AppCheckbox. -->
+        <div class="task-item__left-column">
+            <div class="task-item__column task-item__column--name">
                 <div
-                    class="checkbox"
-                    :class="{
-                        'checkbox--done': state === 'done',
-                        'checkbox--cancelled': state === 'cancelled',
-                        'checkbox--active': active,
-                    }"
-                    @click="onChecked"
+                    class="task-item__menu-button"
+                    @click="onMenuOpened"
                 >
-                    <span />
+                    <span>
+                        <i class="fas fa-ellipsis-v" />
+                    </span>
                 </div>
-            </div>
-            <div class="task-item__name">{{ name }}</div>
-        </div>
-        <div class="task-item__column">
-            <div class="task-item-timer">
-                <span
-                    class="task-item-timer__time"
-                    :class="{ 'task-item-timer__time--active': timer.active }"
-                >
-                    {{ time }}
-                </span>
-                <div
-                    class="task-item-timer__button"
-                    @click="toggleTimer"
-                >
-                    <i :class="[{ 'fas fa-stop': timer.active }, 'fas fa-play']" />
+                <div class="task-item__checkbox">
+                    <!-- todo: Использовать компонент AppCheckbox. -->
+                    <div
+                        class="checkbox"
+                        :class="{
+                            'checkbox--done': state === 'done',
+                        }"
+                        @click="onChecked"
+                    >
+                        <span />
+                    </div>
                 </div>
+                <div class="task-item__name">{{ name }}</div>
             </div>
         </div>
-        <div class="task-item__column">
-            <!-- todo: Поправить отступы и все такое. -->
-            <div
-                v-if="transfers.length > 0"
-                class="task-item-for-date"
-            >
-                <i class="task-item-for-date__icon fas fa-share" />
-                <span class="task-item-for-date__date">{{ forDateFormatted }}</span>
+        <div class="task-item__right-column">
+            <div class="task-item__column task-item__column--timer">
+                <div class="task-item-timer">
+                    <span
+                        class="task-item-timer__time"
+                        :class="{ 'task-item-timer__time--active': active }"
+                    >
+                        {{ time }}
+                    </span>
+                    <div
+                        class="task-item-timer__button"
+                        :class="{ 'task-item-timer__button--stop': active }"
+                        @click="toggleTimer"
+                    >
+                        <i
+                            class="task-item-timer__icon"
+                            :class="{
+                                'fas fa-stop': active,
+                                'task-item-timer__icon--play fas fa-play': !active,
+                            }"
+                        />
+                    </div>
+                </div>
             </div>
-            <div
-                v-if="repeatType"
-                class="task-item-repeatable"
-            >
-                <i class="task-item-repeatable__icon fas fa-redo-alt" />
+            <div class="task-item__column task-item__column--transfer">
+                <div
+                    v-if="transfers.length > 0"
+                    class="task-item-for-date"
+                >
+                    <i class="task-item-for-date__icon fas fa-share" />
+                    <span class="task-item-for-date__date">{{ forDateFormatted }}</span>
+                </div>
+            </div>
+            <div class="task-item__column task-item__column--repeatable">
+                <div class="task-item-repeatable">
+                    <i
+                        v-if="repeatType"
+                        class="task-item-repeatable__icon fas fa-redo-alt"
+                    />
+                </div>
             </div>
         </div>
     </div>
@@ -107,7 +116,6 @@
                     'cancelled',
                 ].indexOf(value) > -1,
             },
-            isTransferred: Boolean,
             transfers: {
                 type: Array,
                 default: () => [],
@@ -130,7 +138,6 @@
                 active: false,
                 done: false,
                 timer: {
-                    active: false,
                     start: null,
                     time: null,
                     worker: null,
@@ -150,10 +157,12 @@
                 // Останавливает таймер, если он уже работает, но был запущен
                 // таймер для другой задачи.
 
-                if (this.timer.active && this.id !== id) {
+                if (this.active && this.id !== id) {
                     this.stopTimer();
                 }
             },
+
+            // todo: Останавливаем таймер и сохраняем время, если задача помечается как done или cancelled.
         },
         methods: {
             ...mapActions('task', {
@@ -182,7 +191,7 @@
                 });
             },
             toggleTimer() {
-                if (this.timer.active) {
+                if (this.active) {
                     this.stopTimer();
 
                     return;
@@ -198,7 +207,7 @@
                     action: 'start',
                 });
 
-                this.timer.active = true;
+                this.active = true;
 
                 this.$emit('on-timer-start', {
                     id: this.id,
@@ -223,11 +232,12 @@
                     end: new Date(),
                 });
 
+                this.active = false;
+
                 this.resetTimerData();
             },
             resetTimerData() {
                 this.timer = {
-                    active: false,
                     time: null,
                     worker: null,
                     start: null,
@@ -247,107 +257,109 @@
         height: 40px;
         position: relative;
 
+        &:hover {
+
+            .task-item__menu-button {
+
+                .flex(row, nowrap, center, center);
+
+                span {
+                    opacity: 1;
+                }
+
+            }
+
+        }
+
         &:hover:not(&--active) {
 
-            .task-item__menu-button {
-
-                .flex(row, nowrap, center, center);
-
-                span {
-                    opacity: 1;
-                }
-
+            .task-item-timer {
+                opacity: 1;
             }
 
         }
 
-        &--active:hover {
-
-            .task-item__menu-button {
-
-                .flex(row, nowrap, center, center);
-                width: 33px;
-
-                span {
-                    opacity: 1;
-                }
-
-            }
-
-        }
-
-        &--important {
-            background-color: @red_3;
-        }
+        &--active:hover {}
 
         &--active {
 
-            background-color: @yellow_3;
-
-            .task-item__name {
-                color: @yellow_1;
+            .task-item-timer {
+                opacity: 1;
             }
 
         }
 
-        &--transferred {
-            display: none;
-        }
+        &--done {}
 
-        &--done {
-            opacity: .25;
-            .task-item__name {
+        &--cancelled {}
 
-                text-decoration: line-through;
-            }
-
-        }
-
+        &--done,
         &--cancelled {
-            opacity: .25;
-            .task-item__name {
 
+            opacity: .25;
+
+            .task-item-timer,
+            .task-item__menu-button {
+                visibility: hidden;
+            }
+
+            .task-item__name {
                 text-decoration: line-through;
             }
 
+        }
+
+        &__left-column {
+            .flex(row, nowrap, flex-start, center);
+        }
+
+        &__right-column {
+            .flex(row, nowrap, flex-end, center);
         }
 
         &__column {
+
             .flex(row, nowrap, flex-start, center);
             height: 40px;
+
+            &--name {}
+
+            &--timer {
+                margin: 0 12px 0 0;
+            }
+
+            &--transfer {}
+
+            &--repeatable {}
+
         }
 
         &__menu-button {
 
             position: absolute;
             top: 8px;
-            left: -19px;
+            left: -15px;
             transition: .1s all linear;
 
             span {
+
                 .flex(row, nowrap, center, center);
-                width: 24px;
+                color: @blue_2;
+                width: 20px;
                 height: 24px;
                 opacity: 0;
                 cursor: pointer;
                 border-radius: 3px;
-                transition: .1s all linear;
+                transition: .1s all ease-in-out;
 
                 &:hover {
+                    color: @blue_1;
                     background-color: @blue_4;
                 }
 
-                img {
-                    fill: red;
-                    width: 8px;
-                    height: 13px;
-                    background: url(/drag.svg);
-                }
-
-                svg {
-                    display: block;
-                    width: 8px;
-                    height: 13px;
+                i {
+                    font-size: 12px;
+                    color: inherit;
                 }
 
             }
@@ -385,10 +397,12 @@
 
     .task-item-repeatable {
 
+        .flex(row, nowrap, center, center);
+        width: 12px;
+
         &__icon {
             font-size: 12px;
             color: @blue_2;
-            margin: 0 8px 0 0;
         }
 
     }
@@ -404,25 +418,9 @@
 
         &--done {
 
-            //border-color: @blue_3;
-
             span {
                 opacity: 1 !important;
                 background-color: @blue_2;
-            }
-
-        }
-
-        &--cancelled {
-            //border-color: @blue_3;
-        }
-
-        &--active {
-
-            border-color: @yellow_2;
-
-            span {
-                background-color: @yellow_2;
             }
 
         }
@@ -440,6 +438,7 @@
     .task-item-timer {
 
         .flex(row, nowrap, flex-start, center);
+        opacity: 0;
 
         &__button {
 
@@ -449,26 +448,45 @@
             border-radius: 16px;
             color: @blue_1;
             cursor: pointer;
+            transition: .1s all ease-in-out;
 
-            &:hover {
+            &:hover:not(&--stop) {
                 background-color: #F6F7F8;
             }
 
-            i {
-                font-size: 8px;
-                margin: 0 -2px 0 0;
-                color: inherit;
+            &--stop {
+
+                color: #fff;
+                background-color: #ff5f5f;
+
+                &:hover {
+                    background-color: lighten(#ff5f5f, 5%);
+                }
+
+            }
+
+        }
+
+        &__icon {
+
+            font-size: 8px;
+            color: inherit;
+
+            &--play {
+                margin: 0 -3px 0 0;
             }
 
         }
 
         &__time {
 
-            .font(@primary-font, 15px, 500, @blue_1);
-            margin: 0 4px 0 0;
+            .font(@primary-font, 15px, 500, @blue_2);
+            margin: 0 12px 0 0;
             opacity: 0;
+            transition: .1s all ease-in-out;
 
             &--active {
+                color: @blue_1;
                 opacity: 1;
             }
 
