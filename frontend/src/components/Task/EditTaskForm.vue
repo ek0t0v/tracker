@@ -15,7 +15,7 @@
 </script>
 
 <style lang="less" scoped>
-    @import '../../less/style';
+    @import (reference) '../../less/style';
 
     .edit-task-form {
         width: 360px;

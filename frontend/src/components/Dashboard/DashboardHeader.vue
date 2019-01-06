@@ -33,9 +33,6 @@
 </template>
 
 <script>
-    import AppDatepicker from '../AppDatepicker';
-    import AccountMenu from '../Dashboard/AccountMenu';
-    import CreateTaskForm from '../Task/CreateTaskForm';
     import moment from 'moment';
     import Event from '../../classes/Event';
     import { mapActions } from 'vuex';
@@ -93,12 +90,12 @@
                 'setDate',
             ]),
             openCreateTaskModal() {
-                this.$modal.open(CreateTaskForm, {}, {
+                this.$modal.open(() => import('../Task/CreateTaskForm'), {}, {
                     header: this.$t('modal.header.createTaskForm'),
                 });
             },
             openAccountMenu(e) {
-                this.$menu.open(e, AccountMenu, {}, {
+                this.$menu.open(e, () => import('../Dashboard/AccountMenu'), {}, {
                     position: {
                         top: 16,
                         left: -32,
@@ -106,7 +103,7 @@
                 });
             },
             openDatepickerMenu(e) {
-                this.$menu.open(e, AppDatepicker, {
+                this.$menu.open(e, () => import('../AppDatepicker'), {
                     initialDate: this.date,
                     mode: 'single',
                     weekStartIndex: 1,
@@ -127,7 +124,7 @@
 </script>
 
 <style lang="less" scoped>
-    @import '../../less/style';
+    @import (reference) '../../less/style';
 
     .dashboard-header {
 

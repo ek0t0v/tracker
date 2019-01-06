@@ -2,12 +2,15 @@ const webpack = require('webpack');
 const path = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
+const CleanWebpackPlugin = require('clean-webpack-plugin');
 
 module.exports = {
     entry: './src/index.js',
     output: {
-        path: path.resolve(__dirname, 'public'),
-        filename: 'bundle.js',
+        path: path.resolve(__dirname, 'public/dist'),
+        publicPath: '/dist/',
+        filename: '[name].js',
+        chunkFilename: '[name].js',
     },
     module: {
         rules: [
@@ -27,12 +30,7 @@ module.exports = {
             },
             {
                 test: /\.css$/,
-                use: [
-                    'vue-style-loader',
-                    {
-                        loader: 'css-loader',
-                    }
-                ]
+                loader: 'vue-style-loader!css-loader',
             },
             {
                 test: /\.js$/,
@@ -44,6 +42,10 @@ module.exports = {
                     },
                 },
             },
+            {
+                test: /\.(ttf|eot|woff|woff2|svg)(\?[\s\S]+)?$/,
+                use: 'file-loader?name=./fonts/[hash].[ext]',
+            },
         ],
     },
     plugins: [
@@ -52,13 +54,15 @@ module.exports = {
             filename: 'style.css',
         }),
         new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
+        new CleanWebpackPlugin(['public/dist']),
     ],
     resolve: {
         modules: ['node_modules', 'src'],
         extensions: ['.js', '.vue', '.less', '.json'],
-        alias: {
-            vue: 'vue/dist/vue.js',
-            'vue$': 'vue/dist/vue.esm.js',
+    },
+    optimization: {
+        splitChunks: {
+            chunks: 'all',
         },
     },
 };

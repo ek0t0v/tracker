@@ -1,14 +1,11 @@
 import VueRouter from 'vue-router';
-import Login from '../pages/Login';
-import Home from '../pages/Home';
-import Dashboard from '../pages/Dashboard';
 import store from '../store';
 
 const router = new VueRouter({
     routes: [
         {
             path: '/',
-            component: Home,
+            component: () => import('../pages/Home'),
             name: 'home',
             meta: {
                 requiresAuth: false,
@@ -23,7 +20,7 @@ const router = new VueRouter({
         },
         {
             path: '/login',
-            component: Login,
+            component: () => import('../pages/Login'),
             name: 'login',
             meta: {
                 requiresAuth: false,
@@ -34,7 +31,7 @@ const router = new VueRouter({
         },
         {
             path: '/dashboard:date?',
-            component: Dashboard,
+            component: () => import('../pages/Dashboard'),
             props: route => ({
                 start: route.query.start === undefined ? new Date() : new Date(route.query.start),
             }),

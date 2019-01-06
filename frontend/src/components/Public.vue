@@ -44,7 +44,7 @@
 </script>
 
 <style lang="less" scoped>
-    @import '../less/style';
+    @import (reference) '../less/style';
 
     .public {
         .flex(column, nowrap, flex-start, flex-start);

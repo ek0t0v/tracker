@@ -23,13 +23,12 @@
 </template>
 
 <script>
-    import TaskItem from './TaskItem';
     import { mapGetters } from 'vuex';
 
     export default {
         name: 'TaskList',
         components: {
-            TaskItem,
+            TaskItem: () => import('./TaskItem'),
         },
         data() {
             return {
@@ -37,20 +36,20 @@
             };
         },
         computed: {
-            ...mapGetters('task', [
-                'items',
-            ]),
+            ...mapGetters('task', {
+                items: 'items',
+            }),
         },
         methods: {
             onTimerStart(e) {
                 this.taskIdWithActiveTimer = e.id;
             },
-        }
+        },
     }
 </script>
 
 <style lang="less" scoped>
-    @import '../../less/style';
+    @import (reference) '../../less/style';
 
     .task-list {
 

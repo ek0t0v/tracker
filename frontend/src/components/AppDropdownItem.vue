@@ -45,7 +45,7 @@
 </script>
 
 <style lang="less" scoped>
-    @import '../less/style';
+    @import (reference) '../less/style';
 
     .dropdown-item {
 

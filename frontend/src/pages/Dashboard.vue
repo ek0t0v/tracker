@@ -9,14 +9,13 @@
 
 <script>
     import DashboardHeader from '../components/Dashboard/DashboardHeader';
-    import TaskList from '../components/Task/TaskList';
     import { mapActions } from 'vuex';
 
     export default {
         name: 'Dashboard',
         components: {
             DashboardHeader,
-            TaskList,
+            TaskList: () => import('../components/Task/TaskList'),
         },
         props: {
             start: {
@@ -54,7 +53,7 @@
 </script>
 
 <style lang="less" scoped>
-    @import '../less/style';
+    @import (reference) '../less/style';
 
     .dashboard {
         .flex(column, nowrap, center, center);

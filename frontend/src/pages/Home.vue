@@ -9,7 +9,5 @@
 </script>
 
 <style lang="less" scoped>
-    @import '../less/style';
-
     .home {}
 </style>

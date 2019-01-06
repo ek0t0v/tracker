@@ -73,7 +73,6 @@
 </template>
 
 <script>
-    import TaskMenu from '../Task/TaskMenu';
     import AppCheckbox from '../AppCheckbox';
     import { mapActions } from 'vuex';
     import moment from 'moment';
@@ -177,7 +176,7 @@
                 });
             },
             onMenuOpened(e) {
-                this.$menu.open(e, TaskMenu, {
+                this.$menu.open(e, () => import('../Task/TaskMenu'), {
                     task: this,
                 }, {
                     position: {
@@ -244,7 +243,7 @@
 </script>
 
 <style lang="less" scoped>
-    @import '../../less/style';
+    @import (reference) '../../less/style';
 
     .task-item {
 

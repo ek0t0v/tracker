@@ -11,6 +11,8 @@ import EventBus from './plugins/EventBus';
 import en from './locales/en';
 import ru from './locales/ru';
 import 'moment/locale/ru.js';
+import '@fortawesome/fontawesome-free/css/all.min.css';
+import '../src/less/style.less';
 
 Vue.use(VueRouter);
 Vue.use(VueI18n);

@@ -9,9 +9,9 @@
 </template>
 
 <script>
+    import moment from 'moment';
     import AppModal from './AppModal';
     import AppMenu from './AppMenu';
-    import moment from 'moment';
 
     export default {
         name: 'App',
@@ -33,7 +33,7 @@
 </script>
 
 <style lang="less">
-    @import '../less/style';
+    @import (reference) '../less/style';
 
     .app {
         .flex(column, nowrap, flex-start, center);
