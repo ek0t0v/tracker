@@ -2,6 +2,7 @@ import Vue from 'vue';
 import VueRouter from 'vue-router';
 import VueI18n from 'vue-i18n'
 import App from './components/App';
+import Public from './components/Public';
 import router from './modules/router';
 import store from './store';
 import Menu from './plugins/Menu';
@@ -31,5 +32,5 @@ new Vue({
     router,
     store,
     i18n,
-    render: h => h(App),
+    render: h => store.state.user.authenticated ? h(App) : h(Public),
 });

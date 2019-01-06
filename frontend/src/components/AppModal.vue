@@ -90,6 +90,7 @@
             width: 360px;
             padding: 32px;
             background-color: rgba(82,89,117,.9);
+            border-radius: 3px 3px 0 0;
 
             &--red {
                 background-color: rgba(200,70,70,.9);

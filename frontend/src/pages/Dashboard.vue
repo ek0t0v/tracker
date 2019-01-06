@@ -28,7 +28,7 @@
                 this.setDate({
                     date: this.date,
                 });
-                this.load({
+                this.loadTasks({
                     start: this.date,
                 });
             },
@@ -37,7 +37,7 @@
             this.setDate({
                 date: this.date,
             });
-            this.load({
+            this.loadTasks({
                 start: this.date,
             });
         },
@@ -46,7 +46,7 @@
                 setDate: 'setDate',
             }),
             ...mapActions('task', {
-                load: 'load',
+                loadTasks: 'load',
             }),
         },
     }

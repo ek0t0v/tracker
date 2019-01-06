@@ -8,6 +8,8 @@ function initialState() {
     };
 }
 
+const DATE_FORMAT = 'YYYY-MM-DD';
+
 export default {
     namespaced: true,
     state: initialState,
@@ -29,13 +31,13 @@ export default {
     },
     actions: {
         load({ commit }, payload) {
-            let forDate = moment(payload.start).format('YYYY-MM-DD');
+            let forDate = moment(payload.start).format(DATE_FORMAT);
 
             if (this.state.task.items.hasOwnProperty(forDate)) {
                 return;
             }
 
-            return api.get('/tasks?start=' + moment.utc(payload.start).format('YYYY-MM-DD'))
+            return api.get('/tasks?start=' + forDate)
                 .then(response => commit('load', {
                     key: forDate,
                     items: response.data.items,
@@ -43,16 +45,16 @@ export default {
             ;
         },
         create({ commit, dispatch, rootState }, payload) {
-            return api.post('/tasks', {
-                name: payload.name,
-                start: moment.utc(payload.start).format('YYYY-MM-DD'),
-                end: payload.end ? moment.utc(payload.end).format('YYYY-MM-DD') : null,
-                repeatType: payload.repeatType ? payload.repeatType.value : null,
-                repeatValue: payload.repeatValue,
-            })
+            payload.start = moment(payload.start).format(DATE_FORMAT);
+            payload.end = payload.end ? moment(payload.end).format(DATE_FORMAT) : null;
+            payload.repeatType = payload.repeatType ? payload.repeatType.value : null;
+
+            return api.post('/tasks', payload)
                 .then(() => {
                     commit('reset');
-                    dispatch('load', rootState.date);
+                    dispatch('load', {
+                        start: rootState.date,
+                    });
                 })
             ;
         },
@@ -60,12 +62,14 @@ export default {
             api.delete('/tasks/' + payload.id)
                 .then(() => {
                     commit('reset');
-                    dispatch('load', rootState.date);
+                    dispatch('load', {
+                        start: rootState.date,
+                    });
                 })
             ;
         },
         setState({ commit }, payload) {
-            api.put('/tasks/' + payload.id + '/' + moment.utc(payload.forDate).format('YYYY-MM-DD') + '/state', {
+            api.put('/tasks/' + payload.id + '/' + moment(payload.forDate).format(DATE_FORMAT) + '/state', {
                 state: payload.state,
             })
                 .then(() => commit('setState', payload))
@@ -82,12 +86,12 @@ export default {
 
             Vue.set(state.items, payload.key, payload.items);
         },
-        setState(state, task) {
-            let forDate = moment(task.forDate).format('YYYY-MM-DD');
+        setState(state, payload) {
+            let forDate = moment(payload.forDate).format(DATE_FORMAT);
 
             state.items[forDate].forEach(item => {
-                if (item.id === task.id && item.forDate === task.forDate) {
-                    item.state = task.state;
+                if (item.id === payload.id) {
+                    item.state = payload.state;
                 }
             });
         },

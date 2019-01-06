@@ -58,17 +58,14 @@
             "label": "Редактировать",
             "iconCssClass": "fas fa-pen"
         },
-        "timer": {
-            "label": "Запустить таймер",
-            "iconCssClass": "fas fa-hourglass-start"
-        },
         "transfer": {
             "label": "Перенести",
             "iconCssClass": "fas fa-share"
         },
         "cancel": {
             "label": "Отменить",
-            "iconCssClass": "fas fa-calendar-times"
+            "iconCssClass": "fas fa-calendar-times",
+            "confirmModalHeader": "Отменить задачу"
         },
         "markAsImportant": {
             "label": "Пометить как важную",
@@ -76,7 +73,8 @@
         },
         "delete": {
             "label": "Удалить",
-            "iconCssClass": "fas fa-trash"
+            "iconCssClass": "fas fa-trash",
+            "confirmModalHeader": "Удалить задачу"
         }
     },
     "repeatTypeEnum": {

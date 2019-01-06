@@ -1,5 +1,6 @@
 import axios from 'axios';
 import httpRetryQueue from './http-retry-queue';
+import store from '../store';
 
 export const api = axios.create({
     baseURL: 'http://localhost/api',
@@ -31,8 +32,7 @@ api.interceptors.response.use(response => response, error => {
                 httpRetryQueue.retryAll();
             })
             .catch(error => {
-                // todo: Была какая-то ошибка после очистки localStorage - посмотреть/поправить.
-                // store.dispatch('user/userLogout');
+                store.dispatch('user/userLogout');
 
                 return Promise.reject(error);
             })

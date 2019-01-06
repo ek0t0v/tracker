@@ -10,6 +10,7 @@
         <app-menu-item
             :color="'red'"
             :icon-css-class="$t('accountMenu.logout.iconCssClass')"
+            @click.native="userLogout"
         >
             {{ $t('accountMenu.logout.label') }}
         </app-menu-item>
@@ -20,6 +21,7 @@
     import AppMenuItem from '../AppMenuItem';
     import AppMenuDelimiter from '../AppMenuDelimiter';
     import SettingsForm from '../Dashboard/SettingsForm';
+    import { mapActions } from 'vuex';
 
     export default {
         name: 'AccountMenu',
@@ -28,6 +30,9 @@
             AppMenuDelimiter,
         },
         methods: {
+            ...mapActions('user', {
+                userLogout: 'userLogout',
+            }),
             openSettingsModal() {
                 this.$modal.open(SettingsForm, {}, {
                     header: this.$t('modal.header.settings'),

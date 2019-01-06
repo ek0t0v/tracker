@@ -58,17 +58,14 @@
             "label": "Edit",
             "iconCssClass": "fas fa-pen"
         },
-        "timer": {
-            "label": "Start timer",
-            "iconCssClass": "fas fa-hourglass-start"
-        },
         "transfer": {
             "label": "Transfer",
             "iconCssClass": "fas fa-share"
         },
         "cancel": {
             "label": "Cancel",
-            "iconCssClass": "fas fa-calendar-times"
+            "iconCssClass": "fas fa-calendar-times",
+            "confirmModalHeader": "Cancel task"
         },
         "markAsImportant": {
             "label": "Mark as important",
@@ -76,7 +73,8 @@
         },
         "delete": {
             "label": "Delete",
-            "iconCssClass": "fas fa-trash"
+            "iconCssClass": "fas fa-trash",
+            "confirmModalHeader": "Delete task"
         }
     },
     "repeatTypeEnum": {

@@ -2,17 +2,14 @@
     <div class="task-menu">
         <app-menu-item
             :icon-css-class="$t('taskMenu.edit.iconCssClass')"
+            :is-disabled="true"
             @click.native="editTask"
         >
             {{ $t('taskMenu.edit.label') }}
         </app-menu-item>
         <app-menu-item
-            :icon-css-class="$t('taskMenu.timer.iconCssClass')"
-        >
-            {{ $t('taskMenu.timer.label') }}
-        </app-menu-item>
-        <app-menu-item
             :icon-css-class="$t('taskMenu.transfer.iconCssClass')"
+            :is-disabled="true"
         >
             {{ $t('taskMenu.transfer.label') }}
         </app-menu-item>
@@ -24,6 +21,7 @@
         </app-menu-item>
         <app-menu-item
             :icon-css-class="$t('taskMenu.markAsImportant.iconCssClass')"
+            :is-disabled="true"
         >
             {{ $t('taskMenu.markAsImportant.label') }}
         </app-menu-item>
@@ -66,10 +64,10 @@
             },
         },
         methods: {
-            ...mapActions('task', [
-                'setState',
-                'remove',
-            ]),
+            ...mapActions('task', {
+                setState: 'setState',
+                remove: 'remove',
+            }),
             editTask() {
                 this.$modal.open(EditTaskForm, {
                     id: this.task.id,
@@ -86,7 +84,7 @@
                         state: 'cancelled',
                     },
                 }, {
-                    header: 'Отменить задачу',
+                    header: this.$t('taskMenu.cancel.confirmModalHeader'),
                 });
             },
             removeTask() {
@@ -96,7 +94,7 @@
                         id: this.task.id,
                     },
                 }, {
-                    header: 'Удалить задачу',
+                    header: this.$t('taskMenu.delete.confirmModalHeader'),
                 });
             },
         },

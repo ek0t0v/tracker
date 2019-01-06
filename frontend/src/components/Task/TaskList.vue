@@ -17,6 +17,8 @@
             :transfers="item.transfers"
             :repeat-type="item.repeatType"
             :repeat-value="item.repeatValue"
+            :task-id-with-active-timer="taskIdWithActiveTimer"
+            @on-timer-start="onTimerStart"
         />
     </div>
 </template>
@@ -30,11 +32,21 @@
         components: {
             TaskItem,
         },
+        data() {
+            return {
+                taskIdWithActiveTimer: null,
+            };
+        },
         computed: {
             ...mapGetters('task', [
                 'items',
             ]),
         },
+        methods: {
+            onTimerStart(e) {
+                this.taskIdWithActiveTimer = e.id;
+            },
+        }
     }
 </script>
 
@@ -47,12 +59,14 @@
         margin: 128px 0 0 0;
 
         &__empty {
+
             .flex(row, nowrap, center, center);
             width: 100%;
 
             span {
                 .font(@primary-font, 16px, 500, @blue_2);
             }
+
         }
 
     }

@@ -34,6 +34,22 @@
             <div class="task-item__name">{{ name }}</div>
         </div>
         <div class="task-item__column">
+            <div class="task-item-timer">
+                <span
+                    class="task-item-timer__time"
+                    :class="{ 'task-item-timer__time--active': timer.active }"
+                >
+                    {{ time }}
+                </span>
+                <div
+                    class="task-item-timer__button"
+                    @click="toggleTimer"
+                >
+                    <i :class="[{ 'fas fa-stop': timer.active }, 'fas fa-play']" />
+                </div>
+            </div>
+        </div>
+        <div class="task-item__column">
             <!-- todo: Поправить отступы и все такое. -->
             <div
                 v-if="transfers.length > 0"
@@ -56,6 +72,8 @@
     import TaskMenu from '../Task/TaskMenu';
     import { mapActions } from 'vuex';
     import moment from 'moment';
+
+    const TIMER_DEFAULT_VALUE = '00:00:00';
 
     export default {
         name: 'TaskItem',
@@ -102,22 +120,48 @@
                 type: Array,
                 default: null,
             },
+            taskIdWithActiveTimer: {
+                type: Number,
+                default: null,
+            },
         },
         data() {
             return {
                 active: false,
                 done: false,
+                timer: {
+                    active: false,
+                    start: null,
+                    time: null,
+                    worker: null,
+                },
             };
         },
         computed: {
             forDateFormatted() {
                 return moment(this.forDate).format(this.$t('taskItem.forDateFormat'));
             },
+            time() {
+                return this.timer.time ? this.timer.time : TIMER_DEFAULT_VALUE;
+            },
+        },
+        watch: {
+            taskIdWithActiveTimer(id) {
+                // Останавливает таймер, если он уже работает, но был запущен
+                // таймер для другой задачи.
+
+                if (this.timer.active && this.id !== id) {
+                    this.stopTimer();
+                }
+            },
         },
         methods: {
-            ...mapActions('task', [
-                'setState',
-            ]),
+            ...mapActions('task', {
+                setState: 'setState',
+            }),
+            ...mapActions('timing', {
+                saveTiming: 'save',
+            }),
             onChecked() {
                 let state = this.state === 'in_progress' ? 'done' : 'in_progress';
 
@@ -136,6 +180,58 @@
                         left: -175 - 8,
                     },
                 });
+            },
+            toggleTimer() {
+                if (this.timer.active) {
+                    this.stopTimer();
+
+                    return;
+                }
+
+                this.startTimer();
+            },
+            startTimer() {
+                this.timer.start = new Date();
+                this.timer.worker = new Worker('workers/timer.js');
+
+                this.timer.worker.postMessage({
+                    action: 'start',
+                });
+
+                this.timer.active = true;
+
+                this.$emit('on-timer-start', {
+                    id: this.id,
+                });
+
+                this.timer.worker.onmessage = e => {
+                    let date = new Date(null);
+
+                    date.setSeconds(e.data);
+                    this.timer.time = date.toISOString().substr(11, 8);
+                };
+            },
+            stopTimer() {
+                this.timer.worker.postMessage({
+                    action: 'stop',
+                });
+
+                this.saveTiming({
+                    id: this.id,
+                    forDate: this.forDate,
+                    start: this.timer.start,
+                    end: new Date(),
+                });
+
+                this.resetTimerData();
+            },
+            resetTimerData() {
+                this.timer = {
+                    active: false,
+                    time: null,
+                    worker: null,
+                    start: null,
+                };
             },
         },
     }
@@ -337,6 +433,45 @@
             border-radius: 1px;
             display: block;
             opacity: 0;
+        }
+
+    }
+
+    .task-item-timer {
+
+        .flex(row, nowrap, flex-start, center);
+
+        &__button {
+
+            .flex(row, nowrap, center, center);
+            width: 32px;
+            height: 32px;
+            border-radius: 16px;
+            color: @blue_1;
+            cursor: pointer;
+
+            &:hover {
+                background-color: #F6F7F8;
+            }
+
+            i {
+                font-size: 8px;
+                margin: 0 -2px 0 0;
+                color: inherit;
+            }
+
+        }
+
+        &__time {
+
+            .font(@primary-font, 15px, 500, @blue_1);
+            margin: 0 4px 0 0;
+            opacity: 0;
+
+            &--active {
+                opacity: 1;
+            }
+
         }
 
     }
