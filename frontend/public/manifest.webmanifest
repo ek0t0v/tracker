@@ -1,0 +1,13 @@
+{
+  "name": "Task tracker",
+  "short_name": "Tracker",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#fff",
+  "description": "Task tracker.",
+  "icons": [],
+  "related_applications": [{
+    "platform": "web"
+  }],
+  "theme_color": "#525975"
+}
