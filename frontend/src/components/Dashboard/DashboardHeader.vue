@@ -25,7 +25,7 @@
             </div>
             <div
                 class="dashboard-header-user"
-                style="background-image: url(classic.jpg);"
+                style="background-image: url(default_avatar.png);"
                 @click="openAccountMenu"
             />
         </div>
