@@ -11,7 +11,8 @@
             "yesterday": "Yesterday",
             "tomorrow": "Tomorrow",
             "thisYearDateFormat": "MMMM Do",
-            "anotherYearDateFormat": "MMMM Do YYYY"
+            "anotherYearDateFormat": "MMMM Do YYYY",
+            "weekdayFormat": "dddd"
         }
     },
     "createTaskForm": {

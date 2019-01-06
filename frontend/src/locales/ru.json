@@ -11,7 +11,8 @@
             "yesterday": "Вчера",
             "tomorrow": "Завтра",
             "thisYearDateFormat": "D MMMM",
-            "anotherYearDateFormat": "D MMMM YYYY"
+            "anotherYearDateFormat": "D MMMM YYYY",
+            "weekdayFormat": "dddd"
         }
     },
     "createTaskForm": {

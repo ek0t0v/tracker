@@ -6,7 +6,7 @@
             </div>
         </div>
         <div class="dashboard-header__column">
-            <div class="dashboard-header-header">{{ headerText }}</div>
+            <div class="dashboard-header-header">{{ headerText }} / {{ weekday }}</div>
         </div>
         <div class="dashboard-header__column">
             <div class="dashboard-header-menu">
@@ -63,6 +63,9 @@
                 }
 
                 return headerText;
+            },
+            weekday() {
+                return moment(this.date).format(this.$t('header.text.weekdayFormat'));
             },
         },
         mounted() {
