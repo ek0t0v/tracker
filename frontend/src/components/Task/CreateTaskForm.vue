@@ -120,7 +120,7 @@
     import AppCheckbox from '../AppCheckbox';
     import AppTextInput from '../AppTextInput';
     import AppDateInput from '../AppDateInput';
-    import { mapActions } from 'vuex';
+    import { mapGetters, mapActions } from 'vuex';
     import AppDropdown from '../AppDropdown';
     import AppDropdownItem from '../AppDropdownItem';
     import RepeatTypeEnum from '../../enums/RepeatTypeEnum';
@@ -140,7 +140,7 @@
             return {
                 repeatTypeEnum: RepeatTypeEnum,
                 name: '',
-                start: new Date(),
+                start: null,
                 end: null,
                 repeatable: false,
                 repeatType: RepeatTypeEnum.custom,
@@ -157,10 +157,18 @@
                 },
             };
         },
+        computed: {
+            ...mapGetters({
+                currentDate: 'date',
+            }),
+        },
+        mounted() {
+            this.start = this.currentDate;
+        },
         methods: {
-            ...mapActions('task', [
-                'create',
-            ]),
+            ...mapActions('task', {
+                saveTask: 'create',
+            }),
             onNameChanged(name) {
                 this.name = name;
             },
@@ -186,14 +194,15 @@
                 this.repeatValues[this.repeatTypeEnum.custom.value] = repeatValue;
             },
             onSubmit() {
-                this.create({
+                this.saveTask({
                     name: this.name,
                     start: this.start,
                     end: this.repeatable ? this.end : null,
                     repeatType: this.repeatable ? this.repeatType : null,
                     repeatValue: this.repeatable ? this.repeatValues[this.repeatType.value] : null,
                 })
-                    .then(() => this.$modal.close());
+                    .then(() => this.$modal.close())
+                ;
             },
         },
     }

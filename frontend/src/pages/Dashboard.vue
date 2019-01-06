@@ -1,7 +1,7 @@
 <template>
     <div class="dashboard">
         <div class="dashboard-header-wrapper">
-            <DashboardHeader />
+            <DashboardHeader :date="start" />
         </div>
         <TaskList />
     </div>
@@ -10,7 +10,7 @@
 <script>
     import DashboardHeader from '../components/Dashboard/DashboardHeader';
     import TaskList from '../components/Task/TaskList';
-    import { mapGetters, mapActions } from 'vuex';
+    import { mapActions } from 'vuex';
 
     export default {
         name: 'Dashboard',
@@ -18,27 +18,28 @@
             DashboardHeader,
             TaskList,
         },
-        computed: {
-            ...mapGetters([
-                'date',
-            ]),
+        props: {
+            start: {
+                type: Date,
+                default: null,
+            },
         },
         watch: {
-            date() {
+            start() {
                 this.setDate({
-                    date: this.date,
+                    date: this.start,
                 });
                 this.loadTasks({
-                    start: this.date,
+                    start: this.start,
                 });
             },
         },
         mounted() {
             this.setDate({
-                date: this.date,
+                date: this.start,
             });
             this.loadTasks({
-                start: this.date,
+                start: this.start,
             });
         },
         methods: {

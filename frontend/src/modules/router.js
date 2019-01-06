@@ -33,8 +33,11 @@ const router = new VueRouter({
             },
         },
         {
-            path: '/dashboard',
+            path: '/dashboard:date?',
             component: Dashboard,
+            props: route => ({
+                start: route.query.start === undefined ? new Date() : new Date(route.query.start),
+            }),
             name: 'dashboard',
             meta: {
                 requiresAuth: true,

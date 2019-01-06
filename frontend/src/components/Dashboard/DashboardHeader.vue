@@ -38,14 +38,17 @@
     import CreateTaskForm from '../Task/CreateTaskForm';
     import moment from 'moment';
     import Event from '../../classes/Event';
-    import { mapGetters, mapActions } from 'vuex';
+    import { mapActions } from 'vuex';
 
     export default {
         name: 'DashboardHeader',
+        props: {
+            date: {
+                type: Date,
+                default: new Date(),
+            },
+        },
         computed: {
-            ...mapGetters([
-                'date',
-            ]),
             headerText() {
                 let headerText;
                 let dateAsMoment = moment(this.date);
@@ -70,9 +73,19 @@
         },
         mounted() {
             this.$bus.on(this._uid + ':on-date-change', payload => {
-                this.setDate({
-                    date: payload.date,
-                });
+                let to = {
+                    name: 'dashboard',
+                };
+
+                let date = moment(payload.date);
+
+                if (!date.isSame(moment(), 'day')) {
+                    to.query = {
+                        start: date.format('YYYY-MM-DD'),
+                    };
+                }
+
+                this.$router.push(to);
             });
         },
         methods: {
