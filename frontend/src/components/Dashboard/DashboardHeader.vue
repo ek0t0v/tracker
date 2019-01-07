@@ -200,7 +200,7 @@
         width: 48px;
         height: 48px;
         border-radius: 24px;
-        background-color: #F5F5F5;
+        background-color: #F6F7F8;
         background-size: cover;
         position: relative;
         cursor: pointer;
