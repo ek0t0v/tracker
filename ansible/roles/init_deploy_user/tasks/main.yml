@@ -2,8 +2,8 @@
   user:
     name: '{{ deploy__user }}'
     groups:
-      - '{{ www_group }}'
-    password: '{{ deploy__password }}'
+      - '{{ www_user }}'
+    password: '{{ deploy__password }}' # todo: Не удается войти с заданным паролем, нужно разобраться.
 
 - name: Change www directory owner to deploy user
   command: find /var/www -exec chown -R deploy:www-data {} \;
