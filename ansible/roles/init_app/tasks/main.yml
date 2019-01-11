@@ -1,0 +1,92 @@
+- name: Install sudo
+  apt:
+    name: sudo
+    state: latest
+
+- name: Update repositories
+  shell: |
+    apt-get clean
+    apt-get update
+    apt-get -y upgrade
+  become: true
+
+- name: Install git
+  apt:
+    name: git
+    state: latest
+
+- name: Install htop
+  apt:
+    name: htop
+    state: latest
+
+- name: Install mc
+  apt:
+    name: mc
+    state: latest
+
+- name: Install nginx
+  apt:
+    name: nginx
+    state: latest
+
+- name: Install letsencrypt
+  apt:
+    name: letsencrypt
+    state: latest
+
+- name: Create letsencrypt directory
+  file:
+    name: /var/www/letsencrypt
+    state: directory
+
+- name: Remove default nginx virtual host
+  file:
+    path: '{{ nginx__sites_available_dir }}/default'
+    state: absent
+  notify: reload nginx
+
+- name: Install system nginx config
+  template:
+    src: '{{ nginx__nginx_conf_template }}'
+    dest: /etc/nginx/nginx.conf
+
+- name: Install nginx site for letsencrypt requests
+  template:
+    src: '{{ nginx__host_letsencrypt_template }}'
+    dest: '{{ nginx__sites_enabled_dir }}/{{ nginx__host_letsencrypt_filename }}'
+
+- name: Reload nginx to activate letsencrypt site
+  service:
+    name: nginx
+    state: restarted
+
+- name: Create letsencrypt certificate
+  shell: letsencrypt certonly -n --webroot -w /var/www/letsencrypt -m {{ letsencrypt_email }} --agree-tos -d {{ domain }}
+  args:
+    creates: /etc/letsencrypt/live/{{ domain }}
+
+- name: Generate dhparams
+  shell: openssl dhparam -out /etc/nginx/dhparams.pem 2048
+  args:
+    creates: /etc/nginx/dhparams.pem
+
+- name: Create nginx virtual host
+  template:
+    src: '{{ nginx__host_template }}'
+    dest: '{{ nginx__sites_available_dir }}/{{ nginx__host_site_filename }}'
+  notify: reload nginx
+
+- name: Create symbolic link for virtual host
+  file:
+    src: '{{ nginx__sites_available_dir }}/{{ nginx__host_site_filename }}'
+    dest: '{{ nginx__sites_enabled_dir }}/{{ nginx__host_site_filename }}'
+    state: link
+  notify: reload nginx
+
+- name: Add letsencrypt cronjob for cert renewal
+  cron:
+    name: letsencrypt_renewal
+    special_time: weekly
+    job: letsencrypt --renew certonly -n --webroot -w /var/www/letsencrypt -m {{ letsencrypt_email }} --agree-tos -d {{ domain }} && service nginx reload
+

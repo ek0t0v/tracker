@@ -173,6 +173,7 @@
                     id: this.id,
                     forDate: this.forDate,
                     state: this.state === 'in_progress' ? 'done' : 'in_progress',
+                    transfers: this.transfers,
                 });
             },
             onMenuOpened(e) {

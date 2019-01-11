@@ -62,6 +62,10 @@
                 type: String,
                 default: '',
             },
+            transfers: {
+                type: Array,
+                default: () => [],
+            },
         },
         methods: {
             ...mapActions('task', {
@@ -82,6 +86,7 @@
                         id: this.task.id,
                         forDate: this.task.forDate,
                         state: 'cancelled',
+                        transfers: this.task.transfers,
                     },
                 }, {
                     header: this.$t('taskMenu.cancel.confirmModalHeader'),

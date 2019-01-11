@@ -1,0 +1,14 @@
+- name: Create deploy user
+  user:
+    name: '{{ deploy__user }}'
+    groups:
+      - '{{ www_group }}'
+    password: '{{ deploy__password }}'
+
+- name: Change www directory owner to deploy user
+  command: find /var/www -exec chown -R deploy:www-data {} \;
+
+- name: Allow restart php-fpm by deploy user
+  lineinfile:
+    path: /etc/sudoers
+    line: 'deploy ALL=NOPASSWD:/bin/systemctl restart php7.1-fpm'

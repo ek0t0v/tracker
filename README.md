@@ -36,3 +36,5 @@ Pass phrase can be taken from `backend/.env` or set your own pass phrase, do not
 - `docker-compose exec php php vendor/bin/phpstan analyze -l 4 src` run PHPStan
 
 ## Notes
+
+- `ansible-playbook -i hosts.yml init.yml`

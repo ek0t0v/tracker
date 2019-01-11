@@ -1,0 +1,159 @@
+- name: Install sudo
+  apt:
+    name: sudo
+    state: latest
+
+- name: Update repositories
+  shell: |
+    apt-get clean
+    apt-get update
+    apt-get -y upgrade
+  become: true
+
+- name: Install git
+  apt:
+    name: git
+    state: latest
+
+- name: Install htop
+  apt:
+    name: htop
+    state: latest
+
+- name: Install mc
+  apt:
+    name: mc
+    state: latest
+
+- name: Install nginx
+  apt:
+    name: nginx
+    state: latest
+
+- name: Remove default nginx virtual host
+  file:
+    path: '{{ nginx_sites_available_dir }}/default'
+    state: absent
+  notify: reload nginx
+
+- name: Create nginx virtual host
+  template:
+    src: '{{ nginx__host_template }}'
+    dest: '{{ nginx_sites_available_dir }}/{{ nginx__host_filename }}'
+  notify: reload nginx
+
+- name: Create symbolic link for virtual host
+  file:
+    src: '{{ nginx_sites_available_dir }}/{{ nginx__host_filename }}'
+    dest: '{{ nginx_sites_enabled_dir }}/{{ nginx__host_filename }}'
+    state: link
+  notify: reload nginx
+
+- name: Add php repository
+  shell: |
+    apt-get -y install apt-transport-https lsb-release ca-certificates
+    wget -O /etc/apt/trusted.gpg.d/php.gpg https://packages.sury.org/php/apt.gpg
+    echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" | sudo tee /etc/apt/sources.list.d/php.list
+    apt-get update
+    warn=no
+
+- name: Install php7.1-fpm
+  apt:
+    name: php7.1-fpm
+
+- name: Install php7.1-pdo-pgsql
+  apt:
+    name: php7.1-pdo-pgsql
+
+- name: Install php7.1-dom
+  apt:
+    name: php7.1-dom
+
+- name: Install php7.1-zip
+  apt:
+    name: php7.1-zip
+
+- name: Install php7.1-mbstring
+  apt:
+    name: php7.1-mbstring
+
+- name: Install php7.1-curl
+  apt:
+    name: php7.1-curl
+
+- name: Uncomment listen.mode in www.conf
+  replace:
+    path: '{{ php__www_conf }}'
+    regexp: '^;listen.mode = 0660$'
+    replace: 'listen.mode = 0660'
+  notify: restart php-fpm
+
+- name: Update post_max_size in php.ini
+  replace:
+    path: '{{ php__php_ini }}'
+    regexp: '^post_max_size = [0-9]+M'
+    replace: 'post_max_size = 128M'
+  notify: restart php-fpm
+
+- name: Update upload_max_filesize in php.ini
+  replace:
+    path: '{{ php_ini }}'
+    regexp: '^upload_max_filesize = [0-9]+M'
+    replace: 'upload_max_filesize = 100M'
+  notify: restart php-fpm
+
+- name: Install composer
+  shell: |
+    php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+    php -r "if (hash_file('SHA384', 'composer-setup.php') === '544e09ee996cdf60ece3804abc52599c22b1f40f4323403c44d44fdfdd586475ca9813a858088ffbc1f233e9b180f061') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;"
+    php composer-setup.php
+    php -r "unlink('composer-setup.php');"
+    mv composer.phar /usr/local/bin/composer
+
+- name: Configure postgresql APT key
+  apt_key:
+    url: 'https://www.postgresql.org/media/keys/ACCC4CF8.asc'
+    state: present
+
+- name: Configure postgresql APT repositories
+  apt_repository:
+    repo: 'deb http://apt.postgresql.org/pub/repos/apt/ precise-pgdg main'
+    state: present
+
+- name: Install postgresql-10.5
+  apt:
+    name: postgresql-10.5
+    state: present
+  notify: restart postgresql
+
+- name: Install postgresql adapter # todo: Что это и зачем?
+  apt:
+    name: python-psycopg2
+    state: present
+
+- name: Create postgresql user
+  postgresql_user:
+    name: '{{ postgres__user }}'
+    password: '{{ postgres__password }}'
+  become: true
+  become_user: postgres
+  notify: restart postgresql
+
+- name: Create postgresql database
+  postgresql_db:
+    name: '{{ postgres__database }}'
+    owner: '{{ postgres__user }}'
+  become: true
+  become_user: postgres
+  notify: restart postgresql
+
+- name: Update pg_hba.conf
+  template:
+    src: '{{ postgres__pg_hba_template }}'
+    dest: '/etc/postgresql/9.6/main/pg_hba.conf'
+  notify: restart postgresql
+
+- name: Make postgresql start automatically on boot
+  systemd:
+    name: postgresql
+    enabled: yes

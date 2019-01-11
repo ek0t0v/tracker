@@ -87,10 +87,12 @@ export default {
             Vue.set(state.items, payload.key, payload.items);
         },
         setState(state, payload) {
-            let forDate = moment(payload.forDate).format(DATE_FORMAT);
+            let forDate = payload.transfers.length > 0
+                ? moment(payload.transfers[payload.transfers.length - 1]).format(DATE_FORMAT)
+                : moment(payload.forDate).format(DATE_FORMAT);
 
             state.items[forDate].forEach(item => {
-                if (item.id === payload.id) {
+                if (item.id === payload.id ) {
                     item.state = payload.state;
                 }
             });

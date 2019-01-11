@@ -1,0 +1,12 @@
+domain: tracker.seniorcote.com
+root_dir: /var/www/app.tracker/current/frontent/public
+www_user: www-data
+letsencrypt_email: dev@seniorcote.com
+nginx__sites_available_dir: /etc/nginx/sites-available
+nginx__sites_enabled_dir: /etc/nginx/sites-enabled
+nginx__nginx_conf_template: nginx.conf.j2
+nginx__host_site_template: nginx_host_site.j2
+nginx__host_site_filename: tracker.seniorcote.com
+nginx__host_letsencrypt_template: nginx_host_letsencrypt.j2
+nginx__host_letsencrypt_filename: letsencrypt
+

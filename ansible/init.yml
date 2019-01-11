@@ -1,0 +1,8 @@
+- name: Init
+  hosts: prod
+  user: root
+  gather_facts: false
+  roles:
+    - init_app
+    - init_api
+    - init_deploy_user

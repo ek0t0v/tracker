@@ -1,0 +1,15 @@
+server_tokens off;
+
+server {
+    listen 80 default_server;
+    server_name {{ domain }};
+
+    location /.well-known/acme-challenge {
+        root /var/www/{{ nginx__host_letsencrypt_filename }};
+        try_files $uri $uri/ =404;
+    }
+
+    location / {
+        rewrite ^ https://{{ domain }}$request_uri? permanent;
+    }
+}
