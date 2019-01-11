@@ -25,6 +25,14 @@
     name: mc
     state: latest
 
+- name: Run a script with arguments
+  script: docker_install_script.sh
+
+- name: Install docker-compose
+  shell: |
+    curl -L https://github.com/docker/compose/releases/download/1.22.0/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
+    chmod +x /usr/local/bin/docker-compose
+
 - name: Install nginx
   apt:
     name: nginx
@@ -73,7 +81,7 @@
 
 - name: Create nginx virtual host
   template:
-    src: '{{ nginx__host_template }}'
+    src: '{{ nginx__host_site_template }}'
     dest: '{{ nginx__sites_available_dir }}/{{ nginx__host_site_filename }}'
   notify: reload nginx
 

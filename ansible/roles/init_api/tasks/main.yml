@@ -25,29 +25,78 @@
     name: mc
     state: latest
 
+- name: Run a script with arguments
+  script: docker_install_script.sh
+
+- name: Install docker-compose
+  shell: |
+    curl -L https://github.com/docker/compose/releases/download/1.22.0/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
+    chmod +x /usr/local/bin/docker-compose
+
 - name: Install nginx
   apt:
     name: nginx
     state: latest
 
+- name: Install letsencrypt
+  apt:
+    name: letsencrypt
+    state: latest
+
+- name: Create letsencrypt directory
+  file:
+    name: /var/www/letsencrypt
+    state: directory
+
 - name: Remove default nginx virtual host
   file:
-    path: '{{ nginx_sites_available_dir }}/default'
+    path: '{{ nginx__sites_available_dir }}/default'
     state: absent
   notify: reload nginx
 
+- name: Install system nginx config
+  template:
+    src: '{{ nginx__nginx_conf_template }}'
+    dest: /etc/nginx/nginx.conf
+
+- name: Install nginx site for letsencrypt requests
+  template:
+    src: '{{ nginx__host_letsencrypt_template }}'
+    dest: '{{ nginx__sites_enabled_dir }}/{{ nginx__host_letsencrypt_filename }}'
+
+- name: Reload nginx to activate letsencrypt site
+  service:
+    name: nginx
+    state: restarted
+
+- name: Create letsencrypt certificate
+  shell: letsencrypt certonly -n --webroot -w /var/www/letsencrypt -m {{ letsencrypt_email }} --agree-tos -d {{ domain }}
+  args:
+    creates: /etc/letsencrypt/live/{{ domain }}
+
+- name: Generate dhparams
+  shell: openssl dhparam -out /etc/nginx/dhparams.pem 2048
+  args:
+    creates: /etc/nginx/dhparams.pem
+
 - name: Create nginx virtual host
   template:
-    src: '{{ nginx__host_template }}'
-    dest: '{{ nginx_sites_available_dir }}/{{ nginx__host_filename }}'
+    src: '{{ nginx__host_site_template }}'
+    dest: '{{ nginx__sites_available_dir }}/{{ nginx__host_site_filename }}'
   notify: reload nginx
 
 - name: Create symbolic link for virtual host
   file:
-    src: '{{ nginx_sites_available_dir }}/{{ nginx__host_filename }}'
-    dest: '{{ nginx_sites_enabled_dir }}/{{ nginx__host_filename }}'
+    src: '{{ nginx__sites_available_dir }}/{{ nginx__host_site_filename }}'
+    dest: '{{ nginx__sites_enabled_dir }}/{{ nginx__host_site_filename }}'
     state: link
   notify: reload nginx
+
+- name: Add letsencrypt cronjob for cert renewal
+  cron:
+    name: letsencrypt_renewal
+    special_time: weekly
+    job: letsencrypt --renew certonly -n --webroot -w /var/www/letsencrypt -m {{ letsencrypt_email }} --agree-tos -d {{ domain }} && service nginx reload
 
 - name: Add php repository
   shell: |
@@ -97,18 +146,10 @@
 
 - name: Update upload_max_filesize in php.ini
   replace:
-    path: '{{ php_ini }}'
+    path: '{{ php__php_ini }}'
     regexp: '^upload_max_filesize = [0-9]+M'
     replace: 'upload_max_filesize = 100M'
   notify: restart php-fpm
-
-- name: Install composer
-  shell: |
-    php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
-    php -r "if (hash_file('SHA384', 'composer-setup.php') === '544e09ee996cdf60ece3804abc52599c22b1f40f4323403c44d44fdfdd586475ca9813a858088ffbc1f233e9b180f061') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;"
-    php composer-setup.php
-    php -r "unlink('composer-setup.php');"
-    mv composer.phar /usr/local/bin/composer
 
 - name: Configure postgresql APT key
   apt_key:
