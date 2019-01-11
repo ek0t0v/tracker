@@ -25,7 +25,7 @@
     name: mc
     state: latest
 
-- name: Run a script with arguments
+- name: Install docker
   script: docker_install_script.sh
 
 - name: Install docker-compose
@@ -151,20 +151,12 @@
     replace: 'upload_max_filesize = 100M'
   notify: restart php-fpm
 
-- name: Configure postgresql APT key
-  apt_key:
-    url: 'https://www.postgresql.org/media/keys/ACCC4CF8.asc'
-    state: present
-
-- name: Configure postgresql APT repositories
-  apt_repository:
-    repo: 'deb http://apt.postgresql.org/pub/repos/apt/ precise-pgdg main'
-    state: present
-
-- name: Install postgresql-10.5
-  apt:
-    name: postgresql-10.5
-    state: present
+- name: Install postgresql
+  shell: |
+    echo "deb http://apt.postgresql.org/pub/repos/apt/ $(lsb_release -sc)-pgdg main" > /etc/apt/sources.list.d/pgdg.list
+    wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add -
+    apt-get update
+    apt-get install postgresql-10 -y
   notify: restart postgresql
 
 - name: Install postgresql adapter # todo: Что это и зачем?
@@ -176,6 +168,7 @@
   postgresql_user:
     name: '{{ postgres__user }}'
     password: '{{ postgres__password }}'
+    encrypted: yes
   become: true
   become_user: postgres
   notify: restart postgresql
@@ -188,10 +181,10 @@
   become_user: postgres
   notify: restart postgresql
 
-- name: Update pg_hba.conf
-  template:
-    src: '{{ postgres__pg_hba_template }}'
-    dest: '/etc/postgresql/9.6/main/pg_hba.conf'
+- name: Copy pg_hba.conf
+  copy:
+    src: '{{ postgres__pg_hba_conf }}'
+    dest: '/etc/postgresql/10/main/pg_hba.conf'
   notify: restart postgresql
 
 - name: Make postgresql start automatically on boot

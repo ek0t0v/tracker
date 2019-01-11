@@ -11,5 +11,7 @@ nginx__host_letsencrypt_template: nginx_host_letsencrypt.j2
 nginx__host_letsencrypt_filename: letsencrypt
 php__www_conf: /etc/php/7.1/fpm/pool.d/www.conf
 php__php_ini: /etc/php/7.1/fpm/php.ini
-postgres__pg_hba_template: pg_hba.conf.j2
+postgres__pg_hba_conf: pg_hba.conf
 postgres__database: tracker
+postgres__user: '{{ vault_postgres_user }}'
+postgres__password: '{{ vault_postgres_password }}'

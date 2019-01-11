@@ -1,1 +1,3 @@
 www_group: www-data
+deploy__user: '{{ vault_deploy_user }}'
+deploy__password: '{{ vault_deploy_password }}'
