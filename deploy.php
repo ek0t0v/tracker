@@ -2,29 +2,29 @@
 
 namespace Deployer;
 
-require 'phar://deployer.phar/recipe/symfony3.php';
-require 'deployer/recipes.php';
+require 'deployer/recipe.php';
 
 inventory('deployer/hosts.yml');
 
-set('application', 'symfony');
-set('repository', '');
-set('git_tty', true); 
+set('repository', 'git@bitbucket.org:seniorcote/tracker.git');
+set('git_tty', true);
+set('keep_releases', 3);
 
-add('shared_files', [
-    '.env',
-    'backend/.env',
-]);
 add('shared_dirs', []);
 add('writable_dirs', []);
-
-host('tracker.local')
-    ->set('deploy_path', '~/{{application}}');    
+add('shared_files', [
+    'backend/.env',
+]);
 
 task('build', function () {
     run('cd {{release_path}} && build');
 });
 
 after('deploy:failed', 'deploy:unlock');
+after('deploy:vendors', 'deploy:build:frontend');
+after('deploy:build:frontend', 'deploy:docker:down');
+after('deploy', 'fpm:restart');
+after('rollback', 'fpm:restart');
 
 before('deploy:symlink', 'database:migrate');
+before('deploy:vendors', 'deploy:docker:up');

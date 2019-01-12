@@ -3,6 +3,11 @@
     name: sudo
     state: latest
 
+- name: Install acl
+  apt:
+    name: acl
+    state: latest
+
 - name: Update repositories
   shell: |
     apt-get clean

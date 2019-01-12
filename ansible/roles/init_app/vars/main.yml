@@ -1,5 +1,5 @@
 domain: tracker.seniorcote.com
-root_dir: /var/www/app.tracker/current/frontent/public
+root_dir: /var/www/tracker/current/frontend/public
 www_user: www-data
 letsencrypt_email: dev@seniorcote.com
 nginx__sites_available_dir: /etc/nginx/sites-available
