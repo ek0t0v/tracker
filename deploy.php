@@ -10,8 +10,13 @@ set('repository', 'git@bitbucket.org:seniorcote/tracker.git');
 set('git_tty', true);
 set('keep_releases', 3);
 
-add('shared_dirs', []);
-add('writable_dirs', []);
+add('shared_dirs', [
+    'backend/var/log',
+    'backend/var/sessions',
+]);
+add('writable_dirs', [
+    'backend/var',
+]);
 add('shared_files', [
     'backend/.env', // todo: .env просто создается (пустой файл), должен копироваться из .env.dist.
 ]);

@@ -1,5 +1,5 @@
 server {
-    listen 80;
+    listen 81;
     server_name {{ domain }};
     return 301 https://$host$request_uri;
 }
@@ -8,7 +8,6 @@ server {
     listen 443 ssl;
     server_name {{ domain }};
     root {{ root_dir }};
-    index index.php;
     client_max_body_size 10m;
     server_tokens off;
     sendfile on;
@@ -40,10 +39,10 @@ server {
     }
 
     location / {
-         try_files $uri /app.php$is_args$args;
+         try_files $uri /index.php$is_args$args;
     }
 
-    location ~ ^/app\.php(/|$) {
+    location ~ ^/index\.php(/|$) {
         fastcgi_pass unix:/run/php/php7.1-fpm.sock;
         fastcgi_split_path_info ^(.+\.php)(/.*)$;
         include fastcgi_params;
