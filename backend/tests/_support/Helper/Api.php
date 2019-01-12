@@ -1,10 +1,9 @@
 <?php
 
-namespace App\Tests\Helper;
+namespace Common\Tests\Helper;
 
 use Codeception\Exception\ModuleException;
 use Codeception\Module;
-use Codeception\Util\HttpCode;
 
 /**
  * Class Api.
@@ -20,9 +19,9 @@ class Api extends Module
      * @param string $email
      * @param string $password
      *
-     * @return string
-     *
      * @throws ModuleException
+     *
+     * @return string
      */
     public function getAccessToken(string $email, string $password): string
     {

@@ -12,16 +12,22 @@ doctrine:
             charset: utf8
             collate: utf8_unicode_ci
         types:
-            task_change_state: App\Doctrine\DBAL\Type\TaskChangeStateType
-            task_repeat_type: App\Doctrine\DBAL\Type\TaskRepeatTypeType
+            task_change_state: Task\Doctrine\DBAL\Type\TaskChangeStateType
+            task_repeat_type: Task\Doctrine\DBAL\Type\TaskRepeatTypeType
     orm:
         auto_generate_proxy_classes: '%kernel.debug%'
         naming_strategy: doctrine.orm.naming_strategy.underscore
         auto_mapping: true
         mappings:
-            App:
+            Task:
                 is_bundle: false
                 type: annotation
-                dir: '%kernel.project_dir%/src/Entity'
-                prefix: 'App\Entity'
-                alias: App
+                dir: '%kernel.project_dir%/src/Task/Entity'
+                prefix: 'Task\Entity'
+                alias: Task
+            User:
+                is_bundle: false
+                type: annotation
+                dir: '%kernel.project_dir%/src/User/Entity'
+                prefix: 'User\Entity'
+                alias: User

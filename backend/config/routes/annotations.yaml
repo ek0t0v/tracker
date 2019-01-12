@@ -1,3 +1,9 @@
-controllers:
-    resource: ../../src/Controller/
+Common:
+    resource: ../../src/Common/Controller/
+    type: annotation
+Task:
+    resource: ../../src/Task/Controller/
+    type: annotation
+User:
+    resource: ../../src/User/Controller/
     type: annotation

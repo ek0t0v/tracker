@@ -6,18 +6,18 @@ services:
         autoconfigure: true
         public: false
     user_uniqie_email:
-        class: App\Validator\UserUniqueEmailValidator
+        class: User\Validator\UserUniqueEmailValidator
         tags:
             - { name: validator.constraint_validator, alias: user_unique_email }
     task_repeat_value:
-        class: App\Validator\TaskRepeatValueValidator
+        class: Task\Validator\TaskRepeatValueValidator
         tags:
             - { name: validator.constraint_validator, alias: task_repeat_value }
     not_blank_if_not_null:
-        class: App\Validator\NotBlankIfNotNullValidator
+        class: Common\Validator\NotBlankIfNotNullValidator
         tags:
             - { name: validator.constraint_validator, alias: not_blank_if_not_null }
     not_past:
-        class: App\Validator\NotPastValidator
+        class: Common\Validator\NotPastValidator
         tags:
             - { name: validator.constraint_validator, alias: not_past }

@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Tests\api;
+namespace Common\Tests\api;
 
-use App\Tests\ApiTester;
+use Common\Tests\ApiTester;
 use Codeception\Util\HttpCode;
 
 /**

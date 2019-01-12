@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Tests;
+namespace Common\Tests;
 
 use Codeception\Util\HttpCode;
 

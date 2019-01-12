@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Tests;
+namespace Common\Tests;
 
-use App\Entity\Task;
+use Common\Entity\Task;
 use Codeception\Test\Unit;
 
 /**

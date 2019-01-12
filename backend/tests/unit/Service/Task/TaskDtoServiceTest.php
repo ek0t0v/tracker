@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Tests;
+namespace Common\Tests;
 
-use App\Entity\Task;
-use App\Entity\TaskChange;
-use App\Service\Task\DtoService;
+use Common\Entity\Task;
+use Common\Entity\TaskChange;
+use Common\Service\Task\DtoService;
 use Codeception\Exception\ModuleException;
 use Codeception\Test\Unit;
 use Doctrine\Common\Collections\ArrayCollection;

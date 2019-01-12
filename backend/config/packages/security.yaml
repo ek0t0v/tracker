@@ -2,10 +2,10 @@ security:
     providers:
         user_provider:
             entity:
-                class: App\Entity\User
+                class: User\Entity\User
                 property: email
     encoders:
-        App\Entity\User: bcrypt
+        User\Entity\User: bcrypt
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/

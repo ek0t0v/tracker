@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Tests\Helper;
+namespace Common\Tests\Helper;
 
 use Codeception\Module;
 
@@ -12,9 +12,9 @@ class Unit extends Module
     /**
      * @param string $id
      *
-     * @return mixed
-     *
      * @throws \Codeception\Exception\ModuleException
+     *
+     * @return mixed
      */
     public function getSymfonyService(string $id)
     {

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Tests\Helper;
+namespace Common\Tests\Helper;
 
 use Codeception\Module;
 

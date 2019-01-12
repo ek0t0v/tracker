@@ -40,7 +40,9 @@
     },
     "autoload": {
         "psr-4": {
-            "App\\": "src/"
+            "Common\\": "src/Common",
+            "Task\\": "src/Task",
+            "User\\": "src/User"
         }
     },
     "autoload-dev": {

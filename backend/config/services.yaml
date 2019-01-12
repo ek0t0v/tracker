@@ -9,22 +9,31 @@ services:
         autowire: true
         autoconfigure: true
         public: false
-    App\:
-        resource: '../src/*'
-        exclude: '../src/{DependencyInjection,Entity,Migrations,Tests,Kernel.php}'
-    App\Controller\:
-        resource: '../src/Controller'
+    Symfony\Component\Serializer\SerializerInterface:
+        factory: 'Common\Service\SerializerFactory:create'
+    Common\:
+        resource: '../src/Common/*'
+        exclude: '../src/Common/{Migrations}'
+    Common\Controller\:
+        resource: '../src/Common/Controller'
         tags: ['controller.service_arguments']
-    App\EventListener\ExceptionListener:
+    Common\EventListener\ExceptionListener:
         tags:
             - { name: kernel.event_listener, event: kernel.exception }
-    Symfony\Component\Serializer\SerializerInterface:
-        factory: 'App\Service\SerializerFactory:create'
-    App\Doctrine\EventListener\UserListener:
-        tags:
-            - { name: doctrine.orm.entity_listener }
-    App\Request\ParamConverter\ScheduledTaskByUserParamConverter:
+    Task\:
+        resource: '../src/Task/*'
+    Task\Controller\:
+        resource: '../src/Task/Controller'
+        tags: ['controller.service_arguments']
+    Task\ParamConverter\ScheduledTaskByUserParamConverter:
         tags:
             - { name: request.param_converter, converter: scheduled_task_by_user }
         arguments:
             - '@doctrine'
+    User\:
+        resource: '../src/User/*'
+    User\Controller\:
+        resource: '../src/User/Controller'
+        tags: ['controller.service_arguments']
+    User\Doctrine\EventListener\UserListener:
+        tags: ['doctrine.orm.entity_listener']
