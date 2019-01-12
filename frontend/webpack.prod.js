@@ -1,3 +1,4 @@
+const webpack = require('webpack');
 const merge = require('webpack-merge');
 const common = require('./webpack.common.js');
 const UglifyJsWebpackPlugin = require('uglifyjs-webpack-plugin');
@@ -45,4 +46,12 @@ module.exports = merge(common, {
         sideEffects: true,
         minimize: true,
     },
+    plugins: [
+        new webpack.DefinePlugin({
+            'process.env':{
+                'NODE_ENV': JSON.stringify('production'),
+                'API_URL': JSON.stringify('https://api.tm.seniorcote.com/api')
+            },
+        }),
+    ],
 });

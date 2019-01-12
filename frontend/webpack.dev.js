@@ -1,3 +1,4 @@
+const webpack = require('webpack');
 const merge = require('webpack-merge');
 const common = require('./webpack.common.js');
 
@@ -15,4 +16,12 @@ module.exports = merge(common, {
             'vue$': 'vue/dist/vue.esm.js',
         },
     },
+    plugins: [
+        new webpack.DefinePlugin({
+            'process.env': {
+                'NODE_ENV': JSON.stringify('development'),
+                'API_URL': JSON.stringify('http://localhost/api'),
+            },
+        }),
+    ],
 });

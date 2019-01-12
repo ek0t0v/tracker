@@ -3,7 +3,10 @@
     name: '{{ deploy__user }}'
     groups:
       - '{{ www_user }}'
+      - docker
     password: '{{ deploy__password | password_hash("sha512") }}'
+    createhome: yes
+    home: /var/www/tracker
 
 - name: Change www directory owner to deploy user
   command: find /var/www -exec chown -R deploy:www-data {} \;

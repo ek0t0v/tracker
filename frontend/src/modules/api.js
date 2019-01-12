@@ -3,7 +3,7 @@ import httpRetryQueue from './http-retry-queue';
 import store from '../store';
 
 export const api = axios.create({
-    baseURL: 'http://localhost/api',
+    baseURL: process.env.API_URL,
     headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',

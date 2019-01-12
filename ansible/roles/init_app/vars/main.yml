@@ -1,4 +1,4 @@
-domain: tracker.seniorcote.com
+domain: tm.seniorcote.com
 root_dir: /var/www/tracker/current/frontend/public
 www_user: www-data
 letsencrypt_email: dev@seniorcote.com

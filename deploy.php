@@ -13,7 +13,7 @@ set('keep_releases', 3);
 add('shared_dirs', []);
 add('writable_dirs', []);
 add('shared_files', [
-    'backend/.env',
+    'backend/.env', // todo: .env просто создается (пустой файл), должен копироваться из .env.dist.
 ]);
 
 task('build', function () {
@@ -21,10 +21,13 @@ task('build', function () {
 });
 
 after('deploy:failed', 'deploy:unlock');
+after('deploy:failed', 'deploy:remove_frontend_dist');
+after('deploy:unlock', 'deploy:docker:down');
+after('deploy:unlock', 'deploy:remove_node_modules');
 after('deploy:vendors', 'deploy:build:frontend');
-after('deploy:build:frontend', 'deploy:docker:down');
 after('deploy', 'fpm:restart');
 after('rollback', 'fpm:restart');
 
 before('deploy:symlink', 'database:migrate');
 before('deploy:vendors', 'deploy:docker:up');
+before('deploy:build:frontend', 'deploy:remove_frontend_dist');
