@@ -18,7 +18,9 @@ add('writable_dirs', [
     'backend/var',
 ]);
 add('shared_files', [
-    'backend/.env', // todo: .env просто создается (пустой файл), должен копироваться из .env.dist.
+    'backend/.env',
+    'backend/config/jwt/private.pem',
+    'backend/config/jwt/public.pem',
 ]);
 
 task('build', function () {
