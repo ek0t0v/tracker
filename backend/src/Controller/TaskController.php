@@ -85,7 +85,7 @@ class TaskController extends ApiController
      */
     public function removeTask(Task $task): JsonResponse
     {
-        $em = $this->get('doctrine')->getManager();
+        $em = $this->getDoctrine()->getManager();
         $em->remove($task);
         $em->flush();
 

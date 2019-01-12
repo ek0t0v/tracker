@@ -21,11 +21,6 @@ class TaskFacade
     private $getByDateService;
 
     /**
-     * @var GetByDyDateOldService
-     */
-    private $getByDateOldService;
-
-    /**
      * @var GetOverdueService
      */
     private $getOverdueService;
@@ -53,19 +48,17 @@ class TaskFacade
     /**
      * TaskFacade constructor.
      *
-     * @param DtoService            $dtoService
-     * @param GetByDateService      $getByDateService
-     * @param GetByDyDateOldService $getByDateOldService
-     * @param GetOverdueService     $getOverdueService
-     * @param CreateService         $createService
-     * @param StateService          $stateService
-     * @param PositionService       $positionService
-     * @param TransferService       $transferService
+     * @param DtoService        $dtoService
+     * @param GetByDateService  $getByDateService
+     * @param GetOverdueService $getOverdueService
+     * @param CreateService     $createService
+     * @param StateService      $stateService
+     * @param PositionService   $positionService
+     * @param TransferService   $transferService
      */
     public function __construct(
         DtoService $dtoService,
         GetByDateService $getByDateService,
-        GetByDyDateOldService $getByDateOldService,
         GetOverdueService $getOverdueService,
         CreateService $createService,
         StateService $stateService,
@@ -74,7 +67,6 @@ class TaskFacade
     ) {
         $this->dtoService = $dtoService;
         $this->getByDateService = $getByDateService;
-        $this->getByDateOldService = $getByDateOldService;
         $this->getOverdueService = $getOverdueService;
         $this->createService = $createService;
         $this->stateService = $stateService;
@@ -120,6 +112,8 @@ class TaskFacade
     }
 
     /**
+     * @throws \Exception
+     *
      * @return TaskDto[]
      */
     public function getOverdueTasks(): array

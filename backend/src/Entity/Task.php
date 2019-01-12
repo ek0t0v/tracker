@@ -189,7 +189,7 @@ class Task
     }
 
     /**
-     * @param $repeatType
+     * @param string|null $repeatType
      *
      * @return Task
      */

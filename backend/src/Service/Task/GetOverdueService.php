@@ -39,7 +39,7 @@ class GetOverdueService
     }
 
     /**
-     * @throws
+     * @throws \Exception
      *
      * @return array
      */

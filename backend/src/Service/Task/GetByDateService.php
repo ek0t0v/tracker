@@ -120,7 +120,7 @@ class GetByDateService
                 continue;
             }
 
-            if (is_null($task->getRepeatType()) && $task->getStartDate() == $date) {
+            if (!$task->getRepeatType() && $task->getStartDate() == $date) {
                 $result[] = [
                     'task' => $task,
                     'forDate' => $date,
@@ -150,7 +150,12 @@ class GetByDateService
      */
     private function getTransferredToDateTasks(\DateTime $date, array $tasks): array
     {
-        $timezone = new \DateTimeZone($this->tokenStorage->getToken()->getUser()->getSettings()->getTimezone());
+        /**
+         * @var User $user
+         */
+        $user = $this->tokenStorage->getToken()->getUser();
+
+        $timezone = new \DateTimeZone($user->getSettings()->getTimezone());
         $result = [];
 
         foreach ($tasks as $task) {

@@ -14,6 +14,6 @@ class WeekendStrategy implements Strategy
     {
         $weekdayIndex = $date->format('w');
 
-        return 0 === $weekdayIndex || 6 === $weekdayIndex;
+        return in_array($weekdayIndex, [0, 6]);
     }
 }
