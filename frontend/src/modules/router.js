@@ -11,6 +11,11 @@ const router = new VueRouter({
                 requiresAuth: false,
             },
             beforeEnter: (to, from, next) => {
+                // При изменении даты через url новая дата не доходит до
+                // AppDatepicker, т.к. он обернут компонентом меню. Можно либо
+                // заморочиться с ивентами, либо закрывать все меню/окна при
+                // изменении даты через url.
+
                 if (store.state.user.authenticated && from.name === null) {
                     return next('tasks');
                 }
