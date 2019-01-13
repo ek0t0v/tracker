@@ -66,7 +66,12 @@
         "cancel": {
             "label": "Отменить",
             "iconCssClass": "fas fa-calendar-times",
-            "confirmModalHeader": "Отменить задачу"
+            "confirmModal": {
+                "header": "Отменить задачу",
+                "text": "Задача будет отменена в этот день, продолжить?",
+                "confirmButtonText": "OK",
+                "cancelButtonText": "Отмена"
+            }
         },
         "markAsImportant": {
             "label": "Пометить как важную",
@@ -75,7 +80,12 @@
         "delete": {
             "label": "Удалить",
             "iconCssClass": "fas fa-trash",
-            "confirmModalHeader": "Удалить задачу"
+            "confirmModal": {
+                "header": "Удалить задачу",
+                "text": "Задача будет удалена навсегда, и исчезнет изо всех дней на которые была запланирована.",
+                "confirmButtonText": "Удалить задачу",
+                "cancelButtonText": "Отмена"
+            }
         }
     },
     "repeatTypeEnum": {

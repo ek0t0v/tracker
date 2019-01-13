@@ -88,8 +88,11 @@
                         state: 'cancelled',
                         transfers: this.task.transfers,
                     },
+                    text: this.$t('taskMenu.cancel.confirmModal.text'),
+                    confirmButtonText: this.$t('taskMenu.cancel.confirmModal.confirmButtonText'),
+                    cancelButtonText: this.$t('taskMenu.cancel.confirmModal.cancelButtonText'),
                 }, {
-                    header: this.$t('taskMenu.cancel.confirmModalHeader'),
+                    header: this.$t('taskMenu.cancel.confirmModal.header'),
                 });
             },
             removeTask() {
@@ -98,8 +101,12 @@
                     payload: {
                         id: this.task.id,
                     },
+                    text: this.$t('taskMenu.delete.confirmModal.text'),
+                    confirmButtonText: this.$t('taskMenu.delete.confirmModal.confirmButtonText'),
+                    cancelButtonText: this.$t('taskMenu.delete.confirmModal.cancelButtonText'),
+                    danger: true,
                 }, {
-                    header: this.$t('taskMenu.delete.confirmModalHeader'),
+                    header: this.$t('taskMenu.delete.confirmModal.header'),
                 });
             },
         },
