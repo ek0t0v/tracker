@@ -21,8 +21,6 @@ set('writable_dirs', [
 set('shared_files', [
     '.env',
     'backend/.env',
-    'backend/config/jwt/private.pem',
-    'backend/config/jwt/public.pem',
 ]);
 
 task('build', function () {
