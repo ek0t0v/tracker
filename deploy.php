@@ -6,21 +6,22 @@ require 'deployer/recipe.php';
 
 inventory('deployer/hosts.yml');
 
-set('repository', 'git@bitbucket.org:seniorcote/tracker.git');
+set('repository', 'git@github.com:seniorcote/tracker.git');
 set('git_tty', true);
 set('keep_releases', 3);
 
 add('shared_dirs', [
     'backend/var/log',
     'backend/var/sessions',
+    'backend/config/jwt',
 ]);
 add('writable_dirs', [
-    'backend/var',
+    'backend/var/log',
 ]);
 add('shared_files', [
     'backend/.env',
-    'backend/config/jwt/private.pem',
-    'backend/config/jwt/public.pem',
+    //'backend/config/jwt/private.pem',
+    //'backend/config/jwt/public.pem',
 ]);
 
 task('build', function () {

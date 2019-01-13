@@ -6,6 +6,7 @@
       - docker
     password: '{{ deploy__password | password_hash("sha512") }}'
     createhome: yes
+    shell: /bin/bash
     home: /var/www/tracker
 
 - name: Change www directory owner to deploy user
