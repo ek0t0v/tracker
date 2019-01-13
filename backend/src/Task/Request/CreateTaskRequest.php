@@ -47,7 +47,7 @@ class CreateTaskRequest implements RequestDtoInterface
      * @var string|null
      *
      * @NotBlankIfNotNull
-     * @Assert\Choice(callback={"App\Doctrine\DBAL\Type\TaskRepeatTypeType", "getChoices"})
+     * @Assert\Choice(callback={"Task\Doctrine\DBAL\Type\TaskRepeatTypeType", "getChoices"})
      */
     public $repeatType;
 

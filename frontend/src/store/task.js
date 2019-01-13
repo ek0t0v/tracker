@@ -58,14 +58,9 @@ export default {
                 })
             ;
         },
-        remove({ commit, dispatch, rootState }, payload) {
+        remove({ commit }, payload) {
             api.delete('/tasks/' + payload.id)
-                .then(() => {
-                    commit('reset');
-                    dispatch('load', {
-                        start: rootState.date,
-                    });
-                })
+                .then(() => commit('remove', payload))
             ;
         },
         setState({ commit }, payload) {
@@ -85,6 +80,11 @@ export default {
             });
 
             Vue.set(state.items, payload.key, payload.items);
+        },
+        remove(state, payload) {
+            Object.keys(state.items).forEach(key => {
+                state.items[key] = state.items[key].filter(item => item.id !== payload.id);
+            });
         },
         setState(state, payload) {
             let forDate = payload.transfers.length > 0
