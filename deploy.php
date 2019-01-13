@@ -2,26 +2,27 @@
 
 namespace Deployer;
 
-require 'deployer/recipe.php';
+require 'phar://deployer.phar/recipe/symfony4.php';
+require 'deployer/tasks.php';
 
 inventory('deployer/hosts.yml');
 
 set('repository', 'git@github.com:seniorcote/tracker.git');
 set('git_tty', true);
 set('keep_releases', 3);
-
-add('shared_dirs', [
+set('shared_dirs', [
     'backend/var/log',
     'backend/var/sessions',
     'backend/config/jwt',
 ]);
-add('writable_dirs', [
-    'backend/var/log',
+set('writable_dirs', [
+    'backend/var',
 ]);
-add('shared_files', [
+set('shared_files', [
+    '.env',
     'backend/.env',
-    //'backend/config/jwt/private.pem',
-    //'backend/config/jwt/public.pem',
+    'backend/config/jwt/private.pem',
+    'backend/config/jwt/public.pem',
 ]);
 
 task('build', function () {

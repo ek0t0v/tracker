@@ -2,8 +2,6 @@
 
 namespace deployer;
 
-require 'phar://deployer.phar/recipe/symfony4.php';
-
 desc('Restart php-fpm');
 task('fpm:restart', function () {
     run('sudo systemctl restart php7.1-fpm');
