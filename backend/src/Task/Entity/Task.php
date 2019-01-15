@@ -78,7 +78,7 @@ class Task
     /**
      * @var ArrayCollection|TaskTransfer[]
      *
-     * @ORM\OneToMany(targetEntity="TaskTransfer", mappedBy="task")
+     * @ORM\OneToMany(targetEntity="TaskTransfer", mappedBy="task", orphanRemoval=true)
      */
     private $transfers;
 
