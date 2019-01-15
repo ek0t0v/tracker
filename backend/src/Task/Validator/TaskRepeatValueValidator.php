@@ -20,7 +20,7 @@ class TaskRepeatValueValidator extends ConstraintValidator
             return;
         }
 
-        if (count($value) < 2) {
+        if (count($value) < 2 || !in_array(1, $value)) {
             $this->context->buildViolation($constraint->message)->addViolation();
         }
     }

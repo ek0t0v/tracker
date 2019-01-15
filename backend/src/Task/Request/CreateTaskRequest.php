@@ -11,8 +11,6 @@ use Symfony\Component\Validator\Constraints as Assert;
  * todo: Доработать валидацию.
  *
  * - start всегда должен быть меньше end
- * - repeatValue при типе повторения custom не должен быть [0,0], надо хотя бы [1,0], например
- * - не допускать пустое имя задачи, нужно хотя бы один символ
  *
  * Class CreateTaskRequest.
  */
@@ -23,6 +21,9 @@ class CreateTaskRequest implements RequestDtoInterface
      *
      * @Assert\NotNull
      * @Assert\Type("string")
+     * @Assert\Length(
+     *     min="1"
+     * )
      */
     public $name;
 
