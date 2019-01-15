@@ -1,8 +1,9 @@
 <?php
 
-namespace Common\Tests;
+namespace Tests\api\User;
 
 use Codeception\Util\HttpCode;
+use Tests\ApiTester;
 
 /**
  * Class CreateUserCest.

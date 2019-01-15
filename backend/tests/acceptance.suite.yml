@@ -1,7 +1,7 @@
 actor: AcceptanceTester
 modules:
     enabled:
-        - \App\Tests\Helper\Acceptance
+        - Tests\Helper\Acceptance
         - PhpBrowser:
             url: http://nginx
             headers:

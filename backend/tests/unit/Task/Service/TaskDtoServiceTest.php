@@ -1,13 +1,14 @@
 <?php
 
-namespace Common\Tests;
+namespace Tests\unit\Task\Service;
 
-use Common\Entity\Task;
-use Common\Entity\TaskChange;
-use Common\Service\Task\DtoService;
+use Task\Entity\Task;
+use Task\Entity\TaskChange;
+use Task\Service\CreateResponseDto;
 use Codeception\Exception\ModuleException;
 use Codeception\Test\Unit;
 use Doctrine\Common\Collections\ArrayCollection;
+use Tests\UnitTester;
 
 /**
  * Class TaskDtoServiceTest.
@@ -20,7 +21,7 @@ class TaskDtoServiceTest extends Unit
     protected $tester;
 
     /**
-     * @var DtoService
+     * @var CreateResponseDto
      */
     private $taskDtoService;
 
@@ -29,7 +30,7 @@ class TaskDtoServiceTest extends Unit
      */
     protected function _before()
     {
-        $this->taskDtoService = $this->tester->getSymfonyService(DtoService::class);
+        $this->taskDtoService = $this->tester->getSymfonyService(CreateResponseDto::class);
     }
 
     /**

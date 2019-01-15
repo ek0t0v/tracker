@@ -1,9 +1,10 @@
 <?php
 
-namespace Common\Tests\Helper;
+namespace Tests\Helper;
 
 use Codeception\Exception\ModuleException;
 use Codeception\Module;
+use Codeception\Module\REST;
 
 /**
  * Class Api.
@@ -25,6 +26,9 @@ class Api extends Module
      */
     public function getAccessToken(string $email, string $password): string
     {
+        /**
+         * @var REST $rest
+         */
         $rest = $this->getModule('REST');
 
         if (!$this->token) {

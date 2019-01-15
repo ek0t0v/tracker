@@ -1,7 +1,7 @@
 actor: IntegrationTester
 modules:
     enabled:
-        - \App\Tests\Helper\Integration
+        - Tests\Helper\Integration
         - Db
         - Symfony:
             app_path: 'src'

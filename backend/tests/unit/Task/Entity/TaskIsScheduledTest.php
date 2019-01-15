@@ -1,9 +1,10 @@
 <?php
 
-namespace Common\Tests;
+namespace Tests\unit\Task\Entity;
 
-use Common\Entity\Task;
+use Task\Entity\Task;
 use Codeception\Test\Unit;
+use Tests\UnitTester;
 
 /**
  * Class TaskIsScheduledTest.

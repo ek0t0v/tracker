@@ -1,8 +1,9 @@
 <?php
 
-namespace Common\Tests\api;
+namespace Tests\api\Task;
 
-use Common\Tests\ApiTester;
+use Task\Doctrine\DBAL\Type\TaskRepeatTypeType;
+use Tests\ApiTester;
 use Codeception\Util\HttpCode;
 
 /**
@@ -122,48 +123,6 @@ class CreateTaskCest
     /**
      * @param ApiTester $I
      */
-    public function createTaskScheduleValidationTest(ApiTester $I)
-    {
-        $I->sendPOST('/tasks', [
-            'schedule' => false,
-        ]);
-
-        $I->seeResponseCodeIsClientError();
-        $I->seeResponseCodeIs(HttpCode::UNPROCESSABLE_ENTITY);
-        $I->seeResponseContainsJson([
-            'schedule' => [
-                'This value should be of type array.',
-            ],
-        ]);
-
-        $I->sendPOST('/tasks', [
-            'schedule' => [],
-        ]);
-
-        $I->seeResponseCodeIsClientError();
-        $I->seeResponseCodeIs(HttpCode::UNPROCESSABLE_ENTITY);
-        $I->seeResponseContainsJson([
-            'schedule' => [
-                'Invalid schedule.',
-            ],
-        ]);
-
-        $I->sendPOST('/tasks', [
-            'schedule' => [0, 0, 0, 0],
-        ]);
-
-        $I->seeResponseCodeIsClientError();
-        $I->seeResponseCodeIs(HttpCode::UNPROCESSABLE_ENTITY);
-        $I->seeResponseContainsJson([
-            'schedule' => [
-                'Invalid schedule.',
-            ],
-        ]);
-    }
-
-    /**
-     * @param ApiTester $I
-     */
     public function createTaskTest(ApiTester $I)
     {
         $I->sendPOST('/tasks', [
@@ -184,7 +143,8 @@ class CreateTaskCest
             'name' => 'Another task',
             'start' => '2018-11-01',
             'end' => '2018-12-01',
-            'schedule' => [1, 1, 0],
+            'repeatType' => TaskRepeatTypeType::CUSTOM,
+            'repeatValue' => [1, 1, 0],
         ]);
 
         $I->seeResponseCodeIsSuccessful();
@@ -196,6 +156,7 @@ class CreateTaskCest
         $I->assertEquals('Another task', $responseAsArray['name']);
         $I->assertEquals('2018-11-01T00:00:00+00:00', $responseAsArray['start']);
         $I->assertEquals('2018-12-01T00:00:00+00:00', $responseAsArray['end']);
-        $I->assertEquals([1, 1, 0], $responseAsArray['schedule']);
+        $I->assertEquals(TaskRepeatTypeType::CUSTOM, $responseAsArray['repeatType']);
+        $I->assertEquals([1, 1, 0], $responseAsArray['repeatValue']);
     }
 }

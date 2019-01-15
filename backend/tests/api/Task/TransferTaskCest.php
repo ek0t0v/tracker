@@ -1,8 +1,8 @@
 <?php
 
-namespace Common\Tests\api;
+namespace Tests\api\Task;
 
-use Common\Tests\ApiTester;
+use Tests\ApiTester;
 use Codeception\Util\HttpCode;
 
 /**
@@ -97,7 +97,8 @@ class TransferTaskCest
             'forDate' => '2018-12-01T00:00:00+00:00',
             'transfers' => [],
             'isTransferred' => false,
-            'schedule' => null,
+            'repeatType' => null,
+            'repeatValue' => null,
             'position' => null,
         ], json_decode($I->grabResponse(), true));
     }

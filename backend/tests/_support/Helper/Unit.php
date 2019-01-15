@@ -1,8 +1,9 @@
 <?php
 
-namespace Common\Tests\Helper;
+namespace Tests\Helper;
 
 use Codeception\Module;
+use Codeception\Module\Symfony;
 
 /**
  * Class Unit.
@@ -18,6 +19,11 @@ class Unit extends Module
      */
     public function getSymfonyService(string $id)
     {
-        return $this->getModule('Symfony')->grabService('test.service_container')->get($id);
+        /**
+         * @var Symfony $symfony
+         */
+        $symfony = $this->getModule('Symfony');
+
+        return $symfony->grabService('test.service_container')->get($id);
     }
 }

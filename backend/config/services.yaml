@@ -11,6 +11,9 @@ services:
         public: false
     Symfony\Component\Serializer\SerializerInterface:
         factory: 'Common\Service\SerializerFactory:create'
+    App\:
+        resource: '../src/*'
+        exclude: '../src/{Common,Task,User,DependencyInjection,Entity,Migrations,Tests,Kernel.php}'
     Common\:
         resource: '../src/Common/*'
         exclude: '../src/Common/{Migrations}'

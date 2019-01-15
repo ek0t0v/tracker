@@ -1,6 +1,6 @@
 <?php
 
-namespace Common\Tests;
+namespace Tests;
 
 /**
  * Inherited Methods.
