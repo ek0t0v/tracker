@@ -17,8 +17,11 @@ task('deploy:docker:down', function () {
     run('cd {{release_path}} && docker-compose down');
 });
 
-desc('Installing vendors'); // todo: После установки composer пытается внести изменения в .env, но не может, т.к. .env расшаренный, вместо файла ссылка, нельзя получить доступ изнутри контейнера.
+desc('Installing vendors');
 task('deploy:vendors', function () {
+    // После установки composer пытается внести изменения в .env, но не может,
+    // т.к. .env расшаренный, вместо файла ссылка, нельзя получить доступ
+    // изнутри контейнера. Добавил ключ --no-scripts чтобы обойти это.
     run('cd {{release_path}} && docker-compose run composer install --no-scripts');
     run('cd {{release_path}} && docker-compose run node npm install');
 });

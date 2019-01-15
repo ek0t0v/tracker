@@ -81,7 +81,7 @@ class TransferTaskCest
     {
         $to = new \DateTime();
 
-        $I->sendPUT('/tasks/5/2018-12-01/transfer', [
+        $I->sendPUT('/tasks/7/2018-12-01/transfer', [
             'to' => $to->format('Y-m-d'),
         ]);
 
@@ -89,14 +89,13 @@ class TransferTaskCest
         $I->seeResponseCodeIs(HttpCode::OK);
         $I->seeResponseIsJson();
         $I->assertEquals([
-            'id' => 5,
+            'id' => 7,
             'name' => 'Single task 2',
             'state' => 'in_progress',
             'start' => '2018-12-01T00:00:00+00:00',
             'end' => null,
             'forDate' => '2018-12-01T00:00:00+00:00',
             'transfers' => [],
-            'isTransferred' => false,
             'repeatType' => null,
             'repeatValue' => null,
             'position' => null,
