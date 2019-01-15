@@ -17,6 +17,10 @@ class TaskEndValidator
      */
     public function validate(CreateTaskRequest $object, ExecutionContextInterface $context)
     {
+        if (is_null($object->end)) {
+            return;
+        }
+
         try {
             $end = new \DateTime($object->end);
         } catch (\Exception $e) {
