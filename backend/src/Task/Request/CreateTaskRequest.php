@@ -8,11 +8,9 @@ use Task\Validator\Constraint\TaskRepeatValue;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * todo: Доработать валидацию.
- *
- * - start всегда должен быть меньше end
- *
  * Class CreateTaskRequest.
+ *
+ * @Assert\Callback({"Task\Validator\TaskEndValidator", "validate"})
  */
 class CreateTaskRequest implements RequestDtoInterface
 {
