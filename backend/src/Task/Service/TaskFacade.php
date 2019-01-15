@@ -11,67 +11,67 @@ use Task\Entity\Task;
 class TaskFacade
 {
     /**
-     * @var DtoService
+     * @var CreateResponseDto
      */
-    private $dtoService;
+    private $createResponseDtoService;
 
     /**
-     * @var GetByDateService
+     * @var GetTasksByDate
      */
-    private $getByDateService;
+    private $getTasksByDateService;
 
     /**
-     * @var GetOverdueService
+     * @var GetOverdueTasks
      */
-    private $getOverdueService;
+    private $getOverdueTasksService;
 
     /**
-     * @var CreateService
+     * @var CreateTask
      */
-    private $createService;
+    private $createTaskService;
 
     /**
-     * @var StateService
+     * @var UpdateTaskState
      */
-    private $stateService;
+    private $updateTaskStateService;
 
     /**
-     * @var PositionService
+     * @var UpdateTaskPosition
      */
-    private $positionService;
+    private $updateTaskPositionService;
 
     /**
-     * @var TransferService
+     * @var TransferTask
      */
-    private $transferService;
+    private $transferTaskService;
 
     /**
      * TaskFacade constructor.
      *
-     * @param DtoService        $dtoService
-     * @param GetByDateService  $getByDateService
-     * @param GetOverdueService $getOverdueService
-     * @param CreateService     $createService
-     * @param StateService      $stateService
-     * @param PositionService   $positionService
-     * @param TransferService   $transferService
+     * @param CreateResponseDto  $createResponseDtoService
+     * @param GetTasksByDate     $getTasksByDateService
+     * @param GetOverdueTasks    $getOverdueTasksService
+     * @param CreateTask         $createTaskService
+     * @param UpdateTaskState    $updateTaskStateService
+     * @param UpdateTaskPosition $updateTaskPositionService
+     * @param TransferTask       $transferTaskService
      */
     public function __construct(
-        DtoService $dtoService,
-        GetByDateService $getByDateService,
-        GetOverdueService $getOverdueService,
-        CreateService $createService,
-        StateService $stateService,
-        PositionService $positionService,
-        TransferService $transferService
+        CreateResponseDto $createResponseDtoService,
+        GetTasksByDate $getTasksByDateService,
+        GetOverdueTasks $getOverdueTasksService,
+        CreateTask $createTaskService,
+        UpdateTaskState $updateTaskStateService,
+        UpdateTaskPosition $updateTaskPositionService,
+        TransferTask $transferTaskService
     ) {
-        $this->dtoService = $dtoService;
-        $this->getByDateService = $getByDateService;
-        $this->getOverdueService = $getOverdueService;
-        $this->createService = $createService;
-        $this->stateService = $stateService;
-        $this->positionService = $positionService;
-        $this->transferService = $transferService;
+        $this->createResponseDtoService = $createResponseDtoService;
+        $this->getTasksByDateService = $getTasksByDateService;
+        $this->getOverdueTasksService = $getOverdueTasksService;
+        $this->createTaskService = $createTaskService;
+        $this->updateTaskStateService = $updateTaskStateService;
+        $this->updateTaskPositionService = $updateTaskPositionService;
+        $this->transferTaskService = $transferTaskService;
     }
 
     /**
@@ -83,8 +83,8 @@ class TaskFacade
     {
         $result = [];
 
-        foreach ($this->getByDateService->getByDate($date) as $task) {
-            $result[] = $this->dtoService->create($task['task'], $task['forDate']);
+        foreach ($this->getTasksByDateService->getByDate($date) as $task) {
+            $result[] = $this->createResponseDtoService->create($task['task'], $task['forDate']);
         }
 
         return $result;
@@ -102,9 +102,9 @@ class TaskFacade
     {
         $result = [];
 
-        foreach ($this->getByDateService->getByDateRange($start, $end) as $date => $tasks) {
+        foreach ($this->getTasksByDateService->getByDateRange($start, $end) as $date => $tasks) {
             foreach ($tasks as $task) {
-                $result[$date][] = $this->dtoService->create($task['task'], $task['forDate']);
+                $result[$date][] = $this->createResponseDtoService->create($task['task'], $task['forDate']);
             }
         }
 
@@ -120,8 +120,8 @@ class TaskFacade
     {
         $result = [];
 
-        foreach ($this->getOverdueService->get() as $task) {
-            $result[] = $this->dtoService->create($task['task'], $task['forDate'], $task['date']);
+        foreach ($this->getOverdueTasksService->get() as $task) {
+            $result[] = $this->createResponseDtoService->create($task['task'], $task['forDate'], $task['date']);
         }
 
         return $result;
@@ -145,9 +145,9 @@ class TaskFacade
         array $repeatValue = null,
         array $schedule = null
     ): TaskDto {
-        $task = $this->createService->create($name, $startDate, $endDate, $repeatType, $repeatValue, $schedule);
+        $task = $this->createTaskService->create($name, $startDate, $endDate, $repeatType, $repeatValue, $schedule);
 
-        return $this->dtoService->create($task, $startDate);
+        return $this->createResponseDtoService->create($task, $startDate);
     }
 
     /**
@@ -159,9 +159,9 @@ class TaskFacade
      */
     public function transferTask(Task $task, \DateTime $forDate, \DateTime $to): TaskDto
     {
-        $this->transferService->transfer($task, $forDate, $to);
+        $this->transferTaskService->transfer($task, $forDate, $to);
 
-        return $this->dtoService->create($task, $task->getStartDate());
+        return $this->createResponseDtoService->create($task, $task->getStartDate());
     }
 
     /**
@@ -173,9 +173,9 @@ class TaskFacade
      */
     public function updateTaskState(Task $task, \DateTime $forDate, string $state): TaskDto
     {
-        $this->stateService->update($task, $forDate, $state);
+        $this->updateTaskStateService->update($task, $forDate, $state);
 
-        $dto = $this->dtoService->create($task, $forDate);
+        $dto = $this->createResponseDtoService->create($task, $forDate);
         $dto->state = $state;
 
         return $dto;
@@ -190,9 +190,9 @@ class TaskFacade
      */
     public function updateTaskPosition(Task $task, \DateTime $forDate, int $position): TaskDto
     {
-        $this->positionService->update($task, $forDate, $position);
+        $this->updateTaskPositionService->update($task, $forDate, $position);
 
-        $dto = $this->dtoService->create($task, $forDate);
+        $dto = $this->createResponseDtoService->create($task, $forDate);
         $dto->position = $position;
 
         return $dto;

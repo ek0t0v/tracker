@@ -8,9 +8,9 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 /**
- * Class CreateService.
+ * Class CreateTask.
  */
-class CreateService
+class CreateTask
 {
     /**
      * @var EntityManagerInterface
@@ -23,7 +23,7 @@ class CreateService
     private $tokenStorage;
 
     /**
-     * CreateService constructor.
+     * CreateTask constructor.
      *
      * @param EntityManagerInterface $em
      * @param TokenStorageInterface  $tokenStorage

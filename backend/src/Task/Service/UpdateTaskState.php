@@ -8,9 +8,9 @@ use Task\Repository\TaskChangeRepository;
 use Doctrine\ORM\EntityManagerInterface;
 
 /**
- * Class StateService.
+ * Class UpdateTaskState.
  */
-class StateService
+class UpdateTaskState
 {
     /**
      * @var EntityManagerInterface
@@ -18,7 +18,7 @@ class StateService
     private $em;
 
     /**
-     * StateService constructor.
+     * UpdateTaskState constructor.
      *
      * @param EntityManagerInterface $em
      */

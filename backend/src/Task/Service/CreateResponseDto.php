@@ -8,9 +8,9 @@ use Task\Entity\Task;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 /**
- * Class DtoService.
+ * Class CreateResponseDto.
  */
-class DtoService
+class CreateResponseDto
 {
     /**
      * @var TokenStorageInterface
@@ -18,7 +18,7 @@ class DtoService
     private $tokenStorage;
 
     /**
-     * DtoService constructor.
+     * CreateResponseDto constructor.
      *
      * @param TokenStorageInterface $tokenStorage
      */

@@ -10,9 +10,9 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 /**
- * Class PositionService.
+ * Class UpdateTaskPosition.
  */
-class PositionService
+class UpdateTaskPosition
 {
     /**
      * @var EntityManagerInterface
@@ -25,7 +25,7 @@ class PositionService
     private $tokenStorage;
 
     /**
-     * PositionService constructor.
+     * UpdateTaskPosition constructor.
      *
      * @param EntityManagerInterface $em
      * @param TokenStorageInterface  $tokenStorage

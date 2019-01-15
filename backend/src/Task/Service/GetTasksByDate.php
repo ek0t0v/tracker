@@ -10,9 +10,9 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 use Task\Service\Schedule\Context;
 
 /**
- * Class GetByDateService.
+ * Class GetTasksByDate.
  */
-class GetByDateService
+class GetTasksByDate
 {
     /**
      * @var TaskRepository
@@ -30,7 +30,7 @@ class GetByDateService
     private $scheduleContext;
 
     /**
-     * GetByDateService constructor.
+     * GetTasksByDate constructor.
      *
      * @param TaskRepository        $repository
      * @param TokenStorageInterface $tokenStorage

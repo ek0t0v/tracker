@@ -10,9 +10,9 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 /**
- * Class GetOverdueService.
+ * Class GetOverdueTasks.
  */
-class GetOverdueService
+class GetOverdueTasks
 {
     /**
      * @var EntityManagerInterface
@@ -25,7 +25,7 @@ class GetOverdueService
     private $tokenStorage;
 
     /**
-     * GetOverdueService constructor.
+     * GetOverdueTasks constructor.
      *
      * @param EntityManagerInterface $em
      * @param TokenStorageInterface  $tokenStorage

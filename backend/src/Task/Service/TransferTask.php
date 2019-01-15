@@ -7,9 +7,9 @@ use Task\Entity\TaskTransfer;
 use Doctrine\ORM\EntityManagerInterface;
 
 /**
- * Class TransferService.
+ * Class TransferTask.
  */
-class TransferService
+class TransferTask
 {
     /**
      * @var EntityManagerInterface
@@ -17,7 +17,7 @@ class TransferService
     private $em;
 
     /**
-     * TransferService constructor.
+     * TransferTask constructor.
      *
      * @param EntityManagerInterface $em
      */
