@@ -94,7 +94,7 @@ class TaskFacade
      * @param \DateTime $start
      * @param \DateTime $end
      *
-     * @return TaskDto[]
+     * @return array
      */
     public function getTasksByDateRange(\DateTime $start, \DateTime $end): array
     {

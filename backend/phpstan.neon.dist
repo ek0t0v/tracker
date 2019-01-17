@@ -1,6 +1,6 @@
 parameters:
     excludes_analyse:
-        - %rootDir%/../../../src/Migrations/*
+        - %rootDir%/../../../src/Common/Migrations/*
         - %rootDir%/../../../tests/_*
     ignoreErrors:
         - '#^Access to an undefined property Symfony\\Component\\Validator\\Constraint::\$message\.$#'
