@@ -39,8 +39,6 @@ class GetOverdueTasks
     }
 
     /**
-     * @throws \Exception
-     *
      * @return array
      */
     public function get(): array
@@ -54,7 +52,12 @@ class GetOverdueTasks
         $tasksHash = [];
         $yesterday = new \DateTime();
         $yesterday->add(\DateInterval::createFromDateString('yesterday'));
-        $oneDayInterval = new \DateInterval('P1D');
+
+        try {
+            $oneDayInterval = new \DateInterval('P1D');
+        } catch (\Exception $e) {
+            die;
+        }
 
         /**
          * @var Task $task

@@ -29,8 +29,6 @@ class TaskController extends ApiController
      * @return JsonResponse
      *
      * @Route(name="api_tasks_get_tasks", methods={"GET"})
-     *
-     * @throws \Exception
      */
     public function getTasks(GetTasksRequest $request, TaskFacade $taskFacade): JsonResponse
     {
@@ -52,8 +50,6 @@ class TaskController extends ApiController
      * @return JsonResponse
      *
      * @Route("/overdue", name="api_tasks_get_overdue_tasks", methods={"GET"})
-     *
-     * @throws \Exception
      */
     public function getOverdueTasks(TaskFacade $taskFacade)
     {

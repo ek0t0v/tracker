@@ -69,8 +69,6 @@ class GetTasksByDate
      * @param \DateTime $start
      * @param \DateTime $end
      *
-     * @throws \Exception
-     *
      * @return array
      */
     public function getByDateRange(\DateTime $start, \DateTime $end): array
@@ -83,7 +81,12 @@ class GetTasksByDate
 
         // Увеличивает на 1 секунду, чтобы период включал в себя последний день.
         $end->setTime(0, 0, 1);
-        $period = new \DatePeriod($start, new \DateInterval('P1D'), $end);
+
+        try {
+            $period = new \DatePeriod($start, new \DateInterval('P1D'), $end);
+        } catch (\Exception $e) {
+            die;
+        }
 
         $result = [];
 

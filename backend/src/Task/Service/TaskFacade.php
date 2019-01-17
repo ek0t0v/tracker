@@ -94,8 +94,6 @@ class TaskFacade
      * @param \DateTime $start
      * @param \DateTime $end
      *
-     * @throws \Exception
-     *
      * @return TaskDto[]
      */
     public function getTasksByDateRange(\DateTime $start, \DateTime $end): array
@@ -112,8 +110,6 @@ class TaskFacade
     }
 
     /**
-     * @throws \Exception
-     *
      * @return TaskDto[]
      */
     public function getOverdueTasks(): array
