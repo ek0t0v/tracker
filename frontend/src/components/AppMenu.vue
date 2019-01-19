@@ -24,21 +24,11 @@
 <script>
     import Vue from 'vue';
 
-    // function isElement(element) {
-    //     return element instanceof Element || element instanceof HTMLDocument;
-    // }
-    //
-    // let element = null;
-
     Vue.component('first-menu-component', {
         updated() {
             this.$menu.first.isVisible
                 ? document.addEventListener('click', this.$menu.closeFirstMenu)
                 : document.removeEventListener('click', this.$menu.closeFirstMenu);
-
-            // if (this.$menu.first.isVisible && isElement(this.$el)) {
-            //     element = this.$el;
-            // }
         },
         render(h) {
             return h(this.$menu.first.component, {
@@ -52,10 +42,6 @@
             this.$menu.second.isVisible
                 ? document.addEventListener('click', this.$menu.closeSecondMenu)
                 : document.removeEventListener('click', this.$menu.closeSecondMenu);
-
-            // if (this.$menu.second.isVisible && isElement(this.$el)) {
-            //     element = this.$el;
-            // }
         },
         render(h) {
             return h(this.$menu.second.component, {
@@ -66,9 +52,6 @@
 
     export default {
         name: 'AppMenu',
-        // updated() {
-        //     this.$menu.opendedBy = element;
-        // },
     }
 </script>
 

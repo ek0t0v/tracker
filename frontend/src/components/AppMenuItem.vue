@@ -7,7 +7,7 @@
             'menu-item--yellow': color === 'yellow',
             'menu-item--green': color === 'green',
         }"
-        @click="onClick"
+        @click="!isDisabled ? onClick : null"
     >
         <div class="menu-item__icon">
             <i :class="iconCssClass" />
@@ -44,6 +44,7 @@
         },
         methods: {
             onClick(e) {
+                console.log(e);
                 if (!this.closeMenuOnClick) {
                     e.stopPropagation();
                 }

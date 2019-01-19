@@ -3,7 +3,6 @@
         <app-menu-item
             :icon-css-class="$t('taskMenu.edit.iconCssClass')"
             :is-disabled="true"
-            @click.native="editTask"
         >
             {{ $t('taskMenu.edit.label') }}
         </app-menu-item>
