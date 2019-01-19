@@ -17,7 +17,7 @@ class TaskEndValidator
      */
     public function validate(CreateTaskRequest $object, ExecutionContextInterface $context)
     {
-        if (is_null($object->end)) {
+        if (is_null($object->end) || is_null($object->start)) {
             return;
         }
 
